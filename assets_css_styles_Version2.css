@@ -1,0 +1,53 @@
+:root{
+  --bg:#fafafa;
+  --card:#fff;
+  --accent:#0b63d6;
+  --text:#222;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.45;
+  padding:1rem;
+}
+
+.site-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  margin-bottom:1rem;
+}
+
+.site-header h1{margin:0;font-size:1.25rem}
+
+.main-nav{display:flex;gap:.5rem;flex-wrap:wrap}
+.nav-link{
+  text-decoration:none;
+  padding:.4rem .6rem;
+  border-radius:6px;
+  color:var(--accent);
+  background:transparent;
+}
+.nav-link:hover{background:rgba(11,99,214,.06)}
+
+main{max-width:900px;margin:0 auto}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1rem}
+.card{background:var(--card);padding:1rem;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+footer{margin-top:2rem;text-align:center;color:#666;font-size:.9rem}
+
+/* Удобство форм */
+input, textarea, button{
+  font:inherit;
+  border:1px solid #ddd;
+  padding:.5rem;
+  border-radius:6px;
+}
+button{background:var(--accent);color:#fff;border:none;padding:.6rem .9rem}
+button:hover{opacity:.95}
