@@ -1,33 +1,1396 @@
-<!doctype html>
-<html lang="ru">
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Проект 3 — Многостраничный сайт</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧹</text></svg>">
+<title>Расчёт нагрузки — МБОУ Лицей №35</title>
+<
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--bg:#0f1117;--bg2:#161822;--card:#1c1f2e;--card-hover:#232740;--border:#2a2e42;--fg:#e8eaf0;--fg-muted:#8b8fa7;--accent:#00c9a7;--accent-dim:rgba(0,201,167,0.12);--danger:#ff6b6b;--danger-dim:rgba(255,107,107,0.12);--warn:#ffc857;--warn-dim:rgba(255,200,87,0.12);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--blue:#60a5fa;--blue-dim:rgba(96,165,250,0.12);--orange:#f97316;--orange-dim:rgba(249,115,22,0.12);--success:#5a9e5a;--success-dim:rgba(90,158,90,0.12);--radius:10px;--shadow:0 4px 24px rgba(0,0,0,0.3);--glow1:rgba(0,201,167,0.06);--glow2:rgba(167,139,250,0.05);--muted-text:#555a72;--hover-border:#3a3f58;--color-scheme:dark;}
+[data-theme="light"]{--bg:#f0f2f7;--bg2:#e4e7f0;--card:#ffffff;--card-hover:#f5f6fa;--border:#cdd1de;--fg:#1a1c2e;--fg-muted:#5d6178;--accent:#00a88a;--accent-dim:rgba(0,168,138,0.10);--danger:#e04545;--danger-dim:rgba(224,69,69,0.09);--warn:#d4a017;--warn-dim:rgba(212,160,23,0.10);--purple:#7c5fd3;--purple-dim:rgba(124,95,211,0.09);--blue:#3b82f6;--blue-dim:rgba(59,130,246,0.09);--orange:#e06010;--orange-dim:rgba(224,96,16,0.09);--success:#3d8c3d;--success-dim:rgba(61,140,61,0.09);--shadow:0 4px 24px rgba(0,0,0,0.07);--glow1:rgba(0,168,138,0.05);--glow2:rgba(124,95,211,0.04);--muted-text:#9ca0b5;--hover-border:#b5b9cc;--color-scheme:light;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;transition:background .35s,color .35s;}
+body::before{content:'';position:fixed;top:-40%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,var(--glow1) 0%,transparent 70%);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;bottom:-30%;right:-10%;width:500px;height:500px;background:radial-gradient(circle,var(--glow2) 0%,transparent 70%);pointer-events:none;z-index:0;}
+.app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1;}
+
+.header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0;transition:background .35s,border-color .35s;gap:12px;}
+.header-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.header-logo{width:36px;height:36px;border-radius:8px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:16px;flex-shrink:0;}
+.header-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.header-sub{font-size:12px;color:var(--fg-muted);white-space:nowrap;}
+.tabs{display:flex;align-items:center;gap:2px;background:var(--bg2);border-radius:8px;padding:3px;border:1px solid var(--border);}
+.tab-btn{padding:7px 18px;border:none;background:transparent;color:var(--fg-muted);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border-radius:6px;transition:all .2s;white-space:nowrap;}
+.tab-btn:hover{color:var(--fg);background:var(--card-hover);}
+.tab-btn.active{background:var(--accent-dim);color:var(--accent);}
+.header-right{display:flex;align-items:center;gap:8px;}
+.btn-icon{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--fg-muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.btn-icon:hover{background:var(--card-hover);color:var(--accent);border-color:var(--accent);}
+
+.hdr-btn{height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--fg-muted);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;padding:0 14px;font-family:inherit;font-weight:700;transition:all .2s;white-space:nowrap;}
+.hdr-btn:hover{background:var(--card-hover);color:var(--fg);border-color:var(--hover-border);}
+.hdr-btn i{font-size:13px;}
+.hdr-btn-label{font-size:12px;}
+.hdr-btn-accent{border-color:rgba(0,201,167,.25);color:var(--accent);background:var(--accent-dim);}
+.hdr-btn-accent:hover{background:rgba(0,201,167,.2);border-color:rgba(0,201,167,.4);}
+
+.hdr-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:8px;background:var(--bg2);border:1px solid var(--border);font-size:12px;transition:all .35s;}.hdr-badge-label{color:var(--fg-muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.4px;}.hdr-badge-value{font-weight:800;font-size:15px;color:var(--success);min-width:40px;text-align:right;}.hdr-badge-unit{color:var(--muted-text);font-size:11px;}.hdr-badge-req .hdr-badge-value{color:var(--accent);}.manage-section{display:flex;flex-direction:column;gap:12px;}
+.manage-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+
+@media(max-width:900px){.hdr-btn-label{display:none;}.hdr-btn{padding:0;width:36px;justify-content:center;}}
+
+.main-layout{display:flex;flex:1;overflow:hidden;}
+
+.sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;transition:background .35s,border-color .35s;}
+.sidebar-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sidebar-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--fg-muted);}
+.btn-add-sm{width:28px;height:28px;border-radius:6px;border:none;background:var(--accent-dim);color:var(--accent);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.btn-add-sm:hover{background:var(--accent);color:#fff;transform:scale(1.08);}
+.sidebar-search{padding:8px 12px;border-bottom:1px solid var(--border);position:relative;}
+.sidebar-search input{width:100%;padding:7px 10px 7px 32px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--fg);font-family:inherit;outline:none;transition:border-color .2s,background .35s;color-scheme:var(--color-scheme);}
+.sidebar-search input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim);}
+.sidebar-search i{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--muted-text);font-size:12px;pointer-events:none;}
+.sidebar-list{flex:1;overflow-y:auto;padding:6px;}
+.sidebar-list::-webkit-scrollbar{width:5px;}
+.sidebar-list::-webkit-scrollbar-track{background:transparent;}
+.sidebar-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.sb-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .15s;border-left:3px solid transparent;margin-bottom:2px;}
+.sb-item:hover{background:var(--card-hover);border-left-color:var(--fg-muted);}
+.sb-item.active{background:var(--accent-dim);border-left-color:var(--accent);}
+.sb-item-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+.sb-item-area{font-size:11px;color:var(--fg-muted);font-weight:600;margin-left:8px;white-space:nowrap;}
+.sb-item-del{width:22px;height:22px;border-radius:4px;border:none;background:transparent;color:var(--muted-text);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .15s;margin-left:4px;flex-shrink:0;}
+.sb-item:hover .sb-item-del{opacity:1;}
+.sb-item-del:hover{background:var(--danger-dim);color:var(--danger);}
+
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.content-scroll{flex:1;overflow-y:auto;padding:20px;}
+.content-scroll::-webkit-scrollbar{width:6px;}
+.content-scroll::-webkit-scrollbar-track{background:transparent;}
+.content-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;transition:border-color .3s,background .35s;}
+.card:hover{border-color:var(--hover-border);}
+.card-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;transition:background .2s,border-color .35s;}
+.card-head i{color:var(--accent);font-size:14px;}
+.card-head span{font-weight:700;font-size:14px;}
+.card-head .card-head-right{margin-left:auto;display:flex;gap:6px;align-items:center;}
+.card-body{padding:18px;}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.stat-tile{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;transition:transform .2s,border-color .3s,background .35s;}
+.stat-tile:hover{transform:translateY(-1px);border-color:var(--hover-border);}
+.stat-tile .st-num{font-size:26px;font-weight:900;line-height:1;margin-bottom:4px;transition:color .3s;}
+.stat-tile .st-label{font-size:10px;color:var(--fg-muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.st-green .st-num{color:var(--success);}
+.st-accent .st-num{color:var(--accent);}
+.st-blue .st-num{color:var(--blue);}
+.st-orange .st-num{color:var(--orange);}
+
+.form-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.form-row label{min-width:120px;text-align:right;font-size:13px;font-weight:600;color:var(--fg-muted);flex-shrink:0;}
+.input-cell{padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--fg);font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s,background .35s;width:100%;}
+.input-cell:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim);}
+.input-cell::placeholder{color:var(--muted-text);}
+.input-sm{width:100px;text-align:center;}
+
+.btn{padding:7px 14px;background:var(--bg2);color:var(--fg-muted);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.btn:hover{background:var(--card-hover);color:var(--fg);border-color:var(--hover-border);}
+.btn-accent{background:var(--accent-dim);color:var(--accent);border-color:rgba(0,201,167,.3);}
+.btn-accent:hover{background:rgba(0,201,167,.2);}
+.btn-danger{background:var(--danger-dim);color:var(--danger);border-color:rgba(255,107,107,.3);}
+.btn-danger:hover{background:rgba(255,107,107,.2);}
+
+.table-wrap{overflow-x:auto;}
+table.wl{width:100%;border-collapse:collapse;}
+table.wl th,table.wl td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-size:13px;}
+table.wl th{background:var(--bg2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--fg-muted);position:sticky;top:0;white-space:nowrap;transition:background .35s;}
+table.wl tr{transition:background .12s;}
+table.wl tbody tr:hover{background:var(--card-hover);}
+table.wl .row-num{color:var(--fg-muted);font-weight:600;font-size:12px;width:40px;}
+table.wl .row-area{width:110px;text-align:right;}
+table.wl .row-actions{width:36px;text-align:center;}
+.row-header td{background:var(--accent-dim)!important;font-weight:700;font-size:12px;color:var(--accent);}
+.row-total td{background:var(--success-dim)!important;font-weight:800;color:var(--success);font-size:14px;}
+.cell-edit{background:transparent;border:1px solid transparent;color:var(--fg);padding:4px 8px;border-radius:4px;width:100%;font-family:inherit;font-size:inherit;transition:border-color .15s;outline:none;}
+.cell-edit:focus{border-color:var(--accent);background:var(--bg2);}
+.cell-num{background:transparent;border:1px solid transparent;color:var(--fg);padding:4px 8px;border-radius:4px;width:90px;text-align:right;font-family:inherit;font-size:inherit;transition:border-color .15s;outline:none;}
+.cell-num:focus{border-color:var(--accent);background:var(--bg2);}
+.btn-row-del{background:none;border:none;color:var(--muted-text);cursor:pointer;font-size:12px;padding:4px;border-radius:4px;transition:all .15s;}
+.btn-row-del:hover{color:#fff;background:var(--danger);transform:scale(1.1);}
+
+.total-bar{background:var(--card);border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;transition:background .35s,border-color .35s;}
+.total-bar-left{display:flex;align-items:center;gap:8px;color:var(--success);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px;}
+.total-bar-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--success);text-shadow:0 0 20px rgba(90,158,90,.2);transition:all .3s;}
+.total-bar-num.pulse{animation:tpulse .4s ease;}
+@keyframes tpulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+.paper{background:#fefcf8;color:#000;font-family:'Times New Roman',serif;padding:40px 50px;box-shadow:0 8px 40px rgba(0,0,0,.5);border-radius:4px;line-height:1.35;font-size:14pt;max-width:800px;margin:0 auto;}
+.paper h2{font-family:'Times New Roman',serif;font-size:14pt;text-align:center;margin:18px 0 8px;font-weight:700;}
+.paper .center{text-align:center;}
+.paper .right{text-align:right;}
+.paper .just{text-align:justify;}
+.paper .indent{padding-left:45pt;}
+.paper .sign{margin-top:28px;}
+.paper .head{text-align:center;font-size:12pt;font-weight:700;line-height:1.35;}
+.paper .head .addr{font-size:10pt;font-weight:400;}
+.paper table.wt{border-collapse:collapse;width:100%;margin:10px 0;}
+.paper table.wt td,.paper table.wt th{border:1px solid #999;padding:3px 8px;font-size:12px;}
+.paper table.wt th{background:#e8e4de;font-weight:600;}
+.paper table.wt .hr td{background:#f0ede8;font-weight:600;}
+.paper table.wt .tr td{background:#e8f5e9;font-weight:700;}
+
+.paper-ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:16px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);}
+.paper-ctrl label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--fg-muted);margin-bottom:4px;}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:9998;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.active{opacity:1;pointer-events:all;}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 28px;max-width:520px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:scale(.9);transition:transform .25s,background .35s,border-color .35s;}
+.modal-overlay.active .modal-box{transform:scale(1);}
+.modal-box h3{font-size:17px;font-weight:800;margin-bottom:12px;}
+.modal-box .form-row{margin-bottom:12px;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
+.modal-actions button{padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:none;transition:all .2s;}
+.modal-cancel{background:var(--bg2);color:var(--fg-muted);border:1px solid var(--border)!important;}
+.modal-cancel:hover{background:var(--card-hover);color:var(--fg);}
+.modal-confirm{background:var(--danger);color:#fff;}
+.modal-confirm:hover{background:#e05555;}
+.modal-confirm-accent{background:var(--accent);color:#fff;}
+.modal-confirm-accent:hover{opacity:.9;}
+
+.toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+.toast{padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;font-family:'Nunito',sans-serif;color:#fff;box-shadow:0 8px 30px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px;animation:toastIn .3s ease;max-width:440px;}
+.toast.success{background:linear-gradient(135deg,#00a88a,#00c9a7);}
+.toast.error{background:linear-gradient(135deg,#d63031,#ff6b6b);}
+.toast.info{background:linear-gradient(135deg,#6c5ce7,#a78bfa);}
+.toast.warn{background:linear-gradient(135deg,#e67e22,#ffc857);color:#1a1c2e;}
+.toast.out{animation:toastOut .3s ease forwards;}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes toastOut{from{opacity:1;transform:none}to{opacity:0;transform:translateX(40px) scale(.9)}}
+
+@media print{
+  .no-print{display:none!important}
+  #tabCalc,#tabManage{display:none!important}
+  #tabTpl{display:flex!important}
+  .paper{box-shadow:none!important;margin:0!important;padding:15mm 20mm!important;max-width:100%!important}
+  body{background:#fff!important}
+  body::before,body::after{display:none}
+  .total-bar,.header,.sidebar{display:none!important}
+  .content{display:block!important;overflow:visible!important}
+  .content-scroll{overflow:visible!important;padding:0!important}
+}
+@media(max-width:768px){
+  .sidebar{width:240px;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .header-sub{display:none;}
+  .paper{padding:20px;font-size:11px;}
+  .form-row{flex-direction:column;align-items:stretch;}
+  .form-row label{text-align:left;min-width:auto;}
+  .paper-ctrl{flex-direction:column;}
+}
+@media(max-width:600px){
+  .sidebar{position:fixed;left:-280px;top:0;bottom:0;z-index:100;transition:left .3s;box-shadow:4px 0 20px rgba(0,0,0,.4);}
+  .sidebar.open{left:0;}
+  .mobile-menu-btn{display:flex!important;}
+}
+.mobile-menu-btn{display:none;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--fg-muted);font-size:14px;cursor:pointer;align-items:center;justify-content:center;}
+@keyframes rowIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes rowOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(30px)}}
+tr.removing{animation:rowOut .3s ease forwards;pointer-events:none;}
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <h1>Проект 3</h1>
-    <nav class="main-nav" aria-label="Навигация">
-      <a href="index.html" class="nav-link">Главная</a>
-      <a href="about.html" class="nav-link">О нас</a>
-      <a href="projects.html" class="nav-link">Проекты (список)</a>
-      <a href="contact.html" class="nav-link">Контакты</a>
-    </nav>
+<div class="app">
+  <!-- Header -->
+  <header class="header no-print">
+    <div class="header-left">
+      <button class="mobile-menu-btn" onclick="toggleMobileSidebar()"><i class="fa-solid fa-bars"></i></button>
+      <div class="header-logo"><i class="fa-solid fa-broom"></i></div>
+      <div>
+        <div class="header-title">Расчёт нагрузки</div>
+        <div class="header-sub">МБОУ «Лицей №35»</div>
+      </div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" data-tab="calc"><i class="fa-solid fa-calculator" style="margin-right:5px;font-size:11px"></i>Расчёт</button>
+      <button class="tab-btn" data-tab="tpl"><i class="fa-solid fa-file-lines" style="margin-right:5px;font-size:11px"></i>Приказ</button>
+      <button class="tab-btn" data-tab="manage"><i class="fa-solid fa-sliders" style="margin-right:5px;font-size:11px"></i>Управление</button>
+    </div>
+    <div class="header-badges">
+      <div class="hdr-badge"><span class="hdr-badge-label">факт. площадь</span><span class="hdr-badge-value" id="hdrFactArea">0</span><span class="hdr-badge-unit">м²</span></div>
+      <div class="hdr-badge hdr-badge-req"><span class="hdr-badge-label">треб. площадь</span><span class="hdr-badge-value" id="hdrReqArea">0</span><span class="hdr-badge-unit">м²</span></div>
+    </div>
+    <div class="header-right">
+      <button class="hdr-btn" onclick="toggleTheme()" title="Сменить тему"><i class="fa-solid fa-sun" id="themeIcon"></i><span class="hdr-btn-label">Тема</span></button>
+      <button class="hdr-btn" onclick="openSettings()" title="Настройки расчёта"><i class="fa-solid fa-gear"></i><span class="hdr-btn-label">Настройки</span></button>
+      <button class="hdr-btn hdr-btn-accent" onclick="document.getElementById('fileInput').click()" title="Загрузить Excel"><i class="fa-solid fa-file-import"></i><span class="hdr-btn-label">Загрузить</span></button>
+      <button class="hdr-btn hdr-btn-accent" onclick="exportExcel()" title="Выгрузить Excel"><i class="fa-solid fa-file-export"></i><span class="hdr-btn-label">Выгрузить</span></button>
+      <button class="hdr-btn" onclick="confirmClearAll()" title="Очистить все данные" style="color:var(--danger);border-color:rgba(255,107,107,.35);background:var(--danger-dim)"><i class="fa-solid fa-trash-can"></i><span class="hdr-btn-label">Очистить всё</span></button>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none">
+    </div>
   </header>
 
-  <main>
-    <article>
-      <h2>Описание проекта 3</h2>
-      <p>Краткое описание и цель проекта 3.</p>
-    </article>
-  </main>
+  <!-- Tab: Calc -->
+  <div class="main-layout" id="tabCalc">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <span class="sidebar-label">Сотрудники</span>
+        <button class="btn-add-sm" onclick="openAddEmpModal()" title="Добавить"><i class="fa-solid fa-plus"></i></button>
+      </div>
+      <div class="sidebar-search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="sidebarSearch" placeholder="Поиск..." oninput="renderSidebar()"></div>
+      <div class="sidebar-list" id="sidebarList"></div>
+    </aside>
+    <div class="content">
+      <div class="content-scroll" id="mainContent"></div>
+      <div class="total-bar no-print">
+        <div class="total-bar-left"><i class="fa-solid fa-sigma"></i>Сумма всех участков</div>
+        <div class="total-bar-num" id="totalSum">0</div>
+      </div>
+    </div>
+  </div>
 
-  <footer>
-    <p><a href="index.html">← Вернуться на главную</a></p>
-  </footer>
+  <!-- Tab: Template -->
+  <div class="content" id="tabTpl" style="display:none;overflow-y:auto;">
+    <div class="content-scroll">
+      <div class="paper-ctrl no-print">
+        <div style="flex:1;min-width:160px"><label>Сотрудник</label><select id="tplEmp" class="input-cell"></select></div>
+        <div style="display:flex;gap:6px;align-items:flex-end;padding-bottom:1px">
+          <button class="btn btn-accent" onclick="fillDocx()" title="Сформировать приказ из шаблона (без помощника)"><i class="fa-solid fa-file-word"></i>Сформировать приказ</button>
+        </div>
+      </div>
+      <div class="card no-print" style="margin-top:14px;max-width:760px">
+        <div class="card-head"><i class="fa-solid fa-gear"></i><span>Приказ</span></div>
+        <div class="card-body">
+          <div class="form-row">
+            <label>Укажи Шаблон</label>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <input type="file" accept=".docx" id="tplFileInput" onchange="tplFileSelected(this)" style="display:none">
+              <button class="btn" onclick="document.getElementById('tplFileInput').click()" title="Выберите свой шаблон.docx — он будет использоваться для новых приказов"><i class="fa-solid fa-file-arrow-up"></i>Выберите файл</button>
+              <span id="tplInfo"></span>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Укажи папку для приказов</label>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <button class="btn" onclick="pickPrikazFolder()" title="Куда сохранять готовые приказы"><i class="fa-solid fa-folder-open"></i>Выбрать папку</button>
+              <span id="folderInfo"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Tab: Manage -->
+  <div class="content" id="tabManage" style="display:none;overflow-y:auto;">
+    <div class="content-scroll" style="max-width:700px;margin:0 auto;">
+      <div class="card"><div class="card-head"><i class="fa-solid fa-file-import"></i><span>Импорт / Экспорт</span></div>
+        <div class="card-body manage-section">
+          <p style="font-size:13px;color:var(--fg-muted);line-height:1.6;margin-bottom:14px">Загрузите Excel-файл с двумя листами: Лист1 — площади помещений, Лист2 — справочник сотрудников (ФИО, ФИО(Д1), ФИО (Д), ставка, допставка).</p>
+          <div class="manage-row">
+            <button class="btn btn-accent" onclick="document.getElementById('fileInput').click()" style="padding:10px 20px;font-size:14px"><i class="fa-solid fa-file-import"></i>Загрузить Excel</button>
+            <button class="btn btn-accent" onclick="exportExcel()" style="padding:10px 20px;font-size:14px"><i class="fa-solid fa-file-export"></i>Выгрузить Excel</button>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="card-head"><i class="fa-solid fa-chart-bar"></i><span>Сводка по сотрудникам</span></div>
+        <div class="card-body"><div id="summaryContent" style="overflow-x:auto"></div></div>
+      </div>
+      <div class="card"><div class="card-head"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i><span style="color:var(--danger)">Опасная зона</span></div>
+        <div class="card-body manage-section">
+          <p style="font-size:13px;color:var(--fg-muted);margin-bottom:14px">Удалить всех сотрудников и все сохранённые данные. Это действие нельзя отменить.</p>
+          <button class="btn" onclick="saveData();toast(''Данные сохранены'',''success'')" style="padding:10px 20px;font-size:14px"><i class="fa-solid fa-floppy-disk"></i>Сохранить</button> <button class="btn btn-danger" onclick="confirmClearAll()" style="padding:10px 20px;font-size:14px"><i class="fa-solid fa-trash-can"></i>Очистить все данные</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <script src="assets/js/main.js" defer></script>
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+<!-- Toasts -->
+<div class="toast-container" id="toastContainer"></div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+/* ===== STORAGE ===== */
+var DATA_KEY='pfhg-data-v1',THEME_KEY='pfhg-theme';
+function saveData(){try{localStorage.setItem(DATA_KEY,JSON.stringify(S));}catch(e){}}
+function loadData(){try{var d=localStorage.getItem(DATA_KEY);if(d){var p=JSON.parse(d);S.emps=(p.emps||[]).filter(function(e){return e&&e.fio&&String(e.fio).trim();});S.nextId=p.nextId||14;S.selId=p.selId&&S.emps.find(function(e){return e.id===p.selId})?p.selId:(S.emps[0]?S.emps[0].id:null);S.cfg=p.cfg||S.cfg;S.tplDate1=p.tplDate1||'';S.tplDate2=p.tplDate2||'';S.tplNum=p.tplNum||'';S.tplEmpId=p.tplEmpId&&S.emps.find(function(e){return e.id===p.tplEmpId})?p.tplEmpId:(S.emps[0]?S.emps[0].id:null);return true;}}catch(e){}return false;}
+
+/* ===== DEMO DATA ===== */
+var DEMO_S1=[
+['Куликова Л.В.','*'],['2 этаж блок А:','*'],
+['Кабинет № 212',33.9],['Кабинет № 213',33.5],['Кабинет № 214',69],['Кабинет № 215',68.9],
+['Кабинет № 216',61.6],['Кабинет № 217',61.5],['Кабинет № 218',62.1],['Кабинет № 219',70.5],
+['Кабинет № 220',69.8],['Рекреация от каб.№212 (включительно) до каб 219',215.8],
+['Туалеты',30.6],['Кабинет директора',34.1],['Приемная',16.2],['Секретарь',17.6],
+['Кабинет заучей',16.7],['Методический кабинет (Учительская)',4.7],
+['ВСЕГО участок работы',866.5],
+['Гюлумян И.И.','*'],['3 этаж блок А:','*'],
+['Кабинет 316',33.8],['Кабинет № 317 (психолог)',10.5],['Кабинет № 318',68.8],['Кабинет № 319',69.3],
+['Кабинет № 320',61.3],['Кабинет № 321',61.5],['Кабинет № 321 а',7.9],['Кабинет № 322',62],
+['Кабинет № 323',62.3],['Кабинет № 324',62.1],['Кабинет № 324а',23.3],['Туалеты',30.6],
+['Малый коридор',6.7],['Рекреация',190.3],
+['Блок А:','*'],['Лестницы боковые с 1 на 3 этаж (2 шт.)',98.2],
+['2 этаж новое здание:','*'],['Спортивный зал',279.3],['Снарядная (тренерская)',13.8],
+['ВСЕГО участок работы',1141.7],
+['Шевченко Г.Р.','*'],['3 этаж блок В:','*'],
+['Кабинет № 301',63.9],['Кабинет № 303',70.5],['Кабинет № 302',32.1],['Кабинет № 304',61.6],
+['Кабинет № 305',62.1],['Кабинет № 306',61.7],['Кабинет № 307',70],['Кабинет № 308',6.3],
+['Кабинет № 309',33.6],['Кабинет № 310',34.4],['Кабинет № 311',75.2],['Туалеты',29.2],
+['Рекреация до 311 каб.',211],['305 а (Учительская)',7.8],['306 а (Профсоюз)',7.9],
+['ВСЕГО участок работы',827.3],
+['Калинина М.С.','*'],['3 этаж блок Б:','*'],
+['Кабинет контрактного управляющего',21.2],['Кабинет № 312 с подсобным помещением',59.2],
+['Кабинет № 313 с подсобным помещением',40.6],['Кабинет № 314',34.3],
+['Кабинет № 315 (зам. директор по АХР)',16.7],['Служебный туалет',8.9],['Рекреация',211.6],
+['Центральная лестница с 1 по 3 этаж',101.9],
+['2 этаж блок Б:','*'],['Рекреация около приемной',87.9],
+['1 этаж блок А:','*'],['Кабинет № 111',61],['Кабинет № 110',68.6],['Кабинет № 109',53.2],
+['Внутренние помещения в каб.109',13.7],['Рекреация от каб.№109 до входа в «Кванториум» 89,7 м2',75.4],
+['Туалеты',25.1],
+['ВСЕГО участок работы',879.3],
+['Клочкова С.В.','*'],['1 этаж блок В:','*'],
+['Кабинет № 101',69.8],['Учительская начальной школы',33.2],['Кабинет № 102',62.1],
+['Кабинет № 103',61.8],['Кабинет № 104',62],['Кабинет № 105',62.1],['Кабинет № 106',69.1],
+['Кабинет № 107',33.3],['Туалеты',31.1],
+['Рекреация нач.школы (от каб.№ 101 до гардеробной)',172.2],
+['Холл (вход в нач.школу) – 84,6 м2',60.2],['Тамбур (вход в нач.школу)',13.5],
+['Гардеробная нач.школы',30.5],['Тамбур с лестницей (вход в нач.школу)',53],
+['столовая','*'],['столовая (средний зал)',102.3],
+['ВСЕГО участок работы',916.2],
+['Пищеренко Ю.А.','*'],['2 этаж блок В:','*'],
+['Кабинет №201',69.8],['Кабинет № 202',62.1],['Кабинет № 203',61.7],['Кабинет № 204',62.1],
+['Кабинет № 205',61.6],['Кабинет № 206',69.2],['Кабинет № 207',61.2],['Кабинет № 208',33.8],
+['Кабинет № 209',47.3],['Кабинет соц.педагога',7.9],['Туалеты',31],
+['Рекреация от 201 до 209 каб. Включительно',172.2],
+['столовая','*'],['столовая (левый зал)',98.9],['столовая (правый зал- нач.школа)',83.3],
+['ВСЕГО участок работы',922.1],
+['Гончарова М.В.','*'],['2 этаж блок Б и В:','*'],
+['Кабинет № 210',35.4],['Кабинет № 211',48.7],['Лестницы боковые с 1 по 3 этаж',98.2],
+['Рекреация от 211 до 209 каб. включительно',128.2],['Раздевалка 2 этаж',51.4],
+['Спортивный зал (большой)',210.8],['Спортивный (гимнастический зал)',102.7],
+['Тренерская',14.2],['Танцевальный зал',61.8],['Холл перед спортзалом',33.4],
+['Тамбуры (центральный, запасной выход с лестницей)',145.1],
+['ВСЕГО участок работы',929.9],
+['Новая У.','*'],['1 этаж блок Б:','*'],
+['Фойе',102.5],['Холл с гардеробной',155.28],['Холл (каб.медсестры)',121.4],
+['Хлораторная, подсобные помещения',20],['Кабинет № 108',50.8],
+['Комната отдыха, перед ней холл, холл перед каб. №108',100.9],
+['Медицинские кабинеты',33],['Кабинет логопеда',16.5],['Серверная',15.3],
+['ВСЕГО участок работы',615.68],
+['Зацепина Л.М.','*'],['1 этаж блок А:','*'],
+['Кабинет № 115',69.5],['Кабинет № 114',71],['Лаборантская химии',33.8],
+['Кабинет рук. Кванториума',13.5],['Лаборантские физики и биологии',13.4],
+['Рекреация от входа в «Кванториум» до каб.№114',101.8],
+['ВСЕГО участок работы',303],
+['Синецкая О.Н.','*'],['1 этаж блок А:','*'],
+['Кабинет № 115',69.5],['Кабинет № 114',71],['Кабинет № 113',61.5],['Кабинет № 112',61],
+['Рекреация от каб.№109 до каб.№114',191.3],['Туалеты',25.1],
+['ВСЕГО участок работы',479.4],
+['Мирошниченко Т.П.','*'],['1 Этаж н/з:','*'],
+['Кабинет технологии',83.5],['Кабинет слесарные мастерские',121.7],['Кладовые к кабинетам',47.1],
+['Кабинет информатики',98.4],['Кабинет охраны',18.3],['Гимнастический зал',126.9],
+['Туалеты',29.3],['Раздевалки (2 шт)',16],['Венткамера',27],['Душевые (2шт)',4.7],
+['Служебное тех. помещение',7.5],['Коридоры',147.3],['Кабинет ( за каб. Информатики)',20.8],
+['Серверная',10.5],['Лестницы на улице ( центральный вход, запасные входы, пандус) – 50м2',70.05],
+['Лестницы с 1-2 этаж (4 шт,), лестница в подвал',66.8],
+['ВСЕГО участок работы',895.85],
+['Носкова Г.Л.','*'],['2 Этаж н/з:','*'],
+['Актовый зал',197.11],['Сцена актового зала',25.4],['Гримерка актового зала',28],
+['Коридоры около актового зала',32.96],['Холл около актового зала',100.9],['Переход',27.7],
+['Туалеты',27.2],['Коридор (около туалетов , разжевалок',42.1],['Раздевалки (2шт)',32.6],
+['Костюмерная',15.2],
+['ВСЕГО участок работы',529.17],
+['Иглина Н.А.','*'],['Библиотека',125],['ВСЕГО участок работы',125]
+];
+var DEMO_S2=[
+{fio:'Гюлумян И.И.',fioD1:'Гюлумян И.И.',fioD:'Гюлумян Ирине Ивановне',stavka:1,dopStavka:0.5},
+{fio:'Гончарова М.В.',fioD1:'Гончаровой М.В.',fioD:'Гончаровой Маргарите Владимировне',stavka:1,dopStavka:0.5},
+{fio:'Зацепина Л.М.',fioD1:'Зацепиной Л.М.',fioD:'Зацепиной Ларисе Михайловне',stavka:0.5,dopStavka:null},
+{fio:'Иглина Н.А.',fioD1:'Иглиной Н.А.',fioD:'Иглиной Наталье Александровне',stavka:0.25,dopStavka:null},
+{fio:'Калинина М.С.',fioD1:'Калининой М.С.',fioD:'Калининой Марине Сергеевне',stavka:1,dopStavka:0.5},
+{fio:'Клочкова С.В.',fioD1:'Клочковой С.В.',fioD:'Клочковой Снежане Владимировне',stavka:1,dopStavka:0.5},
+{fio:'Куликова Л.В.',fioD1:'Куликовой Л.В.',fioD:'Куликовой Людмиле Владимировне',stavka:1,dopStavka:0.5},
+{fio:'Мирошниченко Т.П.',fioD1:'Мирошниченко Т.П.',fioD:'Мирошниченко Татьяне Петровне',stavka:1,dopStavka:0.5},
+{fio:'Новая У.',fioD1:'Новая У.',fioD:'Новой уборщице',stavka:1,dopStavka:null},
+{fio:'Носкова Г.Л.',fioD1:'Носковой Г.Л.',fioD:'Носковой Галине Леонидовне',stavka:1,dopStavka:null},
+{fio:'Пищеренко Ю.А.',fioD1:'Пищеренко Ю.А.',fioD:'Пищеренко Юлии Александровне',stavka:1,dopStavka:0.5},
+{fio:'Синецкая О.Н.',fioD1:'Синецкой О.Н.',fioD:'Синецкой Ольге Николаевне',stavka:1,dopStavka:null},
+{fio:'Шевченко Г.Р.',fioD1:'Шевченко Г.Р.',fioD:'Шевченко Гульнаре Рушановне',stavka:1,dopStavka:0.5}
+];
+
+/* ===== STATE ===== */
+var S={emps:[],selId:null,tab:'calc',nextId:1,
+  cfg:{baseArea:500,salaryRate:18810,yearS:'01.09.2026',yearE:'31.08.2027',year:'2026-2027',reqArea:0},
+  tplEmpId:null,tplDate1:'',tplDate2:'',tplNum:''};
+var _prevTotal=0;
+
+/* ===== UTILS ===== */
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmt(n){var s=parseFloat(n)||0;return s%1===0?s.toString():s.toFixed(2).replace('.',',');}
+function fmt2(n){var s=fmt(n);if(s.indexOf(',')!==-1)s=s.replace(/0+$/,'').replace(/[.,]$/,'');return s;}
+function fmtFull(n){var s=(parseFloat(n)||0).toFixed(2);var p=s.split('.');p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');return p.join(',');}
+function getEmp(id){return S.emps.find(function(e){return e.id===id});}
+function getTotal(emp){return emp.rows.filter(function(r){return!r.isHeader&&!r.isTotal}).reduce(function(s,r){return s+(r.area||0)},0);}
+function getDoppl(emp){var st=emp.stavka+(emp.dopStavka||0);var base=st*S.cfg.baseArea;return Math.max(0,getTotal(emp)-base);}
+function getProc(emp){var d=getDoppl(emp);return d>0?Math.round(d/S.cfg.baseArea*100):0;}
+function getOklad(emp){return Math.round(emp.stavka*S.cfg.salaryRate);}
+function getDopOklad(emp){return Math.round(S.cfg.salaryRate*getProc(emp)/100);}
+
+/* ===== PARSER ===== */
+function parseSheet1(raw){
+  var blocks={},name=null,rows=[];
+  for(var i=0;i<raw.length;i++){
+    var t=raw[i][0],v=raw[i][1];
+    if(name===null){name=t;rows=[];}
+    else if(t==='ВСЕГО участок работы'){rows.push({text:t,area:parseFloat(v)||0,isHeader:false,isTotal:true});blocks[name]=rows.slice();name=null;rows=[];}
+    else if(v==='*'){rows.push({text:t,area:null,isHeader:true,isTotal:false});}
+    else{rows.push({text:t,area:parseFloat(v)||0,isHeader:false,isTotal:false});}
+  }
+  if(name)blocks[name]=rows;
+  return blocks;
+}
+
+/* ===== THEME ===== */
+function toggleTheme(){var h=document.documentElement,d=h.getAttribute('data-theme')==='dark',t=d?'light':'dark';h.setAttribute('data-theme',t);document.getElementById('themeIcon').className=d?'fa-solid fa-moon':'fa-solid fa-sun';try{localStorage.setItem(THEME_KEY,t);}catch(e){}}
+(function(){try{var s=localStorage.getItem(THEME_KEY);if(s==='light'||s==='dark'){document.documentElement.setAttribute('data-theme',s);document.getElementById('themeIcon').className=s==='dark'?'fa-solid fa-sun':'fa-solid fa-moon';}}catch(e){}})();
+
+/* ===== MOBILE ===== */
+function toggleMobileSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+
+/* ===== TOAST ===== */
+function toast(msg,type){type=type||'info';var icons={success:'fa-circle-check',error:'fa-circle-xmark',info:'fa-circle-info',warn:'fa-triangle-exclamation'};var d=document.createElement('div');d.className='toast '+type;d.innerHTML='<i class="fa-solid '+(icons[type]||icons.info)+'"></i><span>'+esc(msg).replace(/\n/g,'<br>')+'</span>';document.getElementById('toastContainer').appendChild(d);setTimeout(function(){d.classList.add('out');setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},300);},3500);}
+
+/* ===== MODAL ===== */
+function openModal(html){document.getElementById('modalBox').innerHTML=html;document.getElementById('modalOverlay').classList.add('active');}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('active');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+
+/* ===== RECALC ===== */
+function recalcEmp(emp){var total=getTotal(emp);var tr=emp.rows.find(function(r){return r.isTotal});if(tr)tr.area=parseFloat(total.toFixed(2));}
+
+/* ===== TABS ===== */
+document.getElementById('tabs').addEventListener('click',function(e){
+  var btn=e.target.closest('.tab-btn');if(!btn)return;
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  var tab=btn.dataset.tab;S.tab=tab;
+  document.getElementById('tabCalc').style.display=tab==='calc'?'flex':'none';
+  document.getElementById('tabTpl').style.display=tab==='tpl'?'flex':'none';
+  document.getElementById('tabManage').style.display=tab==='manage'?'flex':'none';
+  if(tab==='tpl'){renderTplSelect();renderTplInfo();renderFolderInfo();loadFolderHandle();}
+  if(tab==='manage')renderSummary();
+});
+
+/* ===== SIDEBAR ===== */
+function renderSidebar(){
+  var search=(document.getElementById('sidebarSearch').value||'').toLowerCase();
+  var list=S.emps.filter(function(e){return e.fio.toLowerCase().indexOf(search)!==-1;});
+  var h='';
+  list.forEach(function(e){
+    var act=e.id===S.selId?'active':'';var total=getTotal(e);
+    h+='<div class="sb-item '+act+'" data-eid="'+e.id+'"><div class="sb-item-name">'+esc(e.fio)+'</div><div class="sb-item-area">'+fmt(total)+' м²</div><button class="sb-item-del" data-del="'+e.id+'" title="Удалить"><i class="fa-solid fa-xmark"></i></button></div>';
+  });
+  if(list.length===0)h='<div style="text-align:center;padding:20px;color:var(--muted-text);font-size:13px"><i class="fa-solid fa-inbox" style="font-size:24px;display:block;margin-bottom:8px;opacity:.4"></i>'+(search?'Ничего не найдено':'Нет сотрудников')+'</div>';
+  document.getElementById('sidebarList').innerHTML=h;
+}
+document.getElementById('sidebarList').addEventListener('click',function(e){
+  var del=e.target.closest('[data-del]');
+  if(del){e.stopPropagation();removeEmp(parseInt(del.dataset.del));return;}
+  var item=e.target.closest('[data-eid]');
+  if(item){S.selId=parseInt(item.dataset.eid);renderSidebar();renderMain();}
+});
+
+/* ===== MAIN CONTENT ===== */
+function renderMain(){
+  var emp=getEmp(S.selId);
+  if(!emp){document.getElementById('mainContent').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted-text)"><i class="fa-solid fa-hand-pointer" style="font-size:36px;display:block;margin-bottom:12px;opacity:.3"></i>Выберите сотрудника в списке слева</div>';return;}
+  var total=getTotal(emp),doppl=getDoppl(emp),proc=getProc(emp),oklad=getOklad(emp),dopOk=getDopOklad(emp),baseArea=emp.stavka*S.cfg.baseArea;
+  var h='';
+  /* Сводные карточки по сотруднику */
+  h+='<div class="stats-grid">'
+    +'<div class="stat-tile st-green"><div class="st-num" id="stTotal">0 м²</div><div class="st-label">Общая площадь</div></div>'
+    +'<div class="stat-tile st-accent"><div class="st-num" id="stDop">0 м²</div><div class="st-label">Доп. площадь</div></div>'
+    +'<div class="stat-tile st-blue"><div class="st-num" id="stProc">0%</div><div class="st-label">Доплата к ставке</div></div>'
+    +'<div class="stat-tile st-orange"><div class="st-num" id="stOklad">0</div><div class="st-label">Оклад + доп.</div></div>'
+    +'</div>';
+  h+='<div class="card"><div class="card-head" style="cursor:pointer" onclick="var b=this.querySelector(\'.spoiler-arrow\');var c=this.nextElementSibling;if(c.style.display===\'none\'){c.style.display=\'\';b.style.transform=\'rotate(90deg)\'}else{c.style.display=\'none\';b.style.transform=\'\'}"><i class="fa-solid fa-user"></i><span>'+esc(emp.fio)+'</span><i class="fa-solid fa-chevron-right spoiler-arrow" style="margin-left:auto;font-size:11px;color:var(--fg-muted);transition:transform .2s;transform:rotate(90deg)"></i><div class="card-head-right"><button class="btn btn-danger" onclick="event.stopPropagation();removeEmp(S.selId)"><i class="fa-solid fa-trash-can"></i>Удалить</button></div></div><div class="card-body"><div class="form-row"><label>ФИО</label><input class="input-cell" value="'+esc(emp.fio)+'" data-field="fio"></div><div class="form-row"><label>ФИО (Д1)</label><input class="input-cell" value="'+esc(emp.fioD1)+'" data-field="fioD1"></div><div class="form-row"><label>ФИО (Д)</label><input class="input-cell" value="'+esc(emp.fioD)+'" data-field="fioD"></div><div class="form-row"><label>Ставка</label><input type="number" step="0.25" min="0.25" class="input-cell input-sm" value="'+emp.stavka+'" data-field="stavka"></div><div class="form-row"><label>Допставка</label><input type="number" step="0.25" min="0" class="input-cell input-sm" value="'+(emp.dopStavka||'')+'" data-field="dopStavka" placeholder="—"></div><div class="form-row"><label>Выслуга</label><div style="display:flex;gap:6px;align-items:center"><label style="font-size:12px;white-space:nowrap"><input type="radio" name="vysluga" value="0" data-field="vysluga"> нет выслуги</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="vysluga" value="5" data-field="vysluga" '+(emp.vysluga===5?'checked':'')+'> от 5 до 10 лет</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="vysluga" value="10" data-field="vysluga" '+(emp.vysluga===10?'checked':'')+'> от 10 до 20 лет</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="vysluga" value="15" data-field="vysluga" '+(emp.vysluga===15?'checked':'')+'> от 20 лет</label></div></div><div class="form-row"><label>Факт.выслуга, лет</label><input type="number" step="0.5" class="input-cell input-sm" value="'+(emp.faktVysluga||'')+'"  data-field="faktVysluga" placeholder="—"></div><div class="form-row"><label>Выс.проц</label><input class="input-cell input-sm" value="'+(emp.vyslugaProc!=null?emp.vyslugaProc:'')+'"  data-field="vyslugaProc" style="background:var(--bg-secondary);opacity:.7"></div></div></div>';
+  h+='<div class="card"><div class="card-head"><i class="fa-solid fa-list"></i><span>Участок работы</span><div class="card-head-right"><button class="btn btn-accent" id="btnAddRoom"><i class="fa-solid fa-plus"></i>Помещение</button><button class="btn" id="btnAddSection"><i class="fa-solid fa-plus"></i>Раздел</button></div></div>';
+  h+='<div class="table-wrap"><table class="wl"><thead><tr><th class="row-num">№</th><th>Помещение</th><th class="row-area">Площадь, м²</th><th class="row-actions"></th></tr></thead><tbody id="wlBody">';
+  var num=0;
+  emp.rows.forEach(function(r,i){
+    if(r.isTotal){h+='<tr class="row-total"><td></td><td>'+esc(r.text)+'</td><td style="text-align:right">'+fmt(r.area)+'</td><td></td></tr>';}
+    else if(r.isHeader){h+='<tr class="row-header"><td></td><td><input class="cell-edit" data-idx="'+i+'" data-f="text" value="'+esc(r.text)+'"></td><td></td><td style="text-align:center"><button class="btn-row-del" data-delrow="'+i+'" title="Удалить"><i class="fa-solid fa-xmark"></i></button></td></tr>';}
+    else{num++;h+='<tr><td class="row-num">'+num+'</td><td><input class="cell-edit" data-idx="'+i+'" data-f="text" value="'+esc(r.text)+'"></td><td class="row-area"><input type="number" step="0.01" class="cell-num" data-idx="'+i+'" data-f="area" value="'+r.area+'"></td><td class="row-actions"><button class="btn-row-del" data-delrow="'+i+'" title="Удалить"><i class="fa-solid fa-xmark"></i></button></td></tr>';}
+  });
+  h+='</tbody></table></div></div>';
+  document.getElementById('mainContent').innerHTML=h;
+  updateCalcCards(emp);
+}
+
+/* ===== EVENT DELEGATION ===== */
+document.getElementById('mainContent').addEventListener('input',function(e){
+  var emp=getEmp(S.selId);if(!emp)return;
+  if(e.target.dataset.field){
+    var f=e.target.dataset.field;
+    if(f==='stavka')emp.stavka=parseFloat(e.target.value)||0;
+    else if(f==='dopStavka')emp.dopStavka=parseFloat(e.target.value)||null;else if(f==='vysluga'){emp.vysluga=parseInt(e.target.value);emp.vyslugaProc=parseInt(e.target.value)||emp.vysluga;renderMain();}else if(f==='faktVysluga'){emp.faktVysluga=parseFloat(e.target.value)||null;}
+    else emp[f]=e.target.value;
+    if(f==='fio')renderSidebar();
+    recalcEmp(emp);renderTotalBar();updateTotalsUI(emp);saveData();return;
+  }
+  if(e.target.dataset.idx!==undefined){
+    var idx=parseInt(e.target.dataset.idx);var ff=e.target.dataset.f;
+    if(ff==='area'){emp.rows[idx].area=parseFloat(e.target.value)||0;recalcEmp(emp);renderTotalBar();updateTotalsUI(emp);saveData();}
+    else if(ff==='text'){emp.rows[idx].text=e.target.value;saveData();}
+  }
+});
+document.getElementById('mainContent').addEventListener('click',function(e){
+  if(e.target.closest('#btnAddRoom')){
+    var emp=getEmp(S.selId);if(!emp)return;
+    var ti=emp.rows.findIndex(function(r){return r.isTotal});
+    emp.rows.splice(ti,0,{text:'Новое помещение',area:0,isHeader:false,isTotal:false});
+    recalcEmp(emp);renderMain();renderTotalBar();saveData();
+    setTimeout(function(){var inp=document.querySelectorAll('[data-f="area"]');if(inp.length)inp[inp.length-1].focus();},50);
+  }
+  if(e.target.closest('#btnAddSection')){
+    var emp=getEmp(S.selId);if(!emp)return;
+    var ti=emp.rows.findIndex(function(r){return r.isTotal});
+    emp.rows.splice(ti,0,{text:'Новый раздел:',area:null,isHeader:true,isTotal:false});
+    renderMain();saveData();
+    setTimeout(function(){var inp=document.querySelectorAll('.row-header .cell-edit');if(inp.length){inp[inp.length-1].focus();inp[inp.length-1].select();}},50);
+  }
+  var delBtn=e.target.closest('[data-delrow]');
+  if(delBtn){
+    var emp=getEmp(S.selId);if(!emp)return;
+    var idx=parseInt(delBtn.dataset.delrow);
+    var row=delBtn.closest('tr');
+    if(row){row.classList.add('removing');setTimeout(function(){emp.rows.splice(idx,1);recalcEmp(emp);renderMain();renderTotalBar();saveData();toast('Строка удалена','info');},280);}
+  }
+});
+
+function updateCalcCards(emp){
+  var total=getTotal(emp),doppl=getDoppl(emp),proc=getProc(emp),oklad=getOklad(emp),dopOk=getDopOklad(emp);
+  var e1=document.getElementById('stTotal');if(e1)e1.textContent=fmt(total)+' м²';
+  var e2=document.getElementById('stDop');if(e2)e2.textContent=fmt(doppl)+' м²';
+  var e3=document.getElementById('stProc');if(e3)e3.textContent=proc+'%';
+  var e4=document.getElementById('stOklad');if(e4)e4.textContent=oklad+' + '+dopOk+' ₽';
+}
+
+/* ===== TOTAL BAR ===== */
+function renderTotalBar(){
+  var sum=S.emps.reduce(function(s,e){return s+getTotal(e)},0);
+  var el=document.getElementById('totalSum');
+  el.textContent=fmtFull(sum)+' м²';
+  if(sum!==_prevTotal){el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse');_prevTotal=sum;}
+  var fa=document.getElementById('hdrFactArea');if(fa)fa.textContent=fmtFull(sum);
+  var ra=document.getElementById('hdrReqArea');if(ra)ra.textContent=fmtFull(S.cfg.reqArea||0);
+}
+/* Синхронизация итоговой строки таблицы, сайдбара и карточек */
+function updateTotalsUI(emp){
+  var tr=document.querySelector('#wlBody tr.row-total');
+  if(tr){var tds=tr.querySelectorAll('td');if(tds.length>2)tds[2].textContent=fmt(getTotal(emp));}
+  var si=document.querySelector('.sb-item.active .sb-item-area');
+  if(si)si.textContent=fmt(getTotal(emp))+' м²';
+  updateCalcCards(emp);
+}
+
+/* ===== ADD/REMOVE EMP ===== */
+function openAddEmpModal(){
+  openModal('<h3>Новый сотрудник</h3>'+
+    '<div class="form-row"><label>ФИО</label><input class="input-cell" id="mFio"></div>'+
+    '<div class="form-row"><label>ФИО (Д1)</label><input class="input-cell" id="mFioD1"></div>'+
+    '<div class="form-row"><label>ФИО (Д)</label><input class="input-cell" id="mFioD"></div>'+
+    '<div class="form-row"><label>Ставка</label><input type="number" step="0.25" value="1" class="input-cell input-sm" id="mSt"></div>'+
+    '<div class="form-row"><label>Допставка</label><input type="number" step="0.25" class="input-cell input-sm" id="mDs" placeholder="—"></div><div class="form-row"><label>Выслуга</label><div style="display:flex;gap:6px;align-items:center"><label style="font-size:12px;white-space:nowrap"><input type="radio" name="mVyR" value="0" id="mVy" checked> нет</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="mVyR" value="5"> от 5 до 10</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="mVyR" value="10"> от 10 до 20</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="mVyR" value="15"> св. 20</label></div></div><div class="form-row"><label>Факт.выслуга, лет</label><input class="input-cell input-sm" id="mFv" placeholder="—"></div>'+
+    '<div class="modal-actions"><button class="modal-cancel" onclick="closeModal()">Отмена</button><button class="modal-confirm-accent" id="mOk">Добавить</button></div>');
+  setTimeout(function(){
+    document.getElementById('mOk').addEventListener('click',function(){
+      var fio=document.getElementById('mFio').value.trim();
+      if(!fio){toast('Укажите ФИО','error');return;}
+      var ne={id:S.nextId++,fio:fio,
+        fioD1:document.getElementById('mFioD1').value.trim()||fio,
+        fioD:document.getElementById('mFioD').value.trim()||fio,
+        stavka:parseFloat(document.getElementById('mSt').value)||1,
+        dopStavka:parseFloat(document.getElementById('mDs').value)||null,vysluga:parseInt(document.getElementById("mVy").value)||null,faktVysluga:document.getElementById("mFv").value.trim()||null,vyslugaProc:parseInt(document.getElementById("mVy").value)||null,
+        rows:[{text:'ВСЕГО участок работы',area:0,isHeader:false,isTotal:true}]};
+      S.emps.push(ne);S.selId=ne.id;
+      closeModal();renderSidebar();renderMain();renderTotalBar();saveData();
+      toast('Сотрудник добавлен','success');
+    });
+  },50);
+}
+function removeEmp(id){
+  var emp=getEmp(id);if(!emp)return;
+  openModal('<h3>Удалить сотрудника?</h3>'+
+    '<p style="color:var(--fg-muted);margin-bottom:4px">Удалить <strong style="color:var(--fg)">'+esc(emp.fio)+'</strong> и все данные?</p>'+
+    '<div class="modal-actions"><button class="modal-cancel" onclick="closeModal()">Отмена</button><button class="modal-confirm" id="mDelOk">Удалить</button></div>');
+  setTimeout(function(){
+    document.getElementById('mDelOk').addEventListener('click',function(){
+      S.emps=S.emps.filter(function(e){return e.id!==id});
+      if(S.selId===id)S.selId=S.emps.length?S.emps[0].id:null;
+      closeModal();renderSidebar();renderMain();renderTotalBar();saveData();
+      toast('Сотрудник удалён','info');
+    });
+  },50);
+}
+
+/* ===== SETTINGS ===== */
+function openSettings(){
+  var c=S.cfg;
+  openModal('<h3>Настройки расчёта</h3>'+
+    '<div class="form-row"><label>Площадь на 1 ставку, м²</label><input type="number" class="input-cell input-sm" id="sBase" value="'+c.baseArea+'"></div>'+
+    '<div class="form-row"><label>Оклад на 1 ставку, руб.</label><input type="number" class="input-cell input-sm" id="sSalary" value="'+c.salaryRate+'"></div>'+
+    '<div class="form-row"><label>Треб. площадь, м²</label><input type="number" class="input-cell input-sm" id="sReq" value="'+(c.reqArea||0)+'"></div>'+
+    '<div class="modal-actions"><button class="modal-cancel" onclick="closeModal()">Отмена</button><button class="modal-confirm-accent" id="sOk">Сохранить</button></div>');
+  setTimeout(function(){
+    document.getElementById('sOk').addEventListener('click',function(){
+      S.cfg.baseArea=parseFloat(document.getElementById('sBase').value)||500;
+      S.cfg.salaryRate=parseFloat(document.getElementById('sSalary').value)||18810;
+      S.cfg.reqArea=parseFloat(document.getElementById('sReq').value)||0;
+      closeModal();renderMain();renderTotalBar();saveData();
+      if(S.tab==='tpl')renderTplSelect();
+      toast('Настройки сохранены','success');
+    });
+  },50);
+}
+
+/* ===== TEMPLATE ===== */
+function renderTplSelect(){
+  if((!S.tplEmpId||!getEmp(S.tplEmpId))&&S.emps.length)S.tplEmpId=S.emps[0].id;
+  var sel=document.getElementById('tplEmp');
+  sel.onchange=function(){S.tplEmpId=parseInt(this.value);};
+  sel.innerHTML=S.emps.map(function(e){return '<option value="'+e.id+'"'+(e.id===S.tplEmpId?' selected':'')+'>'+esc(e.fio)+'</option>';}).join('');
+}
+var S3_TEXT='',S3_NUM=9405;/* populated from Лист3 on import: B1 — текст, A1 — число */
+var MONTHS_RU=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+function fmtDate1(d){if(!d)return'___';var parts=String(d).split('.');if(parts.length===3)return parts[0]+'.'+parts[1]+'.'+parts[2]+'г.';var dt=new Date(d);if(isNaN(dt))return d;return ('0'+dt.getDate()).slice(-2)+'.'+('0'+(dt.getMonth()+1)).slice(-2)+'.'+dt.getFullYear()+'г.';}
+function fmtDate2(d){if(!d)return'___';var dt;var parts=String(d).split('.');if(parts.length===3){dt=new Date(parseInt(parts[2],10)||0,(parseInt(parts[1],10)||1)-1,parseInt(parts[0],10)||1);}else{dt=new Date(d);}if(isNaN(dt))return d;return '«'+dt.getDate()+'» '+MONTHS_RU[dt.getMonth()]+' '+dt.getFullYear()+' года';}
+
+/* ===== ПРИКАЗ В БРАУЗЕРЕ: шаблон.docx заполняется без помощника ===== */
+/* ===== DOCX-ENGINE: заполнение шаблона .docx в браузере (без Word-помощника) =====
+ * Чистые функции: на вход — XML word/document.xml + данные приказа, на выход — новый XML.
+ * Теги в шаблоне разбиты по run'ам ({ + таблица + }), «м2» — «м» + надстрочная «2»,
+ * поэтому замена идёт посимвольно по run'ам с сохранением форматирования каждого run'а. */
+var DOCX_ENGINE = (function (global) {
+  'use strict';
+  var E = {};
+
+  E.escXml = function (s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  };
+
+  /* 2 знака после запятой для нецелых: 1103.8 -> «1103,80» */
+  E.fmt = function (n) { var s = parseFloat(n) || 0; return s % 1 === 0 ? s.toString() : s.toFixed(2).replace('.', ','); };
+
+  /* минимум 1 знак после запятой, лишние нули убраны: 62 -> «62,0», 33.8 -> «33,8» */
+  E.fmt1 = function (n) {
+    n = parseFloat(n) || 0;
+    return n.toFixed(2).replace('.', ',').replace(/(,\d)0+$/, '$1');
+  };
+
+  /* короткое имя раздела для строки «Итого»: «3 этаж блок А» -> «3-й этаж», иначе как есть */
+  E.shortSec = function (name) {
+    var m = String(name).match(/(\d+)\s*(?:-й|-ой)?\s*этаж/i);
+    return m ? m[1] + '-й этаж' : String(name).trim();
+  };
+
+  /* строки участка работы в формате пользователя:
+   *   раздел:
+   *   помещение - N м2
+   *   Итого раздел - N м2
+   *   ВСЕГО участок работы на N м2 */
+  E.buildWorkLines = function (rows) {
+    var lines = [], sec = null, secSum = 0, total = 0;
+    (rows || []).forEach(function (r) {
+      if (r.isHeader) {
+        if (sec !== null) lines.push('Итого ' + E.shortSec(sec) + ' - ' + E.fmt1(secSum) + ' м2');
+        sec = String(r.text || '').replace(/:+\s*$/, '').trim();
+        secSum = 0;
+        lines.push(String(r.text || '').trim());
+      } else if (r.isTotal) {
+        /* итог пересчитаем сами */
+      } else {
+        var a = parseFloat(String(r.area).replace(',', '.')) || 0;
+        total += a; secSum += a;
+        lines.push(String(r.text || '').trim() + ' - ' + E.fmt1(a) + ' м2');
+      }
+    });
+    if (sec !== null) lines.push('Итого ' + E.shortSec(sec) + ' - ' + E.fmt1(secSum) + ' м2');
+    lines.push('ВСЕГО участок работы на ' + E.fmt(total) + ' м2');
+    return lines;
+  };
+
+  function splitParas(xml) {
+    var out = [], re = /<w:p\b[^>]*>.*?<\/w:p>/g, m;
+    while ((m = re.exec(xml))) out.push({ full: m[0], start: m.index, end: m.index + m[0].length });
+    return out;
+  }
+
+  function splitRuns(p) {
+    var runs = [], re = /<w:r\b[^>]*>.*?<\/w:r>/g, m;
+    while ((m = re.exec(p))) {
+      var t = '', tre = /<w:t\b[^>]*>(.*?)<\/w:t>/g, tm;
+      while ((tm = tre.exec(m[0]))) t += tm[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+      runs.push({ xml: m[0], text: t });
+    }
+    return runs;
+  }
+
+  function rebuildRun(runXml, text) {
+    if (!/<w:t\b/.test(runXml)) return runXml;
+    var esc = E.escXml(text), first = true;
+    return runXml.replace(/<w:t\b[^>]*>.*?<\/w:t>/g, function () {
+      if (first) { first = false; return '<w:t xml:space="preserve">' + esc + '</w:t>'; }
+      return '<w:t xml:space="preserve"></w:t>';
+    });
+  }
+
+  /* замена одного паттерна в тексте абзаца с сохранением run'ов:
+   * значение целиком уходит в первый затронутый run, остальные обнуляются */
+  function applyPattern(runs, pattern, value) {
+    if (value === null || value === undefined || !pattern) return false;
+    var full = '', lens = [];
+    runs.forEach(function (r) { lens.push(r.text.length); full += r.text; });
+    var idx = full.indexOf(pattern);
+    if (idx === -1) return false;
+    var a = 0, pos = 0;
+    while (a < runs.length && idx >= pos + lens[a]) { pos += lens[a]; a++; }
+    if (a >= runs.length) return false;
+    var inRun = idx - pos;
+    var inA = Math.min(lens[a] - inRun, pattern.length);
+    runs[a].text = runs[a].text.slice(0, inRun) + value + runs[a].text.slice(inRun + inA);
+    var left = pattern.length - inA, j = a + 1;
+    while (left > 0 && j < runs.length) {
+      var take = Math.min(lens[j], left);
+      runs[j].text = runs[j].text.slice(take);
+      left -= take; j++;
+    }
+    return true;
+  }
+
+  /* «1 ст. (500 м2)» -> «X ст. (Y м2)» с сохранением надстрочной «2» в отдельном run'е */
+  function applyArea(runs, pattern, value) {
+    if (!value) return false;
+    var full = '', lens = [];
+    runs.forEach(function (r) { lens.push(r.text.length); full += r.text; });
+    var idx = full.indexOf(pattern);
+    if (idx === -1) return false;
+    var a = 0, pos = 0;
+    while (a < runs.length && idx >= pos + lens[a]) { pos += lens[a]; a++; }
+    if (a >= runs.length) return false;
+    var inRun = idx - pos;
+    var end = idx + pattern.length;
+    var s = -1, b = a, p2 = pos;
+    for (var i = a; i < runs.length; i++) {
+      if (p2 >= end) break;
+      if (s === -1 && runs[i].xml.indexOf('superscript') !== -1) s = i;
+      b = i;
+      p2 += lens[i];
+    }
+    if (s > a && s <= b) {
+      var vMain = value.slice(0, value.length - 2);
+      var vSup = value.slice(value.length - 2, value.length - 1);
+      var vTail = value.slice(value.length - 1);
+      runs[a].text = runs[a].text.slice(0, inRun) + vMain;
+      for (var k = a + 1; k < s; k++) runs[k].text = '';
+      runs[s].text = vSup;
+      var t = s + 1;
+      if (t <= b) {
+        var covered = lens[a] - inRun;
+        for (var q = a + 1; q < t; q++) covered += lens[q];
+        var rem = end - (idx + covered);
+        runs[t].text = vTail + runs[t].text.slice(rem);
+        for (var q2 = t + 1; q2 <= b; q2++) runs[q2].text = '';
+      } else {
+        runs[s].text = vSup + vTail;
+      }
+      return true;
+    }
+    return applyPattern(runs, pattern, value);
+  }
+
+  /* жирный run: добавляем <w:b/> после <w:rFonts …/> (порядок элементов по схеме OOXML) */
+  E.addBold = function (runXml) {
+    if (/<w:b\s*\/>/.test(runXml)) return runXml;
+    var m = runXml.match(/<w:rPr\b[^>]*>/);
+    if (!m) return runXml.replace(/^(<w:r\b[^>]*>)/, '$1<w:rPr><w:b/></w:rPr>');
+    var after = m.index + m[0].length;
+    var rf = runXml.indexOf('<w:rFonts', after);
+    if (rf !== -1 && rf < runXml.indexOf('</w:rPr>', after)) {
+      var gt = runXml.indexOf('>', rf);
+      if (gt !== -1) return runXml.slice(0, gt + 1) + '<w:b/>' + runXml.slice(gt + 1);
+    }
+    return runXml.slice(0, after) + '<w:b/>' + runXml.slice(after);
+  };
+
+  /* несколько абзацев из списка строк: копируем открывающий тег и pPr исходного абзаца */
+  E.parasFromLines = function (origParaFull, lines) {
+    if (!lines || !lines.length) return '';
+    var openM = origParaFull.match(/^<w:p\b[^>]*>/);
+    var open = openM ? openM[0] : '<w:p>';
+    var pPrM = origParaFull.match(/<w:pPr\b[^>]*>.*?<\/w:pPr>/);
+    var head = open + (pPrM ? pPrM[0] : '');
+    var rPr = '<w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:kern w:val="0"/><w:sz w:val="28"/><w:szCs w:val="28"/><w:lang w:eastAsia="en-US"/></w:rPr>';
+    return lines.map(function (line) {
+      return head + '<w:r>' + rPr + '<w:t xml:space="preserve">' + E.escXml(line) + '</w:t></w:r></w:p>';
+    }).join('');
+  };
+
+  /* главная функция: подстановка всех значений в XML шаблона */
+  E.fillDocxXml = function (xml, P) {
+    P = P || {};
+    var fioD = P.fioD || '';
+    var repls = [
+      ['{оклад1} руб. ({оклад2} руб.)', (P.oklad2 != null) ? P.oklad1 + ' руб. (' + P.oklad2 + ' руб.)' : null],
+      ['{ФИО(Д)}', fioD || null],
+      ['{ФИО(Д1)}', P.fioD1 != null ? P.fioD1 : ''],
+      ['{ФИО}', P.fio != null ? P.fio : ''],
+      ['{ставка}', P.stavka != null ? String(P.stavka) : ''],
+      ['{оклад1}', P.oklad1 != null ? String(P.oklad1) : ''],
+      ['{оклад2}', P.oklad2 != null ? String(P.oklad2) : ''],
+      ['{проц}', P.proc != null ? String(P.proc) : ''],
+      ['{доппл}', P.doppl != null ? String(P.doppl) : ''],
+      ['{допокл}', P.dopOk != null ? String(P.dopOk) : ''],
+      ['{выслуга}', P.vysluga || null],
+      ['{факт.выслуга}', P.faktVysluga != null ? P.faktVysluga : null],
+      ['{выс.проц}', P.vyslugaProc ? String(P.vyslugaProc) : null],
+      ['{оклад3}', P.oklad3 ? String(P.oklad3) : null],
+      ['{дата1}', P.date1 || ''],
+      ['{дата2}', P.date2 || ''],
+      ['Гюлумян Ирине Ивановне', fioD || null],
+      ['на 2026-2027 учебный год.', P.year ? 'на ' + P.year + ' учебный год.' : null],
+      ['2026 - 2027', P.year ? String(P.year).replace(/-/g, ' - ') : null],
+      ['№ ____', P.num ? '№ ' + P.num : null],
+      ['с 01.09.2026г. по 31.08.2027г.', (P.yearS && P.yearE) ? 'с ' + P.yearS + 'г. по ' + P.yearE + 'г.' : null],
+      ['В соответствии Трудовым кодексом', 'В соответствии с Трудовым кодексом'],
+      ['г. нагрузку в размере', 'г. в размере'],
+      ['с ' + P.fio + '..', P.fio ? 'с ' + P.fio + '.' : null]
+    ];
+    var areaValue = (P.stavka != null && P.mainArea != null) ? P.stavka + ' ст. (' + P.mainArea + ' м2)' : null;
+    var noDop = !P.dopStavka;
+    var out = '';
+    var paras = splitParas(xml);
+    if (!paras.length) return xml;
+    var head = xml.slice(0, paras[0].start);
+    var tail = xml.slice(paras[paras.length - 1].end);
+    paras.forEach(function (p) {
+      var runs = splitRuns(p.full);
+      repls.forEach(function (rp) {
+        var guard = 0;
+        while (applyPattern(runs, rp[0], rp[1]) && guard++ < 50) {}
+      });
+      applyArea(runs, '1 ст. (500 м2)', areaValue);
+      var pText = '';
+      runs.forEach(function (r) { pText += r.text; });
+      if (pText.indexOf('{выслуга}') !== -1 && (!P.vysluga || P.vysluga==='нет выслуги')) { runs = []; }
+      if (pText.indexOf('{таблица}') !== -1) {
+        out += E.parasFromLines(p.full, E.buildWorkLines(P.rows));
+        return;
+      }
+      if (pText.indexOf('{0,5ст}') !== -1) {
+        if (P.s3Text) out += E.parasFromLines(p.full, String(P.s3Text).split(/\r?\n/).filter(function (x) { return x.length > 0; }));
+        return; /* без s3Text абзац удаляется */
+      }
+      /* нет допставки — удаляем абзац п.2 (совместительство в приказе) */
+      if (noDop && pText.indexOf('внутреннему совместительству') !== -1 && pText.indexOf('Установить') !== -1) {
+        return;
+      }
+      /* нет допставки — удаляем строку нагрузки по совместительству */
+      if (noDop && pText.indexOf('внутреннему совместительству') !== -1) {
+        return;
+      }
+      /* нет выслуги — удаляем абзац «1.2 Стимулирующего характера…» */
+      var noVysluga = !P.vysluga || P.vysluga === 'нет выслуги' || P.vysluga === 0;
+      if (noVysluga && /Стимулирующего\s+характера/i.test(pText)) {
+        return;
+      }
+      if (noDop) {
+        applyPattern(runs, '3. Муниципальному', '2. Муниципальному');
+        applyPattern(runs, '4. Приказ «Об', '3. Приказ «Об');
+      }
+      /* при удалении п.1.2 (нет выслуги) сдвигаем нумерацию 1.3→1.2, 1.4→1.3 и т.д. */
+      if (noVysluga) {
+        var vGuard = 0;
+        while (applyPattern(runs, '1.3 ', '1.2 ') && vGuard++ < 10) {}
+        vGuard = 0;
+        while (applyPattern(runs, '1.4 ', '1.3 ') && vGuard++ < 10) {}
+        vGuard = 0;
+        while (applyPattern(runs, '1.5 ', '1.4 ') && vGuard++ < 10) {}
+        vGuard = 0;
+        while (applyPattern(runs, '1.6 ', '1.5 ') && vGuard++ < 10) {}
+        vGuard = 0;
+        while (applyPattern(runs, '1.7 ', '1.6 ') && vGuard++ < 10) {}
+        vGuard = 0;
+        while (applyPattern(runs, '1.8 ', '1.7 ') && vGuard++ < 10) {}
+        vGuard = 0;
+        while (applyPattern(runs, '1.9 ', '1.8 ') && vGuard++ < 10) {}
+      }
+      var boldIdx = [];
+      if (fioD) {
+        runs.forEach(function (r, i) { if (r.text.indexOf(fioD) !== -1) boldIdx.push(i); });
+      }
+      var rebuilt = runs.map(function (r) { return rebuildRun(r.xml, r.text); });
+      boldIdx.forEach(function (i) { rebuilt[i] = E.addBold(rebuilt[i]); });
+      var openM = p.full.match(/^<w:p\b[^>]*>/);
+      var open = openM ? openM[0] : '<w:p>';
+      var pPrM = p.full.match(/<w:pPr\b[^>]*>.*?<\/w:pPr>/);
+      out += open + (pPrM ? pPrM[0] : '') + rebuilt.join('') + '</w:p>';
+    });
+    return head + out + tail;
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = E;
+  return E;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+
+
+
+
+
+/* Встроенный шаблон.docx (используется по умолчанию; свой можно загрузить ниже) */
+var prikazDirHandle=null;
+var TPL_KEY='nagruzka_tpl_v1';
+function getTplB64(){
+  try{
+    var s=localStorage.getItem(TPL_KEY);
+    if(s){
+      if(s.charAt(0)==='{'){var o=JSON.parse(s);if(o&&o.b64&&o.b64.length>1000)return o.b64;}
+      else if(s.length>1000)return s;
+    }
+  }catch(e){}
+  return null;
+}
+function fmtDate1Plain(d){if(!d)return'___';var parts=String(d).split('.');if(parts.length===3)return parts[0]+'.'+parts[1]+'.'+parts[2];var dt=new Date(d);if(isNaN(dt))return d;return ('0'+dt.getDate()).slice(-2)+'.'+('0'+(dt.getMonth()+1)).slice(-2)+'.'+dt.getFullYear();}
+function buildPrikazPayload(emp){
+  var total=getTotal(emp),doppl=getDoppl(emp),proc=getProc(emp),oklad=getOklad(emp),dopOk=getDopOklad(emp);
+  var stTxt=emp.stavka===1?'1':fmt2(emp.stavka);
+  var rows=[];
+  emp.rows.forEach(function(r){
+    if(r.isHeader)rows.push({text:r.text,isHeader:true});
+    else if(r.isTotal)rows.push({text:r.text,area:fmt2(r.area),isTotal:true});
+    else rows.push({text:r.text,area:fmt2(r.area)});
+  });
+  return {
+    fio:emp.fio,fioD1:emp.fioD1,fioD:emp.fioD,
+    stavka:stTxt,mainArea:fmt2(emp.stavka*S.cfg.baseArea),
+    dopStavka:emp.dopStavka||null,vysluga:emp.vysluga===0?'нет выслуги':emp.vysluga===5?'от 5 до 10 лет':emp.vysluga===10?'от 10 до 20 лет':emp.vysluga===15?'св. 20 лет':'',faktVysluga:emp.faktVysluga||'',vyslugaProc:emp.vysluga||'',
+    year:S.cfg.year||'',yearS:S.cfg.yearS||'',yearE:S.cfg.yearE||'',
+    oklad1:oklad,oklad2:Math.round(oklad/2),oklad3:Math.round(oklad*(emp.vysluga||0)/100),
+    dopOk:dopOk,proc:proc,doppl:fmt2(doppl),
+    s3Text:(emp.dopStavka&&S3_TEXT)?S3_TEXT:'',
+    date1:S.tplDate1||fmtDate1Plain(new Date()),
+    date2:S.tplDate2||fmtDate2(new Date()),
+    num:S.tplNum||'',rows:rows
+  };
+}
+function saveBlob(blob,name){
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}try{if(a.parentNode)a.parentNode.removeChild(a);}catch(e){}},2000);
+}
+function fillDocx(){
+  var emp=getEmp(S.tplEmpId);
+  if(!emp){toast('Сначала выберите сотрудника','warn');return;}
+  if(typeof JSZip==='undefined'){toast('Библиотека .docx недоступна — перезагрузите страницу','error');return;}
+  var P=buildPrikazPayload(emp);
+  var safe=String(emp.fio).replace(/[\\\/:*?"<>|]/g,'_').trim()||'приказ';
+  var year=String(S.cfg.year||'год').replace(/[\\\/:*?"<>|]/g,'_');
+  var fname='Приказ_'+safe+'_'+year+'.docx';
+  toast('Формируем приказ…','info');
+  (function(){var t=getTplB64();if(!t){toast('\u0428\u0430\u0431\u043b\u043e\u043d \u043d\u0435 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d \u2014 \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0444\u0430\u0439\u043b \u0448\u0430\u0431\u043b\u043e\u043d\u0430 .docx','error');return Promise.reject(new Error('no template'));}return JSZip.loadAsync(t,{base64:true});})().then(function(zip){
+    return zip.file('word/document.xml').async('string').then(function(xml){
+      zip.file('word/document.xml',DOCX_ENGINE.fillDocxXml(xml,P));
+      return zip.generateAsync({type:'blob'});
+    });
+  }).then(function(blob){
+    if(prikazDirHandle){
+      savePrikazToFolder(blob,fname,function(){
+        toast('Приказ сохранён в папку «'+prikazDirHandle.name+'»: '+fname,'success');
+      },function(err){
+        toast('Не удалось сохранить в папку ('+err.message+') — файл скачан','warn');
+        saveBlob(blob,fname);
+      });
+    }else{
+      saveBlob(blob,fname);
+      toast('Приказ готов — файл скачан: '+fname,'success');
+    }
+  }).catch(function(err){toast('Ошибка формирования приказа: '+err.message,'error');});
+}
+function tplFileSelected(input){
+  var f=input&&input.files&&input.files[0];if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var u8=new Uint8Array(rd.result);
+      var bin='';for(var i=0;i<u8.length;i++)bin+=String.fromCharCode(u8[i]);
+      localStorage.setItem(TPL_KEY,JSON.stringify({name:f.name,b64:btoa(bin)}));
+      toast('Шаблон выбран: '+f.name,'success');
+    }catch(e){toast('Не удалось сохранить шаблон: '+e.message,'error');}
+    renderTplInfo();
+  };
+  rd.readAsArrayBuffer(f);
+}
+function resetTpl(){
+  try{localStorage.removeItem(TPL_KEY);}catch(e){}
+  renderTplInfo();
+  toast('Встроенный шаблон восстановлен','info');
+}
+function renderTplInfo(){
+  var el=document.getElementById('tplInfo');if(!el)return;
+  var name='';
+  try{var s=localStorage.getItem(TPL_KEY);if(s&&s.charAt(0)==='{'){var o=JSON.parse(s);if(o&&o.name)name=o.name;}}catch(e){}
+  el.innerHTML=name
+    ?'<span style="font-weight:700;color:var(--fg)">'+esc(name)+'</span> · <a href="javascript:void(0)" onclick="resetTpl()" style="color:var(--accent)">вернуть шаблон не загружен</a>'
+    :'<span style="color:var(--danger)">шаблон не загружен</span>';
+}
+
+/* ===== ПАПКА ДЛЯ ПРИКАЗОВ (File System Access API) ===== */
+function savePrikazToFolder(blob,fname,onOk,onFail){
+  var dir=prikazDirHandle;
+  var step=function(){
+    dir.getFileHandle(fname,{create:true}).then(function(fh){
+      return fh.createWritable().then(function(w){
+        return w.write(blob).then(function(){return w.close();});
+      });
+    }).then(onOk).catch(onFail);
+  };
+  if(dir.queryPermission){
+    dir.queryPermission({mode:'readwrite'}).then(function(st){
+      if(st==='granted'){step();return;}
+      if(dir.requestPermission){
+        dir.requestPermission({mode:'readwrite'}).then(function(st2){
+          if(st2==='granted')step();else onFail(new Error('нет доступа к папке'));
+        }).catch(onFail);
+      }else onFail(new Error('нет доступа к папке'));
+    }).catch(onFail);
+  }else step();
+}
+function pickPrikazFolder(){
+  if(!window.showDirectoryPicker){toast('Этот браузер не умеет выбирать папку — приказы будут скачиваться в «Загрузки»','warn');return;}
+  window.showDirectoryPicker({mode:'readwrite'}).then(function(h){
+    prikazDirHandle=h;
+    renderFolderInfo();
+    try{saveFolderHandle(h);}catch(e){}
+    toast('Папка для приказов: '+h.name,'success');
+  }).catch(function(err){if(!err||err.name!=='AbortError')toast('Не удалось выбрать папку: '+err.message,'error');});
+}
+function renderFolderInfo(){
+  var el=document.getElementById('folderInfo');if(!el)return;
+  el.innerHTML=prikazDirHandle
+    ?'<span style="font-weight:700;color:var(--fg)">'+esc(prikazDirHandle.name)+'</span>'
+    :'<span style="color:var(--fg-muted)">не выбрана — приказ скачается в «Загрузки»</span>';
+}
+function saveFolderHandle(h){
+  try{
+    var req=indexedDB.open('prikazFolders',1);
+    req.onupgradeneeded=function(){try{req.result.createObjectStore('h');}catch(e){}};
+    req.onsuccess=function(){try{var db=req.result;db.transaction('h','readwrite').objectStore('h').put(h,'folder');}catch(e){}};
+    req.onerror=function(){};
+  }catch(e){}
+}
+function loadFolderHandle(){
+  try{
+    var req=indexedDB.open('prikazFolders',1);
+    req.onupgradeneeded=function(){try{req.result.createObjectStore('h');}catch(e){}};
+    req.onsuccess=function(){
+      try{
+        var db=req.result;
+        var tx=db.transaction('h','readonly');
+        var g=tx.objectStore('h').get('folder');
+        g.onsuccess=function(){if(g.result){prikazDirHandle=g.result;renderFolderInfo();}};
+      }catch(e){}
+    };
+    req.onerror=function(){};
+  }catch(e){}
+}
+/* ===== ЗАПАСНОЙ ИМПОРТ ЧЕРЕЗ ПОМОЩНИКА (если шаблон не загружен парсер не сработал) ===== */
+var HELPER_URL='http://127.0.0.1:8756';
+function u8ToBin(u8){
+  var s='',chunk=0x8000,i=0;
+  while(i<u8.length){s+=String.fromCharCode.apply(null,u8.subarray(i,Math.min(i+chunk,u8.length)));i+=chunk;}
+  return s;
+}
+function helperPostBinary(path,bin,onOk,onErr){
+  var url=HELPER_URL+path,ctrl=null;
+  try{ctrl=new AbortController();}catch(e){}
+  var u8=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i)&0xff;
+  var timer=setTimeout(function(){try{if(ctrl)ctrl.abort();}catch(e){}onErr('Помощник не отвечает. Запустите «Запустить помощник Word.bat»');},12000);
+  fetch(url,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:u8,signal:ctrl?ctrl.signal:undefined})
+    .then(function(r){return r.json();})
+    .then(function(res){clearTimeout(timer);if(res&&res.ok)onOk(res);else onErr(res&&res.error?res.error:'Ошибка помощника');})
+    .catch(function(err){clearTimeout(timer);onErr('Помощник недоступен: '+err.message+'. Запустите «Запустить помощник Word.bat»');});
+}
+
+/* ===== IMPORT EXCEL ===== */
+
+function findSheet(wb,names){
+  for(var i=0;i<names.length;i++){if(wb.Sheets[names[i]])return wb.Sheets[names[i]];}
+  for(var s=0;s<wb.SheetNames.length;s++){
+    var sn=wb.SheetNames[s];
+    for(var j=0;j<names.length;j++){if(sn.toLowerCase()===names[j].toLowerCase()||sn.toLowerCase().indexOf(names[j].toLowerCase())!==-1)return wb.Sheets[sn];}
+  }
+  return null;
+}
+function toNum(v){
+  if(v===null||v===undefined)return null;
+  if(typeof v==='number')return isFinite(v)?v:null;
+  var s=String(v).trim().replace(/\s+/g,'').replace(',','.');
+  if(s===''||s==='*'||s==='—'||s==='–'||s==='-')return null;
+  var n=parseFloat(s);
+  return isNaN(n)?null:n;
+}
+function importFromSheets(rawS1,empList,r3){
+  try{
+      /* Лист3: строка [A1, B1] — число (оклад 0,5 ставки) + текст блока совместительства */
+      if(r3){
+        var a=r3[0],b=r3[1];
+        var a2=(a===null||a===undefined)?'':String(a).trim();
+        var b2=(b===null||b===undefined)?'':String(b).trim();
+        if(a2!==''||b2!==''){
+          var an=toNum(a),bn=toNum(b);
+          if(an!==null){S3_NUM=Math.round(an);if(b2!=='')S3_TEXT=b2;}
+          else if(bn!==null){S3_NUM=Math.round(bn);if(a2!=='')S3_TEXT=a2;}
+          else{S3_TEXT=(a2+' '+b2).trim();}
+        }
+      }
+      /* Лист2 — справочник сотрудников: ищем строку с заголовками в первых 5 строках */
+      empList=empList||[];
+      var emps2=[],colMap={},hdrIdx=-1;
+      for(var h=0;h<Math.min(empList.length,5);h++){
+        var hr=empList[h],found=false;
+        for(var c=0;c<hr.length;c++){
+          var hn=String(hr[c]||'').trim().toLowerCase().replace(/[\s()\.\-–—№,:/]/g,'');
+          if(hn==='фио'){colMap.fio=c;found=true;}
+          else if(hn==='фиод1'){colMap.fioD1=c;found=true;}
+          else if(hn==='фиод'){colMap.fioD=c;found=true;}
+          else if(hn==='ставка'){colMap.stavka=c;found=true;}
+          else if(hn==='допставка'){colMap.dopStavka=c;found=true;}
+          else if(hn==='выспроц'||hn==='выс.проц'){colMap.vyslugaProc=c;found=true;}
+          else if(hn==='фактвыслуга'||hn==='факт.выслуга'||hn==='фактвыслугалет'||hn==='факт.выслуга.лет'){colMap.faktVysluga=c;found=true;}
+        }
+        if(found){hdrIdx=h;break;}
+      }
+      var from=hdrIdx>=0?hdrIdx+1:0;
+      for(var r2i=from;r2i<empList.length;r2i++){
+        var row=empList[r2i];
+        if(!row||row.length===0)continue;
+        var fio=String(row[colMap.fio!==undefined?colMap.fio:0]||'').trim();
+        if(!fio)continue;
+        emps2.push({fio:fio,
+          fioD1:String(row[colMap.fioD1!==undefined?colMap.fioD1:1]||fio).trim(),
+          fioD:String(row[colMap.fioD!==undefined?colMap.fioD:2]||fio).trim(),
+          stavka:toNum(row[colMap.stavka!==undefined?colMap.stavka:3])||1,
+          dopStavka:toNum(row[colMap.dopStavka!==undefined?colMap.dopStavka:4]),
+          vysluga:toNum(row[colMap.vyslugaProc!==undefined?colMap.vyslugaProc:6])||null,
+          vyslugaProc:toNum(row[colMap.vyslugaProc!==undefined?colMap.vyslugaProc:6])||null,
+          faktVysluga:String(row[colMap.faktVysluga!==undefined?colMap.faktVysluga:7]||'').trim()||null});
+      }
+      /* Лист1 — площади: распознаём заголовок/титул, канонизируем итоги */
+      rawS1=rawS1||[];
+      var empNames={};
+      emps2.forEach(function(d){empNames[d.fio]=1;});
+      var s1arr=[],isFirstRow=true;
+      for(var i1=0;i1<rawS1.length;i1++){
+        var name=String(rawS1[i1][0]||'').trim();
+        if(!name)continue;
+        var val=rawS1[i1][1];
+        var vs=(val===null||val===undefined)?'':String(val).trim();
+        if(isFirstRow){
+          var looksHead=/^(помещение|наименование|название|сотрудник|фио|площадь|объект|участок|номер|п\/п|№)/i.test(name)
+            ||(vs!==''&&vs!=='*'&&toNum(vs)===null)
+            ||(vs===''&&Object.keys(empNames).length>0&&!empNames[name]);
+          if(looksHead)continue;
+          isFirstRow=false;
+        }
+        /* Канонизируем строку итога: «ВСЕГО участок работы» */
+        if(/^всего\s*участок/i.test(name))name='ВСЕГО участок работы';
+        if(vs===''||vs==='*')s1arr.push([name,'*']);
+        else s1arr.push([name,toNum(vs)||0]);
+      }
+      var blocks=parseSheet1(s1arr);
+      /* Собираем сотрудников */
+      S.emps=[];S.nextId=1;
+      if(emps2.length>0){
+        emps2.forEach(function(d){
+          S.emps.push({id:S.nextId++,fio:d.fio,fioD1:d.fioD1,fioD:d.fioD,
+            stavka:d.stavka,dopStavka:d.dopStavka,vysluga:d.vysluga,vyslugaProc:d.vyslugaProc,faktVysluga:d.faktVysluga,
+            rows:blocks[d.fio]?JSON.parse(JSON.stringify(blocks[d.fio])):[{text:'ВСЕГО участок работы',area:0,isHeader:false,isTotal:true}]});
+        });
+      }else{
+        Object.keys(blocks).forEach(function(fio){
+          S.emps.push({id:S.nextId++,fio:fio,fioD1:fio,fioD:fio,stavka:1,dopStavka:null,
+            rows:JSON.parse(JSON.stringify(blocks[fio]))});
+        });
+      }
+      S.selId=S.emps.length?S.emps[0].id:null;S.tplEmpId=S.selId;
+      S.emps.forEach(recalcEmp);
+      return {empCount:S.emps.length,hasS3:!!S3_TEXT};
+    }catch(err){throw err;}
+}
+function importFromWorkbook(wb){
+  var ws1=findSheet(wb,['Лист1','Лист 1','Лист_1']);
+  var ws2=findSheet(wb,['Лист2','Лист 2','Лист_2']);
+  var ws3=findSheet(wb,['Лист3','Лист 3','Лист_3']);
+  var s1rows=ws1?XLSX.utils.sheet_to_json(ws1,{header:1,defval:''}):[];
+  var s2rows=ws2?XLSX.utils.sheet_to_json(ws2,{header:1,defval:''}):[];
+  var s3row=(ws3?XLSX.utils.sheet_to_json(ws3,{header:1,defval:''}):[])[0]||null;
+  return importFromSheets(s1rows,s2rows,s3row);
+}
+function finishImport(){
+  try{
+    renderSidebar();renderMain();renderTotalBar();saveData();
+    toast('Загружено: '+S.emps.length+' сотрудников'+(S3_TEXT?' (+блок 0,5 ставки)':''),'success');
+  }catch(err){
+    toast('Данные загружены, но ошибка отрисовки: '+err.message,'error');console.error(err);
+  }
+}
+document.getElementById('fileInput').addEventListener('change',function(ev){
+  var file=ev.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var data=new Uint8Array(e.target.result);
+    var wb=null,readErr=null;
+    if(typeof XLSX!=='undefined'){
+      try{wb=XLSX.read(data,{type:'array'});}catch(err){readErr=err;}
+    }
+    if(wb){
+      try{importFromWorkbook(wb);finishImport();}
+      catch(err){toast('Ошибка при разборе данных: '+err.message,'error');console.error(err);}
+      return;
+    }
+    /* Библиотека недоступна или файл не прочитался — запасной путь: разбор через Excel (помощник) */
+    if(window.fetch){
+      toast('Читаем файл через локальный Excel…','warn');
+      helperPostBinary('/parse-xlsx',u8ToBin(data),function(res){
+        try{
+          var sheets=res.sheets||[];
+          var s1=sheets.find(function(sh){return/лист\s*1|^1$|list1/i.test(sh.name||'');})||{rows:[]};
+          var s2=sheets.find(function(sh){return/лист\s*2|^2$|list2/i.test(sh.name||'');})||{rows:[]};
+          var s3=sheets.find(function(sh){return/лист\s*3|^3$|list3/i.test(sh.name||'');})||{rows:[]};
+          importFromSheets(s1.rows||[],s2.rows||[],(s3.rows||[])[0]||null);
+          finishImport();
+        }catch(err2){toast('Ошибка при разборе данных: '+err2.message,'error');console.error(err2);}
+      },function(err2){
+        toast('Не удалось прочитать файл'+(readErr?': '+readErr.message:'')+' ('+err2+')','error');
+      });
+    }else{
+      toast('Не удалось прочитать файл'+(readErr?': '+readErr.message:''),'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);ev.target.value='';
+});
+
+/* ===== EXPORT ===== */
+function exportExcel(){
+  if(S.emps.length===0){toast('Нет данных для выгрузки','warn');return;}
+  var wb=XLSX.utils.book_new();
+  /* Лист1 — та же структура, что и в исходном файле:
+     строка с ФИО, разделы, помещения, итог — формулой SUM, пустая строка между сотрудниками */
+  var s1Rows=[],totalRefs=[],rowNum=1;
+  S.emps.forEach(function(emp){
+    s1Rows.push([emp.fio,'']);rowNum++;
+    var roomRows=[];
+    emp.rows.forEach(function(r){
+      if(r.isHeader){s1Rows.push([r.text,'']);}
+      else if(r.isTotal){s1Rows.push([r.text,parseFloat(r.area)||0]);totalRefs.push({row:rowNum,roomRows:roomRows.slice()});}
+      else{s1Rows.push([r.text,parseFloat(r.area)||0]);roomRows.push(rowNum);}
+      rowNum++;
+    });
+    s1Rows.push([]);rowNum++;
+  });
+  var ws1=XLSX.utils.aoa_to_sheet(s1Rows);
+  totalRefs.forEach(function(t){
+    var cell=ws1['B'+t.row];
+    if(!cell||t.roomRows.length===0)return;
+    var ref=t.roomRows.length===1?('B'+t.roomRows[0]):('B'+t.roomRows[0]+':B'+t.roomRows[t.roomRows.length-1]);
+    cell.f='SUM('+ref+')';
+  });
+  ws1['!cols']=[{wch:52},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Лист1');
+  /* Лист2 — справочник сотрудников (шапка как в исходном файле) */
+  var s2Rows=[];
+  S.emps.forEach(function(emp,i){
+    s2Rows.push({'№':i+1,'ФИО':emp.fio,'ФИО(Д1)':emp.fioD1,'ФИО (Д)':emp.fioD,'ставка':emp.stavka,'допставка':emp.dopStavka==null?'':emp.dopStavka,'выс.проц':emp.vyslugaProc||'','факт.выслуга':emp.faktVysluga||''});
+  });
+  var ws2=XLSX.utils.json_to_sheet(s2Rows);ws2['!cols']=[{wch:5},{wch:25},{wch:25},{wch:40},{wch:8},{wch:10},{wch:12},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws2,'Лист2');
+  /* Лист3 — блок 0,5 ставки (A1 — число, B1 — текст) */
+  if(S3_TEXT){
+    var ws3=XLSX.utils.aoa_to_sheet([[S3_NUM||9405,S3_TEXT]]);
+    XLSX.utils.book_append_sheet(wb,ws3,'Лист3');
+  }
+  try{
+    XLSX.writeFile(wb,'расчет зарплаты.xlsx');
+    toast('Файл выгружен ('+S.emps.length+' сотрудников)','success');
+  }catch(err){
+    toast('Не удалось выгрузить файл: '+err.message,'error');
+  }
+}
+
+/* ===== CLEAR ALL ===== */
+function confirmClearAll(){
+  if(S.emps.length===0){toast('Уже пусто','info');return;}
+  openModal('<h3>Очистить все данные?</h3>'+
+    '<p style="color:var(--fg-muted);margin-bottom:4px">Удалить <strong style="color:var(--fg)">всех '+S.emps.length+' сотрудников</strong> и все сохранённые данные? Это действие нельзя отменить.</p>'+
+    '<div class="modal-actions"><button class="modal-cancel" onclick="closeModal()">Отмена</button><button class="modal-confirm" id="mClrOk">Удалить всё</button></div>');
+  setTimeout(function(){
+    document.getElementById('mClrOk').addEventListener('click',function(){
+      S.emps=[];S.selId=null;S.nextId=1;S.tplEmpId=null;S3_TEXT='';S3_NUM=9405;
+      closeModal();renderSidebar();renderMain();renderTotalBar();saveData();
+      toast('Все данные удалены','info');
+    });
+  },50);
+}
+
+/* ===== SUMMARY ===== */
+function renderSummary(){
+  if(S.emps.length===0){document.getElementById('summaryContent').innerHTML='<p style="color:var(--muted-text);text-align:center;padding:20px">Нет данных</p>';return;}
+  var h='<table class="wl"><thead><tr><th>№</th><th>ФИО</th><th style="text-align:center">Ставка</th><th style="text-align:right">Площадь, м²</th><th style="text-align:right">Доп. пл.</th><th style="text-align:center">%</th><th style="text-align:right">Оклад</th><th style="text-align:right">Доп. окл.</th></tr></thead><tbody>';
+  var grandTotal=0,grandOklad=0,grandDop=0;
+  S.emps.forEach(function(e,i){
+    var t=getTotal(e),d=getDoppl(e),p=getProc(e),o=getOklad(e),do_=getDopOklad(e);
+    grandTotal+=t;grandOklad+=o;grandDop+=do_;
+    h+='<tr><td class="row-num">'+(i+1)+'</td><td style="font-weight:700">'+esc(e.fio)+'</td><td style="text-align:center">'+fmt(e.stavka)+(e.dopStavka?' + '+fmt(e.dopStavka):'')+'</td><td style="text-align:right">'+fmt(t)+'</td><td style="text-align:right;color:'+(d>0?'var(--accent)':'var(--muted-text)')+'">'+(d>0?fmt(d):'—')+'</td><td style="text-align:center;color:'+(p>0?'var(--warn)':'var(--muted-text)')+'">'+(p>0?p+'%':'—')+'</td><td style="text-align:right">'+o+'</td><td style="text-align:right;color:'+(do_>0?'var(--accent)':'var(--muted-text)')+'">'+(do_>0?do_:'—')+'</td></tr>';
+  });
+  h+='<tr class="row-total"><td></td><td>ИТОГО</td><td></td><td style="text-align:right">'+fmtFull(grandTotal)+'</td><td></td><td></td><td style="text-align:right">'+grandOklad+'</td><td style="text-align:right">'+grandDop+'</td></tr>';
+  h+='</tbody></table>';
+  document.getElementById('summaryContent').innerHTML=h;
+}
+
+/* ===== INIT ===== */
+(function(){
+  if(typeof XLSX==='undefined'&&document&&document.head&&document.head.appendChild){
+    var _lx=document.createElement('script');
+    _lx.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    document.head.appendChild(_lx);
+  }
+  var loaded=loadData();
+  if(!loaded||S.emps.length===0){
+    var blocks=parseSheet1(DEMO_S1);
+    S.emps=DEMO_S2.map(function(d){
+      return{id:S.nextId++,fio:d.fio,fioD1:d.fioD1,fioD:d.fioD,
+        stavka:d.stavka,dopStavka:d.dopStavka,
+        rows:blocks[d.fio]?JSON.parse(JSON.stringify(blocks[d.fio])):[{text:'ВСЕГО участок работы',area:0,isHeader:false,isTotal:true}]};
+    });
+    S.selId=S.emps[0]?S.emps[0].id:null;S.tplEmpId=S.selId;
+    saveData();
+  }
+  S.emps.forEach(recalcEmp);
+  renderSidebar();renderMain();renderTotalBar();
+})();
+</script>
 </body>
 </html>
