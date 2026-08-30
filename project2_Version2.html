@@ -440,7 +440,11 @@ function fmtFull(n){var s=(parseFloat(n)||0).toFixed(2);var p=s.split('.');p[0]=
 function getEmp(id){return S.emps.find(function(e){return e.id===id});}
 function getTotal(emp){return emp.rows.filter(function(r){return!r.isHeader&&!r.isTotal}).reduce(function(s,r){return s+(r.area||0)},0);}
 function getDoppl(emp){var st=emp.stavka+(emp.dopStavka||0);var base=st*S.cfg.baseArea;return Math.max(0,getTotal(emp)-base);}
-function getProc(emp){var d=getDoppl(emp);return d>0?Math.round(d/S.cfg.baseArea*100):0;}
+function getProc(emp){
+  var d=getDoppl(emp);
+  /* Процент доплаты к ставке: округляем до десятых процента. */
+  return d>0 ? Math.round((d/S.cfg.baseArea*100)*10)/10 : 0;
+}
 function getOklad(emp){return Math.round(emp.stavka*S.cfg.salaryRate);}
 function getDopOklad(emp){return Math.round(S.cfg.salaryRate*getProc(emp)/100);}
 
@@ -580,7 +584,7 @@ function updateCalcCards(emp){
   var total=getTotal(emp),doppl=getDoppl(emp),proc=getProc(emp),oklad=getOklad(emp),dopOk=getDopOklad(emp);
   var e1=document.getElementById('stTotal');if(e1)e1.textContent=fmt(total)+' м²';
   var e2=document.getElementById('stDop');if(e2)e2.textContent=fmt(doppl)+' м²';
-  var e3=document.getElementById('stProc');if(e3)e3.textContent=proc+'%';
+  var e3=document.getElementById('stProc');if(e3)e3.textContent=(proc===0?'0':String(proc).replace('.',','))+'%';
   var e4=document.getElementById('stOklad');if(e4)e4.textContent=oklad+' + '+dopOk+' ₽';
 }
 
