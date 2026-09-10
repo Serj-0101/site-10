@@ -1,33 +1,2997 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Проект 4 — Многостраничный сайт</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
-</head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Редактор интерактивного плана — 3 этаж</title>
+<style>
+*{box-sizing:border-box} html,body{height:100%;margin:0}
+body{font-family:Arial,sans-serif;background:#eef1f4;color:#17202a;overflow:hidden}
+button,input{font:inherit} button{border:1px solid #d5dce2;background:#fff;color:#17202a;border-radius:8px;padding:8px 11px;cursor:pointer}
+button:hover{background:#f4f7f9} button.primary{background:#1677d2;border-color:#1677d2;color:#fff}
+button.danger{color:#b42318;border-color:#f0b7b2} button:disabled{opacity:.45;cursor:not-allowed}
+.app{height:100%;display:grid;grid-template-columns:300px 1fr 300px}
+.sidebar,.inspector{background:#fff;display:flex;flex-direction:column;min-width:0}
+.sidebar{border-right:1px solid #dfe4e8}.inspector{border-left:1px solid #dfe4e8}
+.header{padding:16px;border-bottom:1px solid #e8ecef}.header h1{font-size:18px;margin:0 0 4px}
+.header p{font-size:12px;color:#6b7680;margin:0;line-height:1.4}
+.search{margin:12px;padding:9px 10px;border:1px solid #d7dde2;border-radius:8px;outline:none}
+.list{overflow:auto;flex:1;padding:0 8px 10px}.item{padding:10px;border-radius:8px;cursor:pointer;margin:2px 0}
+.item:hover,.item.active{background:#edf6ff}.item strong{display:block;font-size:13px}.item small{display:block;color:#74808a;font-size:11px;margin-top:3px}
+.empty{padding:20px 12px;color:#7a858d;font-size:12px;line-height:1.5}.footer{padding:10px 12px;border-top:1px solid #e8ecef;font-size:11px;color:#7a858d}
+.main{min-width:0;display:flex;flex-direction:column}
+.editor-workspace{display:flex;flex:1;min-height:0;min-width:0}
+.toolbar{width:176px;flex:none;background:#fff;border-right:1px solid #dfe4e8;display:flex;flex-direction:column;align-items:stretch;gap:7px;padding:10px;overflow:auto}
+.toolbar button{width:100%;text-align:left;white-space:normal;line-height:1.25}
+.toolbar .sep{width:100%;height:1px;background:#e1e6ea;margin:3px 0}
+.toolbar .tool-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#77838d;padding:3px 2px 0}
+.toolbar .tool-btn.active{background:#1677d2;color:#fff;border-color:#1677d2}
+.zoombox{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:5px;align-items:center}
+.zoombox .zoomlabel{grid-column:1/-1;text-align:center;font-size:12px;padding:4px 0}
+.zoombox button:last-child{grid-column:1/-1}
+.stage{position:relative;overflow:scroll;flex:1;background:#dce1e5;padding:20px;min-width:0;min-height:0}
+.plan-tab-content{display:inline-flex;align-items:center;gap:6px}
+.plan-gray-dot{width:9px;height:9px;border-radius:50%;background:#8B949E;border:1px solid rgba(0,0,0,.18);display:inline-block;flex:none}
+.plan-tab.employee-context{}
+.plan-tab.employee-context .plan-gray-dot{border-color:currentColor}
+
+.stage::-webkit-scrollbar{width:14px;height:14px}
+.stage::-webkit-scrollbar-track{background:#d6dce1}
+.stage::-webkit-scrollbar-thumb{background:#8c98a3;border-radius:8px;border:3px solid #d6dce1}
+.stage::-webkit-scrollbar-thumb:hover{background:#687580}
+.canvas{position:relative;flex:none;min-width:0;min-height:0;background:#fff;box-shadow:0 8px 28px #0002;transform-origin:top left;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.canvas img{position:absolute;inset:0;width:100%;height:100%;max-width:100%;max-height:100%;display:block;object-fit:contain;object-position:center;user-select:none;pointer-events:none}
+svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.room{fill:rgba(25,118,210,.07);stroke:rgba(25,118,210,.40);stroke-width:2;vector-effect:non-scaling-stroke;cursor:pointer}
+.room:hover{fill:rgba(25,118,210,.17);stroke:rgba(25,118,210,.85)} .room.selected{fill:rgba(255,152,0,.25);stroke:rgba(225,120,0,1);stroke-width:3}
+.room.add-preview{fill:rgba(22,119,210,.18);stroke:rgba(22,119,210,.95);stroke-dasharray:6 4}
+.vertex{fill:#fff;stroke:#1677d2;stroke-width:2;vector-effect:non-scaling-stroke;cursor:move}
+.vertex:hover{fill:#dff0ff}.midpoint{fill:#fff;stroke:#7b8790;stroke-width:1.5;vector-effect:non-scaling-stroke;cursor:crosshair}
+.inspector .body{padding:16px;overflow:auto;flex:1}.section{margin-bottom:18px}.section h2{font-size:14px;margin:0 0 10px}
+.field{margin:10px 0}.field label{display:block;font-size:11px;color:#66727b;margin-bottom:5px}
+.field input{width:100%;padding:9px;border:1px solid #d5dce2;border-radius:8px;outline:none}
+.help{font-size:11px;color:#73808a;line-height:1.55}.actions{display:flex;gap:7px;flex-wrap:wrap}
+.status{font-size:11px;color:#5d6972;background:#f6f8f9;border:1px solid #e5e9ec;padding:9px;border-radius:8px;line-height:1.45}
+.overlay-tip{position:absolute;left:18px;bottom:18px;background:#fff;border:1px solid #dce2e6;border-radius:9px;box-shadow:0 5px 18px #0002;padding:9px 11px;font-size:11px;color:#65717a;pointer-events:none;max-width:440px}
+
+.color-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:8px}
+.color-btn{height:30px;border-radius:7px;border:2px solid transparent;padding:0;position:relative}
+.color-btn:hover{transform:translateY(-1px)}
+.color-btn.active{border-color:#111;box-shadow:0 0 0 2px #fff inset}
+.color-btn.active:after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;text-shadow:0 1px 2px #000}
+.room{stroke-width:2}
+.fileinput{display:none}
+@media(max-width:1050px){.app{grid-template-columns:250px 1fr 260px}} @media(max-width:800px){.app{grid-template-columns:1fr}.sidebar,.inspector{display:none}.toolbar{width:150px}}
+
+.management-bar{background:#17202a;color:#fff;padding:9px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.management-bar .title{font-weight:700;font-size:13px;margin-right:4px}.management-bar button{background:#fff;color:#17202a;border:0;border-radius:6px;padding:7px 10px;cursor:pointer}.management-bar button:hover{background:#e9f1f7}.management-bar .plan-title{margin-left:auto;font-size:12px;opacity:.82}
+.plan-tabs{display:flex;gap:5px;overflow:auto;padding:6px 12px;background:#f4f6f8;border-bottom:1px solid #dce1e5;min-height:39px}.plan-tab{border:1px solid #d4dce2;background:#fff;border-radius:6px;padding:5px 9px;font-size:11px;cursor:pointer;white-space:nowrap}.plan-tab.active{background:#1677d2;color:#fff;border-color:#1677d2}
+.workload-window{position:fixed;z-index:10000;left:80px;top:100px;right:auto;bottom:auto;transform:none;width:min(650px,52vw);height:min(690px,78vh);background:#fff;border:1px solid #cfd7dd;border-radius:12px;box-shadow:0 18px 60px rgba(0,0,0,.30);display:none;flex-direction:column;overflow:hidden}.workload-window.open{display:flex}.workload-head{display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid #e1e5e8;background:#fff}.workload-head h2{margin:0;font-size:16px}.workload-head button{margin-left:auto;border:0;background:none;font-size:22px;padding:2px 8px}.workload-body{display:grid;grid-template-columns:205px 1fr;min-height:0;flex:1}.emp-list{overflow:auto;padding:7px;border-right:1px solid #e1e5e8}.emp-item{display:flex;align-items:center;gap:7px;padding:8px;border-radius:7px;cursor:pointer;font-size:11px}.emp-item:hover,.emp-item.active{background:#edf5fd}.emp-color{width:14px;height:14px;border-radius:50%;border:1px solid #0002;flex:none}.load-content{padding:12px;overflow:auto}.load-content h3{margin:0 0 6px;font-size:14px}.load-content table{border-collapse:collapse;width:100%;font-size:11px}.load-content th,.load-content td{border:1px solid #d8dee3;padding:6px}.load-content th{background:#f3f5f6;text-align:left}.load-content tfoot td{font-weight:700;background:#f7f8f9}.load-note{font-size:10px;color:#69747d;margin:6px 0 10px;line-height:1.4}.source-title{font-size:11px;font-weight:700;margin:13px 0 6px}.source-row.section td{font-weight:700;background:#f7f8f9}.source-row.total td{font-weight:700;background:#eef5ed}.assign-mode{background:#e9f7ef;border:1px solid #b7dfc7;color:#136b39;border-radius:7px;padding:7px 9px;margin-bottom:9px;font-size:10px;line-height:1.45}.locked-color{font-size:10px;color:#6b7680;margin-top:5px}.field select{width:100%;padding:9px;border:1px solid #d5dce2;border-radius:8px;outline:none;background:#fff}
+@media(max-width:900px){.workload-window{width:76vw}.workload-body{grid-template-columns:180px 1fr}}@media(max-width:700px){.workload-window{width:92vw;height:76vh;min-width:300px;min-height:300px}.workload-body{grid-template-columns:1fr}.emp-list{max-height:160px;border-right:0;border-bottom:1px solid #e1e5e8}}
+
+body{background:#f6f7f9;overflow:hidden}
+
+.main-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.main-nav a{color:#344054;text-decoration:none;padding:7px 10px;border-radius:7px;font-size:13px}.main-nav a:hover{background:#f0f3f6}.main-nav a.active{background:#eaf3fb;color:#175b91}
+.app{height:calc(100% - 82px);grid-template-columns:minmax(0,1fr) 300px;position:relative;padding:14px;gap:14px;background:#f6f7f9}
+.main,.inspector{border:1px solid #e0e5e9;border-radius:10px;overflow:hidden;background:#fff}.main{grid-column:1}.inspector{grid-column:2;border-left:1px solid #e0e5e9}.management-bar{background:#fff;color:#17202a;border-bottom:1px solid #e0e5e9}.management-bar .title{font-size:14px}.management-bar .plan-title{color:#667085;opacity:1}
+.rooms-drawer{position:fixed;left:18px;top:98px;bottom:18px;width:320px;z-index:9500;border:1px solid #d7dee4;border-radius:10px;box-shadow:0 18px 60px rgba(0,0,0,.22);transform:translateX(calc(-100% - 28px));transition:transform .18s ease;background:#fff}.rooms-drawer.open{transform:translateX(0)}
+.rooms-drawer .drawer-close{position:absolute;right:10px;top:10px;border:0;background:#f1f3f5;padding:5px 9px;z-index:2}.rooms-drawer .header{padding-right:52px}
+.stage{overflow:scroll!important;scrollbar-gutter:stable both-edges;background:#dde2e6;border-top:1px solid #d4dbe0}.stage::-webkit-scrollbar{width:15px;height:15px}.stage::-webkit-scrollbar-corner{background:#cfd6dc}
+.plan-tabs{background:#eef1f4;padding:8px 10px 0;gap:3px;border-bottom:1px solid #bfc8d0;min-height:42px;align-items:flex-end}.plan-tab{border-radius:7px 7px 0 0;border:1px solid #bfc8d0;border-bottom:0;background:#e2e7eb;color:#3d4852;padding:8px 14px;min-width:90px}.plan-tab.active{background:#fff;color:#17202a;border-color:#9aa7b2;position:relative;top:1px;font-weight:700}.plan-tab.active:after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:3px;background:#fff}
+.workload-window{resize:both;min-width:480px;min-height:360px}.workload-head{cursor:move;user-select:none;background:#f8f9fa}.workload-head:active{cursor:grabbing}.free-zone-note{display:flex;gap:8px;align-items:center;font-size:11px;color:#667085}.free-zone-swatch{width:18px;height:18px;border-radius:4px;background:#8b949e;border:1px solid #737d86}.load-content .floor-section td{font-weight:700;background:#eef2f5}.load-content .grand-total td{font-weight:700;background:#edf5ed}
+@media(max-width:900px){.app{grid-template-columns:minmax(0,1fr)}.inspector{display:none}}
+
+
+/* Dark theme */
+body.dark{background:#12171d;color:#e7edf3}
+body.dark .site-header,body.dark .main,body.dark .inspector,body.dark .management-bar,body.dark .toolbar,body.dark .rooms-drawer,body.dark .workload-window,body.dark .workload-head{background:#1b222a;color:#e7edf3;border-color:#35404a}
+body.dark .app{background:#12171d} body.dark 
+body.dark .main-nav a{color:#c7d1db} body.dark .main-nav a:hover{background:#27313a} body.dark .main-nav a.active{background:#21374a;color:#8dc8ff}
+body.dark button{background:#252e37;color:#e7edf3;border-color:#45515c} body.dark button:hover{background:#303b45} body.dark button.primary{background:#1677d2;border-color:#278ce5;color:#fff}
+body.dark button.danger{color:#ffaaa3;border-color:#80423d}
+body.dark input,body.dark select{background:#171d23;color:#e7edf3;border-color:#45515c}
+body.dark .header,body.dark .footer,body.dark .toolbar,body.dark .management-bar{border-color:#35404a}
+body.dark .header p,body.dark .item small,body.dark .help,body.dark .field label,body.dark .footer,body.dark .management-bar .plan-title,body.dark .load-note,body.dark .locked-color,body.dark .free-zone-note,body.dark .toolbar .tool-label{color:#9facb8}
+body.dark .item:hover,body.dark .item.active,body.dark .emp-item:hover,body.dark .emp-item.active{background:#233443}
+body.dark .status{background:#202830;border-color:#35404a;color:#b9c5cf}
+body.dark .stage{background:#11161b;border-color:#35404a} body.dark .stage::-webkit-scrollbar-track{background:#202830} body.dark .stage::-webkit-scrollbar-thumb{background:#52606c;border-color:#202830} body.dark .stage::-webkit-scrollbar-corner{background:#202830}
+body.dark .plan-tabs{background:#161c22;border-color:#45515c} body.dark .plan-tab{background:#252e37;color:#bec9d2;border-color:#45515c} body.dark .plan-tab.active{background:#1b222a;color:#fff;border-color:#73808c} body.dark .plan-tab.active:after{background:#1b222a}
+body.dark .workload-head{border-color:#35404a} body.dark .emp-list{border-color:#35404a} body.dark .load-content th{background:#252e37} body.dark .load-content th,body.dark .load-content td{border-color:#46515b} body.dark .load-content tfoot td,body.dark .source-row.section td{background:#202830} body.dark .source-row.total td{background:#23372d}
+body.dark .assign-mode{background:#173326;border-color:#315c43;color:#9de0b7} body.dark .overlay-tip{background:#1b222a;color:#b9c5cf;border-color:#35404a;box-shadow:0 5px 18px #0008}
+.theme-toggle{min-width:42px}
+
+
+.emp-total-badge{min-width:58px;height:24px;padding:0 8px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;line-height:1;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);flex:none}.emp-item .emp-name{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.load-content h3.employee-heading{display:flex;align-items:center;gap:8px}.load-content h3.employee-heading .emp-heading-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Вертикальная панель редактора */
+.editor-workspace{
+  display:flex !important;
+  flex-direction:row !important;
+  align-items:stretch !important;
+  min-width:0;
+  min-height:0;
+}
+.editor-workspace > .toolbar{
+  display:flex !important;
+  flex-direction:column !important;
+  flex-wrap:nowrap !important;
+  align-items:stretch !important;
+  justify-content:flex-start !important;
+  width:185px !important;
+  min-width:185px !important;
+  max-width:185px !important;
+  height:auto !important;
+  flex:0 0 185px !important;
+  padding:10px !important;
+  gap:7px !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  border-right:1px solid #dfe4e8 !important;
+  border-bottom:0 !important;
+}
+.editor-workspace > .toolbar > button{
+  display:block !important;
+  width:100% !important;
+  min-height:34px;
+  flex:none !important;
+  text-align:left !important;
+  white-space:normal !important;
+}
+.editor-workspace > .toolbar > .sep{
+  width:100% !important;
+  height:1px !important;
+  min-height:1px !important;
+  flex:none !important;
+  margin:4px 0 !important;
+}
+.editor-workspace > .toolbar > .tool-label{
+  width:100%;
+  flex:none;
+}
+.editor-workspace > .toolbar .zoombox{
+  width:100%;
+  margin-top:auto;
+  flex:none;
+}
+.editor-workspace > .stage{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  min-height:0 !important;
+}
+
+
+.room.multi-selected{
+  stroke:#ff9800 !important;
+  stroke-width:4 !important;
+  stroke-dasharray:8 4;
+}
+.item.multi-selected{
+  outline:2px solid #ff9800;
+  outline-offset:-2px;
+}
+
+
+/* Улучшенная визуализация зон */
+.room{
+  transition:filter .16s ease, transform .16s ease, stroke-width .16s ease;
+  transform-box:fill-box;
+  transform-origin:center;
+}
+.room.selected{
+  stroke-width:4 !important;
+}
+.room.employee-focus{
+  filter:drop-shadow(0 10px 6px rgba(0,0,0,.42));
+  transform:translateY(-7px) scale(1.012);
+  stroke-width:3.5 !important;
+  stroke-opacity:1 !important;
+}
+.room.employee-focus:hover{
+  filter:drop-shadow(0 12px 7px rgba(0,0,0,.50));
+  transform:translateY(-9px) scale(1.016);
+}
+.vertex{cursor:grab}
+.vertex:active{cursor:grabbing}
+.midpoint{cursor:copy}
+
+
+/* Улучшенный редактор свойств выбранной зоны */
+.property-save-status{
+  min-height:18px;
+  margin-top:8px;
+  font-size:11px;
+  line-height:1.35;
+  color:#667085;
+}
+.property-save-status.dirty{color:#9a6700}
+.property-save-status.ok{color:#16794b}
+.property-save-status.error{color:#b42318}
+.field input.invalid,.field select.invalid{
+  border-color:#d92d20 !important;
+  box-shadow:0 0 0 2px rgba(217,45,32,.12);
+}
+body.dark .property-save-status{color:#aeb9c3}
+body.dark .property-save-status.dirty{color:#ffd166}
+body.dark .property-save-status.ok{color:#7ee2aa}
+body.dark .property-save-status.error{color:#ff9b94}
+
+/* Динамически окрашиваемые элементы получают цвет текста через JS */
+.emp-total-badge,.plan-tab.employee-context{
+  text-shadow:none;
+}
+
+
+body.dark .load-content .floor-section td{
+  background:#27313a !important;
+  color:#e7edf3 !important;
+  border-color:#46515b !important;
+}
+
+
+.zone-area-label{
+  pointer-events:none;
+  user-select:none;
+  font-weight:800;
+  font-size:30px;
+  letter-spacing:.01em;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  paint-order:stroke fill;
+}
+
+
+body{margin:0;min-height:100vh}
+.app{height:100vh !important;min-height:0 !important}
+
+
+/* Сворачивание панелей «Зоны» и «Свойства зоны» */
+.app{transition:grid-template-columns .30s ease}
+.collapsible-panel{position:relative}
+.panel-toggle-head{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:36px;padding:4px 2px 8px;flex:none}
+.inspector .panel-toggle-head{padding:10px 10px 8px 12px;border-bottom:1px solid #e1e6ea}
+.panel-toggle-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#77838d;white-space:nowrap;overflow:hidden;max-width:180px;transition:opacity .18s ease,max-width .30s ease}
+.inspector .panel-toggle-title{font-size:12px;text-transform:none;letter-spacing:0;color:#344054}
+.panel-toggle{width:30px!important;min-width:30px!important;max-width:30px!important;height:30px!important;min-height:30px!important;padding:0!important;flex:0 0 30px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;border-radius:7px!important}
+.panel-arrow{display:block;line-height:1;transform:rotate(0deg);transition:transform .30s ease}
+.collapsible-panel.collapsed .panel-arrow{transform:rotate(180deg)}
+.editor-workspace>.toolbar.collapsible-panel{transition:width .30s ease,min-width .30s ease,max-width .30s ease,flex-basis .30s ease,padding .30s ease}
+.toolbar-content{display:flex;flex-direction:column;align-items:stretch;gap:7px;min-height:0;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;opacity:1;transform:translateX(0);transition:opacity .18s ease,transform .30s ease}
+.editor-workspace>.toolbar.collapsed{width:46px!important;min-width:46px!important;max-width:46px!important;flex:0 0 46px!important;padding:8px!important;overflow:hidden!important}
+.toolbar.collapsed .panel-toggle-head{justify-content:center;padding-bottom:4px}
+.toolbar.collapsed .panel-toggle-title{opacity:0;max-width:0;width:0}
+.toolbar.collapsed .toolbar-content{opacity:0;transform:translateX(-18px);pointer-events:none;overflow:hidden}
+.editor-workspace>.toolbar .toolbar-content>button{display:block!important;width:100%!important;min-height:34px;flex:none!important;text-align:left!important;white-space:normal!important}
+.editor-workspace>.toolbar .toolbar-content>.sep{width:100%!important;height:1px!important;min-height:1px!important;flex:none!important;margin:4px 0!important}
+.editor-workspace>.toolbar .toolbar-content>.tool-label{width:100%;flex:none}
+.editor-workspace>.toolbar .toolbar-content .zoombox{width:100%;margin-top:auto;flex:none}
+.inspector.collapsible-panel{min-width:0;transition:width .30s ease,min-width .30s ease,max-width .30s ease}
+.app.properties-collapsed{grid-template-columns:minmax(0,1fr) 46px!important}
+.inspector .inspector-original-header,.inspector .body{opacity:1;transform:translateX(0);transition:opacity .18s ease,transform .30s ease}
+.inspector.collapsed .panel-toggle-head{justify-content:center;padding-left:8px;padding-right:8px}
+.inspector.collapsed .panel-toggle-title{opacity:0;max-width:0;width:0}
+.inspector.collapsed .inspector-original-header,.inspector.collapsed .body{opacity:0;transform:translateX(18px);pointer-events:none}
+body.dark .panel-toggle-title{color:#9facb8}
+body.dark .inspector .panel-toggle-title{color:#e7edf3}
+body.dark .inspector .panel-toggle-head{border-color:#35404a}
+@media(max-width:900px){.app.properties-collapsed{grid-template-columns:minmax(0,1fr)!important}}
+
+
+/* Пустой запуск и пропорциональная загрузка планов */
+.stage{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start}
+.canvas.no-plan{width:100%!important;height:100%!important;min-height:420px;box-shadow:none;background:transparent}
+.empty-plan-state{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;z-index:1;pointer-events:none}
+.empty-plan-card{display:flex;flex-direction:column;gap:7px;align-items:center;justify-content:center;min-width:280px;max-width:460px;padding:28px 34px;border:1px dashed #b7c0c8;border-radius:12px;background:rgba(255,255,255,.78);color:#667085;text-align:center}
+.empty-plan-card b{font-size:15px;color:#344054}.empty-plan-card span{font-size:12px;line-height:1.45}
+.canvas.has-plan .empty-plan-state{display:none}
+.canvas.no-plan svg{display:none}
+.canvas.has-plan svg{display:block}
+body.dark .empty-plan-card{background:rgba(27,34,42,.84);border-color:#52606c;color:#aeb9c3}body.dark .empty-plan-card b{color:#e7edf3}
+/* Панель Зоны остаётся вертикальной */
+#zonesPanel,#zonesPanel .toolbar-content{display:flex!important;flex-direction:column!important;align-items:stretch!important}
+
+
+.management-bar{font-size:11px!important;gap:5px!important}
+.management-bar button{font-size:10px!important;padding:5px 7px!important;min-width:0!important;width:auto!important;white-space:nowrap}
+.management-bar .label,.management-bar label{font-size:10px!important}
+.load-modal,.load-window,.workload-modal{font-size:15px!important}
+.load-modal button,.load-window button,.workload-modal button,.load-modal input,.load-window input,.workload-modal input,.load-modal select,.load-window select,.workload-modal select,.load-modal table,.load-window table,.workload-modal table{font-size:14px!important}
+.load-modal .employee-list,.load-window .employee-list,.workload-modal .employee-list{font-size:15px!important}
+#finishPolygonBtn{width:100%;margin-top:6px}
+.zone-context-menu{position:fixed;z-index:100000;min-width:190px;padding:6px;border:1px solid rgba(120,130,140,.35);border-radius:8px;background:#fff;box-shadow:0 12px 30px rgba(0,0,0,.22);display:none}
+.zone-context-menu.open{display:block}
+.zone-context-menu button{display:block;width:100%;text-align:left;padding:8px 10px;margin:0;border:0;border-radius:6px;background:transparent;cursor:pointer}
+.zone-context-menu button:hover:not(:disabled){background:#f0f3f6}
+.zone-context-menu button:disabled{opacity:.45;cursor:not-allowed}
+body.dark .zone-context-menu{background:#202830;color:#e7edf3;border-color:#46515b}
+body.dark .zone-context-menu button{color:#e7edf3}
+body.dark .zone-context-menu button:hover:not(:disabled){background:#2d3842}
+
+
+/* Крупный шрифт модального окна «Нагрузка на сотрудника» */
+.workload-window{font-size:17px!important}
+.workload-window .workload-head h2{font-size:20px!important}
+.workload-window .emp-item{font-size:15px!important}
+.workload-window .load-content{font-size:16px!important}
+.workload-window .load-content h3{font-size:18px!important}
+.workload-window .load-content table{font-size:15px!important}
+.workload-window .load-content th,.workload-window .load-content td{font-size:15px!important;padding:8px!important}
+.workload-window .assign-mode,.workload-window .load-note,.workload-window .source-title{font-size:14px!important}
+.workload-window button{font-size:14px!important}
+.workload-selected-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.workload-clear-btn{font-size:14px!important;padding:6px 10px!important;white-space:nowrap}
+
+/* Поле сотрудника в свойствах — только просмотр */
+.employee-readonly{
+  width:100%;box-sizing:border-box;padding:9px;border:1px solid #d5dce2;border-radius:8px;
+  background:#f5f7f8;color:#344054;min-height:38px;display:flex;align-items:center;
+  cursor:default;user-select:text
+}
+body.dark .employee-readonly{background:#242d35;color:#e7edf3;border-color:#46515b}
+
+.employee-heading{display:flex!important;align-items:center!important;gap:8px!important;width:100%}
+.employee-heading .workload-selected-actions{margin-left:auto!important}
+
+
+/* v32 — несколько сотрудников + подсчёт площади */
+.area-modal{
+  position:fixed;left:170px;top:100px;z-index:9998;width:min(980px,86vw);
+  max-height:80vh;overflow:hidden;background:#fff;border:1px solid #cfd6dd;
+  border-radius:12px;box-shadow:0 18px 45px rgba(0,0,0,.28);display:none;font-size:16px
+}
+.area-modal.open{display:block}
+.area-modal-header{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 12px;border-bottom:1px solid #d9e0e6;cursor:move;
+  font-size:18px;font-weight:800;user-select:none
+}
+.area-total-card{
+  margin:10px;padding:12px 14px;border-radius:10px;background:#eef4f0;
+  border:1px solid #b9d4c1;font-size:21px;font-weight:800
+}
+.area-modal-body{display:grid;grid-template-columns:250px 1fr;min-height:360px;max-height:65vh}
+.area-left{border-right:1px solid #d9e0e6;padding:10px;overflow:auto}
+.area-right{padding:10px;overflow:auto}
+.area-search-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.area-search-row input{flex:1;font-size:16px;padding:8px 10px}
+.area-category-list,.area-room-list,.area-plan-list{display:flex;flex-direction:column;gap:6px}
+.area-item{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:7px 8px;border:1px solid #d7dde3;border-radius:8px;background:#fafbfc
+}
+.area-item.active{outline:2px solid #2e8b57}
+.area-item button{font-size:13px;padding:4px 7px}
+body.dark .area-modal{background:#202830;color:#e7edf3;border-color:#46515b}
+body.dark .area-modal-header,.dark .area-left{border-color:#46515b}
+body.dark .area-item{background:#27313a;border-color:#46515b}
+body.dark .area-total-card{background:#263a2e;border-color:#3c6b4b}
+
+
+/* v36 — выпадающий список помещений со скроллбаром */
+.area-rooms-dropdown{
+  margin-top:12px;
+  border:1px solid #d7dde3;
+  border-radius:9px;
+  background:#fafbfc;
+  overflow:hidden;
+}
+.area-rooms-dropdown>summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:9px 10px;
+  font-weight:800;
+  cursor:pointer;
+  user-select:none;
+  list-style:none;
+}
+.area-rooms-dropdown>summary::-webkit-details-marker{display:none}
+.area-rooms-dropdown>summary::after{
+  content:'▾';
+  margin-left:auto;
+  transition:transform .18s ease;
+}
+.area-rooms-dropdown:not([open])>summary::after{transform:rotate(-90deg)}
+.area-rooms-count{
+  min-width:28px;
+  padding:2px 7px;
+  border-radius:999px;
+  background:#e8edf1;
+  text-align:center;
+  font-size:12px;
+  font-weight:800;
+}
+.area-rooms-dropdown .area-room-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  max-height:360px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  padding:8px;
+  border-top:1px solid #d7dde3;
+}
+.area-rooms-dropdown .area-room-list:focus{
+  outline:2px solid rgba(46,139,87,.38);
+  outline-offset:-2px;
+}
+body.dark .area-rooms-dropdown{
+  background:#27313a;
+  border-color:#46515b;
+}
+body.dark .area-rooms-dropdown .area-room-list{border-color:#46515b}
+body.dark .area-rooms-count{background:#36424c;color:#e7edf3}
+
+
+/* v38 — плашки Факт / Загружено в окне нагрузки */
+.employee-heading{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  flex-wrap:nowrap !important;
+  min-width:0;
+}
+.employee-heading .emp-heading-name{
+  flex:1 1 auto;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.employee-metrics{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+.employee-metric-badge{
+  width:118px;
+  min-width:118px;
+  max-width:118px;
+  height:30px;
+  box-sizing:border-box;
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  padding:4px 8px;
+  border-radius:8px;
+  border:1px solid #cbd5df;
+  background:#f4f7f9;
+  color:#1f2937;
+  font-size:13px;
+  line-height:1;
+}
+.employee-metric-badge .metric-label{
+  font-weight:700;
+  opacity:.78;
+}
+.employee-metric-badge .metric-value{
+  font-weight:900;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.employee-metric-badge.loaded.no-data .metric-value{
+  font-size:12px;
+  font-weight:800;
+}
+.employee-heading [data-clear-selected-employee]{
+  flex:0 0 auto;
+  height:30px;
+  padding:4px 9px !important;
+}
+body.dark .employee-metric-badge{
+  background:#2b353e;
+  border-color:#46515b;
+  color:#e7edf3;
+}
+
+
+/* v39 — метки Факт / Загружено вынесены за плашки */
+.employee-heading{
+  display:flex !important;
+  align-items:center !important;
+  gap:12px !important;
+  flex-wrap:nowrap !important;
+  min-width:0;
+}
+.employee-heading .emp-heading-name{
+  flex:1 1 auto;
+  min-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.employee-metrics{
+  margin-left:auto;
+  display:grid;
+  grid-template-columns:auto 88px auto 104px auto;
+  align-items:center;
+  column-gap:7px;
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+.employee-metric-label{
+  font-size:13px;
+  font-weight:700;
+  color:inherit;
+  background:none;
+  padding:0;
+  margin:0;
+}
+.employee-metric-badge{
+  height:30px;
+  box-sizing:border-box;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 8px;
+  border-radius:8px;
+  border:1px solid #cbd5df;
+  font-size:13px;
+  line-height:1;
+  font-weight:900;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.employee-metric-badge.fact{
+  width:88px;
+  min-width:88px;
+  max-width:88px;
+  background:#eaf3ff;
+  border-color:#a9c7eb;
+  color:#163b63;
+}
+.employee-metric-badge.loaded{
+  width:104px;
+  min-width:104px;
+  max-width:104px;
+  background:#eef8ef;
+  border-color:#b5d7b9;
+  color:#234b2a;
+}
+.employee-metric-badge.loaded.no-data{
+  font-size:12px;
+}
+.employee-heading [data-clear-selected-employee]{
+  width:auto;
+  min-width:76px;
+  height:30px;
+  padding:4px 9px !important;
+  flex:0 0 auto;
+}
+body.dark .employee-metric-badge.fact{
+  background:#26384c;
+  border-color:#496a8d;
+  color:#d9eaff;
+}
+body.dark .employee-metric-badge.loaded{
+  background:#2d4031;
+  border-color:#4e7356;
+  color:#e0f4e4;
+}
+
+</style>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script></head>
 <body>
-  <header class="site-header">
-    <h1>Проект 4</h1>
-    <nav class="main-nav" aria-label="Навигация">
-      <a href="index.html" class="nav-link">Главная</a>
-      <a href="about.html" class="nav-link">О нас</a>
-      <a href="projects.html" class="nav-link">Проекты (список)</a>
-      <a href="contact.html" class="nav-link">Контакты</a>
-    </nav>
-  </header>
 
-  <main>
-    <article>
-      <h2>Описание проекта 4</h2>
-      <p>Краткое описание и цель проекта 4.</p>
-    </article>
-  </main>
+<div class="app" id="editor">
+<aside class="sidebar rooms-drawer" id="roomsDrawer">
+<button class="drawer-close" type="button" onclick="toggleRoomsDrawer(false)">×</button><div class="header"><h1>Помещения</h1><p>Создание и редактирование активных зон прямо на плане.</p></div>
+<input class="search" id="search" placeholder="Поиск помещения...">
+<div class="list" id="list"></div>
+<div class="footer"><b>Добавление:</b> щёлкайте по углам комнаты. Затем нажмите «Завершить».</div>
+</aside>
 
-  <footer>
-    <p><a href="index.html">← Вернуться на главную</a></p>
-  </footer>
+<main class="main">
 
-  <script src="assets/js/main.js" defer></script>
+<div class="management-bar" id="managementBar">
+  <span class="title">Управление</span>
+  <button type="button" onclick="document.getElementById('excelUpload').click()">⬆ Загрузить Excel</button>
+  <button type="button" onclick="downloadExcel()">⬇ Выгрузить Excel</button>
+  <button type="button" onclick="document.getElementById('planUpload').click()">＋ Добавить план</button>
+  <button type="button" onclick="renameCurrentPlan()">✎ Название плана</button>
+  <button type="button" class="danger" onclick="deleteCurrentPlan()">− Удалить план</button>
+  <button type="button" onclick="saveProject()" title="Сохранить все данные проекта в выбранную папку">💾 Сохранить проект</button>
+  <button type="button" onclick="loadProject()" title="Выбрать файл interactive_floor_project.json">📂 Загрузить проект</button>
+  <button type="button" onclick="toggleWorkloadWindow()">👤 Нагрузка на сотрудника</button>
+  <button type="button" onclick="openAreaCalculator()">∑ Посчитать площадь</button>
+  <button type="button" class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Тёмная тема">🌙</button>
+  <input id="excelUpload" type="file" accept=".xlsx,.xls" style="display:none" onchange="loadExcel(event)">
+  <input id="planUpload" type="file" accept="image/*" style="display:none" onchange="addPlanFromFile(event)">
+  <span class="plan-title" id="planTitle" title="Двойной щелчок — переименовать план" ondblclick="renameCurrentPlan()">План не загружен</span>
+</div>
+<div class="plan-tabs" id="planTabs" role="tablist" aria-label="Планы этажей"></div>
+<div class="editor-workspace">
+<div class="toolbar collapsible-panel expanded" id="zonesPanel">
+<div class="panel-toggle-head">
+  <div class="panel-toggle-title">Зоны</div>
+  <button type="button" class="panel-toggle" onclick="toggleEditorPanel('zones')" aria-label="Свернуть или развернуть панель Зоны" aria-expanded="true"><span class="panel-arrow">◀</span></button>
+</div>
+<div class="toolbar-content">
+<button type="button" onclick="toggleRoomsDrawer()">☰ Помещения</button>
+<button class="primary tool-btn" id="addBtn" type="button">＋ Полигон</button>
+<button id="finishPolygonBtn" class="primary" type="button" onclick="finishAdd()" disabled style="display:none">Завершить построение полигона</button>
+<button class="tool-btn" id="rectBtn" type="button" onclick="togglePrimitive('rect')">▭ Прямоугольник</button>
+<button class="tool-btn" id="circleBtn" type="button" onclick="togglePrimitive('circle')">○ Круг</button>
+<button id="editBtn" onclick="startEdit()" disabled>✎ Вершины</button>
+<button id="clearEmployeeBtn" onclick="clearSelectedEmployee()" disabled>◌ Очистить</button>
+<button id="mergeBtn" onclick="mergeSelectedZones()" disabled>⧉ Объединить</button>
+<button class="danger" id="deleteBtn" onclick="deleteSelected()" disabled>Удалить зону</button>
+<span class="sep"></span>
+<div class="tool-label">История</div>
+<button onclick="undo()">↶ Отменить</button>
+<button onclick="redo()">↷ Повторить</button>
+<span class="sep"></span>
+<div class="tool-label">Данные зон</div>
+<button onclick="exportJSON()">Экспорт JSON</button>
+<button onclick="document.getElementById('importFile').click()">Импорт JSON</button>
+<input class="fileinput" id="importFile" type="file" accept=".json,application/json" onchange="importJSON(event)">
+<span class="sep"></span>
+<div class="tool-label">Масштаб</div>
+<div class="zoombox"><button onclick="zoom(-.1)">−</button><button onclick="zoom(.1)">＋</button><span class="zoomlabel" id="zoomLabel">100%</span><button onclick="fit()">По размеру</button></div>
+</div>
+</div>
+<div class="stage" id="stage">
+<div class="canvas" id="canvas">
+<div class="empty-plan-state" id="emptyPlanState">
+  <div class="empty-plan-card"><b>План не загружен</b><span>Нажмите «Добавить план» и выберите изображение.</span></div>
+</div>
+<svg id="svg" viewBox="0 0 1 1" preserveAspectRatio="xMidYMid meet" aria-label="Редактор зон"></svg>
+<div class="overlay-tip" id="tip">Выберите помещение. Для точной коррекции нажмите «Редактировать вершины».</div>
+</div>
+</div>
+</div>
+</main>
+
+<aside class="inspector collapsible-panel expanded" id="propertiesPanel">
+<div class="panel-toggle-head inspector-toggle-head">
+  <div class="panel-toggle-title">Свойства зоны</div>
+  <button type="button" class="panel-toggle" onclick="toggleEditorPanel('properties')" aria-label="Свернуть или развернуть панель Свойства зоны" aria-expanded="true"><span class="panel-arrow">▶</span></button>
+</div>
+<div class="header inspector-original-header"><h1>Свойства зоны</h1><p>Данные выбранного помещения</p></div>
+<div class="body" id="inspectorBody"><div class="empty"><b>Зона не выбрана</b><br><br>Добавьте план, затем создайте или выберите зону.</div></div>
+</aside>
+</div>
+
+<script>
+const SAVED_PROJECT=null; /*__SAVED_PROJECT__*/
+const STORAGE_KEY = 'interactive_floor_editor';
+let EMPLOYEE_TOTALS = {"Гюлумян И.И.": 1103.8, "Гончарова М.В.": 921.9, "Зацепина Л.М.": 303.0, "Иглина Н.А.": 125.0, "Калинина М.С.": 935.2, "Клочкова С.В.": 949.2, "Куликова Л.В.": 911.1, "Мирошниченко Т.П.": 925.85, "Новая У.": 615.68, "Носкова Г.Л.": 503.61, "Пищеренко Ю.А.": 922.1, "Синецкая О.Н.": 500.6, "Шевченко Г.Р.": 893.5};
+const BASE_ROOMS = [];
+const FREE_ZONE_COLOR = '#8B949E';
+const DEFAULT_COLOR = FREE_ZONE_COLOR;
+const COLORS = ["#E53935", "#D81B60", "#8E24AA", "#5E35B1", "#3949AB", "#1E88E5", "#039BE5", "#00ACC1", "#00897B", "#43A047", "#7CB342", "#C0CA33", "#FDD835", "#FFB300", "#FB8C00", "#F4511E", "#6D4C41", "#757575", "#546E7A", "#263238"];
+const INITIAL_EMPLOYEES = ["Гюлумян И.И.", "Гончарова М.В.", "Зацепина Л.М.", "Иглина Н.А.", "Калинина М.С.", "Клочкова С.В.", "Куликова Л.В.", "Мирошниченко Т.П.", "Новая У.", "Носкова Г.Л.", "Пищеренко Ю.А.", "Синецкая О.Н.", "Шевченко Г.Р."];
+let SHEET1_WORKLOAD = {"Гюлумян И.И.": [{"name": "3 этаж блок А:", "value": "1"}, {"name": "Кабинет 316", "value": 33.8}, {"name": "Кабинет № 317 (психолог)", "value": 10.5}, {"name": "Кабинет № 318", "value": 68.8}, {"name": "Кабинет № 319", "value": 69.3}, {"name": "Кабинет № 320", "value": 61.3}, {"name": "Кабинет № 321", "value": 61.5}, {"name": "Кабинет № 322", "value": 62}, {"name": "Кабинет № 323", "value": 62.3}, {"name": "Кабинет № 324", "value": 62.1}, {"name": "Туалеты", "value": 30.6}, {"name": "Рекреация", "value": 190.3}, {"name": "Блок А:", "value": "1"}, {"name": "Лестницы боковые с 1 на 3 этаж (2 шт.)", "value": 98.2}, {"name": "2 этаж новое здание:", "value": "1"}, {"name": "Спортивный зал", "value": 279.3}, {"name": "Снарядная (тренерская)", "value": 13.8}, {"name": "ВСЕГО участок работы", "value": 1103.8}], "Гончарова М.В.": [{"name": "2 этаж блок Б и В:", "value": "1"}, {"name": "Кабинет № 210", "value": 35.4}, {"name": "Кабинет № 211", "value": 48.7}, {"name": "Лестницы боковые с 1 по 3 этаж", "value": 90.2}, {"name": "Рекреация от 211 до 209 каб. включительно", "value": 128.2}, {"name": "Раздевалка 2 этаж", "value": 51.4}, {"name": "Спортивный зал (большой)", "value": 210.8}, {"name": "Спортивный (гимнастический зал)", "value": 102.7}, {"name": "Тренерская", "value": 14.2}, {"name": "Танцевальный зал", "value": 61.8}, {"name": "Холл перед спортзалом", "value": 33.4}, {"name": "Тамбуры (центральный, запасной выход с лестницей)", "value": 145.1}, {"name": "ВСЕГО участок работы", "value": 921.9000000000001}], "Зацепина Л.М.": [{"name": "1 этаж блок А:", "value": "1"}, {"name": "Кабинет № 115", "value": 69.5}, {"name": "Кабинет № 114", "value": 71}, {"name": "Лаборантская химии", "value": 33.8}, {"name": "Кабинет рук. Кванториума", "value": 13.5}, {"name": "Лаборантские физики и биологии", "value": 13.4}, {"name": "Рекреация от входа в «Кванториум» до каб.№114", "value": 101.8}, {"name": "ВСЕГО участок работы", "value": 303}], "Иглина Н.А.": [{"name": "Библиотека", "value": 125}, {"name": "ВСЕГО участок работы", "value": 125}], "Калинина М.С.": [{"name": "3 этаж блок Б:", "value": "1"}, {"name": "Кабинет контрактного управляющего", "value": 21.2}, {"name": "Кабинет № 312 с подсобным помещением", "value": 59.2}, {"name": "Кабинет № 313 с подсобным помещением", "value": 40.6}, {"name": "Кабинет № 314", "value": 34.3}, {"name": "Кабинет № 315 (зам. директор по АХР)", "value": 16.7}, {"name": "Служебный туалет", "value": 8.9}, {"name": "Рекреация", "value": 253.4}, {"name": "Центральная лестница с 1 по 3 этаж", "value": 101.9}, {"name": "2 этаж блок Б:", "value": "1"}, {"name": "Рекреация около приемной", "value": 87.9}, {"name": "1 этаж блок А:", "value": "1"}, {"name": "Кабинет № 111", "value": 61}, {"name": "Кабинет № 110", "value": 68.6}, {"name": "Кабинет № 109", "value": 53.2}, {"name": "Внутренние помещения в каб.109", "value": 13.7}, {"name": "Рекреация от каб.№109 до входа в «Кванториум» 89,7 м2", "value": 89.5}, {"name": "Туалеты", "value": 25.1}, {"name": "ВСЕГО участок работы", "value": 935.2000000000002}], "Клочкова С.В.": [{"name": "1 этаж блок В:", "value": "1"}, {"name": "Кабинет № 101", "value": 69.8}, {"name": "Учительская начальной школы", "value": 33.2}, {"name": "Кабинет № 102", "value": 70.2}, {"name": "Кабинет № 103", "value": 61.8}, {"name": "Кабинет № 104", "value": 62}, {"name": "Кабинет № 105", "value": 61.8}, {"name": "Кабинет № 106", "value": 69.1}, {"name": "Кабинет № 107", "value": 33.3}, {"name": "Туалеты", "value": 31.1}, {"name": "Рекреация нач.школы (от каб.№ 101 до гардеробной)", "value": 172.2}, {"name": "Холл (вход в нач.школу) – 84,6 м2", "value": 81.7}, {"name": "Тамбур (вход в нач.школу)", "value": 13.5}, {"name": "Гардеробная нач.школы", "value": 34.2}, {"name": "Тамбур с лестницей (вход в нач.школу)", "value": 53}, {"name": "столовая", "value": "1"}, {"name": "столовая (средний зал)", "value": 102.3}, {"name": "ВСЕГО участок работы", "value": 949.2}], "Куликова Л.В.": [{"name": "2 этаж блок А:", "value": "1"}, {"name": "Кабинет № 212", "value": 33.9}, {"name": "Кабинет № 213", "value": 33.5}, {"name": "Кабинет № 214", "value": 69}, {"name": "Кабинет № 215", "value": 68.9}, {"name": "Кабинет № 216", "value": 61.6}, {"name": "Кабинет № 217", "value": 61.5}, {"name": "Кабинет № 218", "value": 62.1}, {"name": "Кабинет № 219", "value": 70.5}, {"name": "Кабинет № 220", "value": 69.8}, {"name": "Рекреация от каб.№212 (включительно) до каб 219", "value": 215.8}, {"name": "Туалеты", "value": 30.6}, {"name": "Кабинет директора", "value": 34.1}, {"name": "Приемная", "value": 16.2}, {"name": "Секретарь", "value": 17.6}, {"name": "Кабинет заучей", "value": 16.7}, {"name": "Методический кабинет (Учительская)", "value": 49.3}, {"name": "ВСЕГО участок работы", "value": 911.1000000000003}], "Мирошниченко Т.П.": [{"name": "1 Этаж н/з:", "value": "1"}, {"name": "Кабинет технологии", "value": 83.5}, {"name": "Кабинет слесарные мастерские", "value": 137.2}, {"name": "Кладовые к кабинетам", "value": 47.1}, {"name": "Кабинет информатики", "value": 112.9}, {"name": "Кабинет охраны", "value": 18.3}, {"name": "Гимнастический зал", "value": 126.9}, {"name": "Туалеты", "value": 29.3}, {"name": "Раздевалки (2 шт)", "value": 16}, {"name": "Венткамера", "value": 27}, {"name": "Душевые (2шт)", "value": 4.7}, {"name": "Служебное тех. помещение", "value": 7.5}, {"name": "Коридоры", "value": 147.3}, {"name": "Кабинет ( за каб. Информатики)", "value": 20.8}, {"name": "Серверная", "value": 10.5}, {"name": "Лестницы на улице ( центральный вход, запасные входы, пандус) – 50м2", "value": 70.05}, {"name": "Лестницы с 1-2 этаж (4 шт,), лестница в подвал", "value": 66.8}, {"name": "ВСЕГО участок работы", "value": 925.8499999999999}], "Новая У.": [{"name": "1 этаж блок Б:", "value": "1"}, {"name": "Фойе", "value": 102.5}, {"name": "Холл с гардеробной", "value": 155.28}, {"name": "Холл (каб.медсестры)", "value": 121.4}, {"name": "Хлораторная, подсобные помещения", "value": 20}, {"name": "Кабинет № 108", "value": 50.8}, {"name": "Комната отдыха, перед ней холл, холл перед каб. №108", "value": 100.9}, {"name": "Медицинские кабинеты", "value": 33}, {"name": "Кабинет логопеда", "value": 16.5}, {"name": "Серверная", "value": 15.3}, {"name": "ВСЕГО участок работы", "value": 615.68}], "Носкова Г.Л.": [{"name": "2 Этаж н/з:", "value": "1"}, {"name": "Актовый зал", "value": 197.11}, {"name": "Гримерка актового зала", "value": 29.4}, {"name": "Коридоры около актового зала", "value": 33.1}, {"name": "Холл около актового зала", "value": 100.9}, {"name": "Переход", "value": 27.7}, {"name": "Туалеты", "value": 27.2}, {"name": "Коридор (около туалетов , разжевалок", "value": 40.4}, {"name": "Раздевалки (2шт)", "value": 32.6}, {"name": "Костюмерная", "value": 15.2}, {"name": "ВСЕГО участок работы", "value": 503.60999999999996}], "Пищеренко Ю.А.": [{"name": "2 этаж блок В:", "value": "1"}, {"name": "Кабинет №201", "value": 69.8}, {"name": "Кабинет № 202", "value": 62.1}, {"name": "Кабинет № 203", "value": 61.7}, {"name": "Кабинет № 204", "value": 62.1}, {"name": "Кабинет № 205", "value": 61.6}, {"name": "Кабинет № 206", "value": 69.2}, {"name": "Кабинет № 207", "value": 61.2}, {"name": "Кабинет № 208", "value": 33.8}, {"name": "Кабинет № 209", "value": 47.3}, {"name": "Кабинет соц.педагога", "value": 7.9}, {"name": "Туалеты", "value": 31}, {"name": "Рекреация от 201 до 209 каб. Включительно", "value": 172.2}, {"name": "столовая", "value": "1"}, {"name": "столовая (левый зал)", "value": 98.9}, {"name": "столовая (правый зал- нач.школа)", "value": 83.3}, {"name": "ВСЕГО участок работы", "value": 922.0999999999998}], "Синецкая О.Н.": [{"name": "1 этаж блок А:", "value": "1"}, {"name": "Кабинет № 115", "value": 69.5}, {"name": "Кабинет № 114", "value": 71}, {"name": "Кабинет № 113", "value": 61.5}, {"name": "Кабинет № 112", "value": 61}, {"name": "Рекреация от каб.№109 до каб.№114", "value": 212.5}, {"name": "Туалеты", "value": 25.1}, {"name": "ВСЕГО участок работы", "value": 500.6}], "Шевченко Г.Р.": [{"name": "3 этаж блок В:", "value": "1"}, {"name": "Кабинет № 301", "value": 63.9}, {"name": "Кабинет № 303", "value": 70.5}, {"name": "Кабинет № 302", "value": 32.1}, {"name": "Кабинет № 304", "value": 61.6}, {"name": "Кабинет № 305", "value": 62.1}, {"name": "Кабинет № 306", "value": 61.7}, {"name": "Кабинет № 307", "value": 70}, {"name": "Кабинет № 308", "value": 62.3}, {"name": "Кабинет № 309", "value": 33.6}, {"name": "Кабинет № 310", "value": 34.4}, {"name": "Кабинет № 311", "value": 75.2}, {"name": "Туалеты", "value": 29.2}, {"name": "Рекреация до 311 каб.", "value": 221.2}, {"name": "305 а (Учительская)", "value": 7.8}, {"name": "306 а (Профсоюз)", "value": 7.9}, {"name": "ВСЕГО участок работы", "value": 893.4999999999999}]};
+const EMPLOYEE_COLORS_DEFAULT = {"Гюлумян И.И.": "#E53935", "Гончарова М.В.": "#D81B60", "Зацепина Л.М.": "#8E24AA", "Иглина Н.А.": "#5E35B1", "Калинина М.С.": "#3949AB", "Клочкова С.В.": "#1E88E5", "Куликова Л.В.": "#039BE5", "Мирошниченко Т.П.": "#00ACC1", "Новая У.": "#00897B", "Носкова Г.Л.": "#43A047", "Пищеренко Ю.А.": "#7CB342", "Синецкая О.Н.": "#C0CA33", "Шевченко Г.Р.": "#FDD835"};
+let employees = SAVED_PROJECT ? clone(SAVED_PROJECT.employees) : [...INITIAL_EMPLOYEES];
+let employeeColors = SAVED_PROJECT ? clone(SAVED_PROJECT.employeeColors) : Object.assign({},EMPLOYEE_COLORS_DEFAULT);
+
+let excelSourceBytes=null;
+let excelSourceFileName='';
+let excelSheet1Name='Лист1';
+let excelSheet2Name='Лист2';
+let SHEET1_LOADED_TOTAL_DISPLAY={};
+
+let selectedEmployee = employees[0] || '';
+let workloadMode = false;
+let plans = [];
+let currentPlanId = null;
+let _initialPlan = null;
+let rooms = [], selectedId = null, selectedIds = new Set(), mode = 'select', draft = [], scale = 1, history = [], future = [], drag = null, primitiveStart = null, primitiveCurrent = null;
+
+const svg=document.getElementById('svg'), canvas=document.getElementById('canvas'), stage=document.getElementById('stage');
+const list=document.getElementById('list'), search=document.getElementById('search');
+
+function currentPlan(){return currentPlanId?plans.find(p=>p.id===currentPlanId)||null:null;}
+function planWidth(){const p=currentPlan();return Math.max(1,Number(p&&p.width)||1);}
+function planHeight(){const p=currentPlan();return Math.max(1,Number(p&&p.height)||1);}
+function ensurePlanImage(){
+ let img=document.getElementById('planImage');
+ if(!img){
+  img=document.createElement('img');
+  img.id='planImage';img.alt='Загруженный план помещения';img.draggable=false;
+  canvas.insertBefore(img,svg);
+ }
+ return img;
+}
+function clearPlanVisual(){
+ const img=document.getElementById('planImage');if(img)img.remove();
+ canvas.classList.remove('has-plan');canvas.classList.add('no-plan');
+ svg.setAttribute('viewBox','0 0 1 1');
+ svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+ svg.innerHTML='';
+ const title=document.getElementById('planTitle');if(title)title.textContent='План не загружен';
+ scale=1;applyScale();
+}
+function setPlanVisual(plan,afterLoad){
+ if(!plan||!plan.image){clearPlanVisual();if(afterLoad)afterLoad();return;}
+ const img=ensurePlanImage();
+ img.onload=()=>{
+  if(!Number(plan.width)||!Number(plan.height)){
+   plan.width=img.naturalWidth||1;plan.height=img.naturalHeight||1;
+  }
+  svg.setAttribute('viewBox','0 0 '+planWidth()+' '+planHeight());
+  svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+  canvas.classList.remove('no-plan');canvas.classList.add('has-plan');
+  scale=1;fit();renderSvg();
+  if(afterLoad)afterLoad();
+ };
+ img.src=plan.image;
+ const title=document.getElementById('planTitle');if(title)title.textContent=plan.name||'План';
+}
+
+
+function clone(v){return JSON.parse(JSON.stringify(v))}
+function normalizeRooms(arr){
+  return (Array.isArray(arr)?arr:[]).map((r,i)=>{
+    const parts=Array.isArray(r.parts)?r.parts.filter(Boolean).map(String):[];
+    const points=r.points || parts[0] || '';
+    const employees=Array.isArray(r.employees)
+      ? [...new Set(r.employees.map(v=>String(v||'').trim()).filter(Boolean))]
+      : String(r.employee||'').split(',').map(v=>v.trim()).filter(Boolean);
+    return {
+      id:r.id || ('R'+String(i+1).padStart(2,'0')),
+      name:r.name || 'Без названия',
+      area:Number(r.area)||0,
+      employees,
+      employee:employees.join(', '),
+      color:employees.length ? (r.color || employeeColor(employees[0])) : FREE_ZONE_COLOR,
+      points:points,
+      parts:parts.length>1?parts:undefined
+    };
+  });
+}
+
+function initPlans(){return plans;}
+function savePlans(){const p=plans.find(x=>x.id===currentPlanId);if(p)p.rooms=clone(rooms);}
+function planRoomsForTab(plan){
+ if(!plan)return[];
+ if(plan.id===currentPlanId)return Array.isArray(rooms)?rooms:[];
+ return Array.isArray(plan.rooms)?plan.rooms:[];
+}
+
+function planHasFreeZones(plan){
+ return planRoomsForTab(plan).some(zone=>roomEmployees(zone).length===0);
+}
+
+function planHasSelectedEmployeeZones(plan){
+ if(!selectedEmployee)return false;
+ return planRoomsForTab(plan).some(zone=>{
+   return roomHasEmployee(zone,selectedEmployee);
+ });
+}
+
+function renderPlanTabs(){
+ const box=document.getElementById('planTabs');
+ if(!box)return;
+ box.innerHTML='';
+ if(!plans.length){
+  const title=document.getElementById('planTitle');if(title)title.textContent='План не загружен';
+  return;
+ }
+
+ plans.forEach(plan=>{
+   const tab=document.createElement('button');
+   tab.type='button';
+
+   const active=plan.id===currentPlanId;
+   tab.className='plan-tab'+(active?' active':'');
+   tab.setAttribute('role','tab');
+   tab.setAttribute('aria-selected',active?'true':'false');
+   tab.title='Двойной щелчок — переименовать план';
+
+   const content=document.createElement('span');
+   content.className='plan-tab-content';
+
+   if(planHasFreeZones(plan)){
+     const dot=document.createElement('span');
+     dot.className='plan-gray-dot';
+     dot.title='На плане есть неназначенные серые зоны';
+     content.appendChild(dot);
+   }
+
+   const label=document.createElement('span');
+   label.textContent=plan.name;
+   content.appendChild(label);
+   tab.appendChild(content);
+
+   // СТРОГОЕ УСЛОВИЕ:
+   // окрашиваем только если открыта "Нагрузка на сотрудника"
+   // и именно на ЭТОМ плане есть хотя бы одна зона выбранного сотрудника.
+   const hasSelectedEmployeeZones =
+     workloadMode &&
+     !!selectedEmployee &&
+     planHasSelectedEmployeeZones(plan);
+
+   if(areaCalcMode && areaPlanHasHighlight(plan)){
+     const color='#2E8B57';
+     const textColor=contrastTextColor(color);
+     tab.classList.add('employee-context');
+     tab.style.setProperty('background',color,'important');
+     tab.style.setProperty('border-color',color,'important');
+     tab.style.setProperty('color',textColor,'important');
+   }else if(hasSelectedEmployeeZones){
+     const color=employeeColor(selectedEmployee);
+     const textColor=contrastTextColor(color);
+     tab.classList.add('employee-context');
+     tab.style.setProperty('background',color,'important');
+     tab.style.setProperty('border-color',color,'important');
+     tab.style.setProperty('color',textColor,'important');
+   }else{
+     tab.classList.remove('employee-context');
+     tab.style.removeProperty('background');
+     tab.style.removeProperty('border-color');
+     tab.style.removeProperty('color');
+   }
+
+   tab.onclick=()=>switchPlan(plan.id);
+   tab.ondblclick=e=>{
+     e.preventDefault();
+     e.stopPropagation();
+     renamePlan(plan.id);
+   };
+
+   box.appendChild(tab);
+ });
+
+ const current=plans.find(p=>p.id===currentPlanId);
+ if(current){
+   const title=document.getElementById('planTitle');
+   if(title)title.textContent=current.name;
+ }
+}
+
+function renamePlan(id){
+ savePlans();
+ const p=plans.find(x=>x.id===id);if(!p)return;
+ const value=prompt('Новое название плана:',p.name);
+ if(value===null)return;
+ const name=String(value).trim();
+ if(!name){alert('Название плана не может быть пустым.');return;}
+ p.name=name;
+ renderPlanTabs();
+ if(workloadMode)renderWorkloadTable();
+}
+function renameCurrentPlan(){if(!currentPlanId){alert('Сначала добавьте план.');return;}renamePlan(currentPlanId);}
+function switchPlan(id){
+ if(id===currentPlanId)return;
+ savePlans();
+ const p=plans.find(x=>x.id===id);if(!p)return;
+ currentPlanId=id;rooms=normalizeRooms(p.rooms||[]);
+ clearSelection();mode='select';draft=[];primitiveStart=null;primitiveCurrent=null;history=[];future=[];
+ setPlanVisual(p,()=>{render();if(workloadMode)renderWorkloadTable();});
+}
+function addPlanFromFile(event){
+ const file=event.target.files&&event.target.files[0];if(!file)return;
+ if(!/^image\//i.test(file.type)){alert('Выберите файл изображения.');event.target.value='';return;}
+ const rd=new FileReader();
+ rd.onload=()=>{
+  const probe=new Image();
+  probe.onload=()=>{
+   const defaultName=file.name.replace(/\.[^.]+$/,'');
+   const entered=prompt('Название плана:',defaultName);
+   const name=(entered===null?defaultName:String(entered).trim())||defaultName||'План';
+   savePlans();
+   const id='plan-'+Date.now();
+   const plan={id,name,image:rd.result,width:probe.naturalWidth||1,height:probe.naturalHeight||1,rooms:[]};
+   plans.push(plan);currentPlanId=id;rooms=[];
+   clearSelection();mode='select';draft=[];primitiveStart=null;primitiveCurrent=null;history=[];future=[];
+   savePlans();renderPlanTabs();setPlanVisual(plan,()=>render());
+  };
+  probe.onerror=()=>alert('Не удалось прочитать размеры изображения.');
+  probe.src=rd.result;
+ };
+ rd.readAsDataURL(file);event.target.value='';
+}
+function deleteCurrentPlan(){
+ const idx=plans.findIndex(p=>p.id===currentPlanId),cur=plans[idx];
+ if(!cur){clearPlanVisual();return;}
+ if(!confirm('Удалить план «'+cur.name+'» и все его зоны?'))return;
+ plans.splice(idx,1);
+ const next=plans[Math.min(idx,plans.length-1)]||plans[0]||null;
+ currentPlanId=next?next.id:null;rooms=next?normalizeRooms(next.rooms||[]):[];
+ clearSelection();mode='select';history=[];future=[];
+ renderPlanTabs();
+ if(next)setPlanVisual(next,()=>render());else{clearPlanVisual();render();}
+}
+function toggleTheme(){
+ const dark=document.body.classList.toggle('dark');
+ const b=document.getElementById('themeBtn');
+ if(b){b.textContent=dark?'☀️':'🌙';b.title=dark?'Светлая тема':'Тёмная тема';}
+}
+const PROJECT_FILE_NAME='interactive_floor_project.json';
+function buildProjectData(){
+ savePlans();enforceEmployeeColors();
+ return {
+  format:'interactive-floor-project',
+  version:2,
+  savedAt:new Date().toISOString(),
+  employees:clone(employees),
+  employeeColors:clone(employeeColors),
+  sheet1Workload:clone(SHEET1_WORKLOAD),
+  employeeTotals:clone(EMPLOYEE_TOTALS),
+  sheet1LoadedTotalDisplay:clone(SHEET1_LOADED_TOTAL_DISPLAY),
+  excelSourceFileName:excelSourceFileName||'',
+  excelSheet1Name:excelSheet1Name||'Лист1',
+  excelSheet2Name:excelSheet2Name||'Лист2',
+  excelSourceBase64:excelSourceBytes?arrayBufferToBase64(excelSourceBytes):'',
+  plans:clone(plans),
+  currentPlanId:currentPlanId,
+  selectedEmployee:selectedEmployee||'',
+  darkTheme:document.body.classList.contains('dark')
+};
+}
+function validateProjectData(data){
+ if(!data||typeof data!=='object')throw new Error('Некорректный файл проекта.');
+ if(data.format!=='interactive-floor-project')throw new Error('Это не файл проекта интерактивной карты.');
+ if(!Array.isArray(data.plans))throw new Error('Некорректный список планов.');
+ if(!Array.isArray(data.employees))throw new Error('В проекте отсутствует список сотрудников.');
+ return data;
+}
+function applyProjectData(data){
+ validateProjectData(data);
+ employees=clone(data.employees);
+ employeeColors=Object.assign({},data.employeeColors||{});
+ SHEET1_WORKLOAD=clone(data.sheet1Workload||SHEET1_WORKLOAD||{});
+ EMPLOYEE_TOTALS=clone(data.employeeTotals||EMPLOYEE_TOTALS||{});
+ SHEET1_LOADED_TOTAL_DISPLAY=clone(data.sheet1LoadedTotalDisplay||{});
+ excelSourceFileName=String(data.excelSourceFileName||'');
+ excelSheet1Name=String(data.excelSheet1Name||'Лист1');
+ excelSheet2Name=String(data.excelSheet2Name||'Лист2');
+ excelSourceBytes=data.excelSourceBase64?base64ToUint8Array(data.excelSourceBase64):null;
+ plans=clone(data.plans||[]);
+ currentPlanId=plans.length?(plans.some(p=>p.id===data.currentPlanId)?data.currentPlanId:plans[0].id):null;
+ selectedEmployee=(data.selectedEmployee&&employees.includes(data.selectedEmployee))?data.selectedEmployee:(employees[0]||'');
+ const current=currentPlan();
+ rooms=current?normalizeRooms(current.rooms||[]):[];
+ clearSelection();mode='select';draft=[];primitiveStart=null;primitiveCurrent=null;scale=1;history=[];future=[];drag=null;workloadMode=false;
+ const ww=document.getElementById('workloadWindow');if(ww)ww.classList.remove('open');
+ document.body.classList.toggle('dark',!!data.darkTheme);
+ const tb=document.getElementById('themeBtn');if(tb){tb.textContent=data.darkTheme?'☀️':'🌙';tb.title=data.darkTheme?'Светлая тема':'Тёмная тема';}
+ if(search)search.value='';
+ renderPlanTabs();
+ if(current)setPlanVisual(current,()=>{render();persist();});else{clearPlanVisual();render();persist();}
+}
+async function saveProject(){
+ try{
+  const text=JSON.stringify(buildProjectData(),null,2);
+  if('showDirectoryPicker' in window){
+   const dir=await window.showDirectoryPicker({mode:'readwrite'});
+   const fh=await dir.getFileHandle(PROJECT_FILE_NAME,{create:true});
+   const writable=await fh.createWritable();await writable.write(text);await writable.close();
+   alert('Проект сохранён в выбранной папке:\n'+PROJECT_FILE_NAME);return;
+  }
+  if('showSaveFilePicker' in window){
+   const fh=await window.showSaveFilePicker({suggestedName:PROJECT_FILE_NAME,types:[{description:'Файл проекта интерактивной карты',accept:{'application/json':['.json']}}]});
+   const writable=await fh.createWritable();await writable.write(text);await writable.close();alert('Проект сохранён.');return;
+  }
+  const blob=new Blob([text],{type:'application/json;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=PROJECT_FILE_NAME;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  alert('Браузер не поддерживает выбор папки. Файл проекта скачан в стандартную папку загрузок.');
+ }catch(err){if(err&&err.name==='AbortError')return;alert('Не удалось сохранить проект: '+err.message);}
+}
+async function readProjectFile(file){
+ const text=await file.text();let data;try{data=JSON.parse(text)}catch(_){throw new Error('Файл проекта содержит некорректный JSON.');}
+ applyProjectData(data);alert('Проект загружен: '+(file.name||PROJECT_FILE_NAME));
+}
+async function loadProject(){
+ try{
+  if('showOpenFilePicker' in window){
+   const handles=await window.showOpenFilePicker({multiple:false,types:[{description:'Файл проекта интерактивной карты',accept:{'application/json':['.json']}}],excludeAcceptAllOption:false});
+   if(!handles||!handles.length)return;const file=await handles[0].getFile();await readProjectFile(file);return;
+  }
+  const input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.style.display='none';document.body.appendChild(input);
+  input.addEventListener('change',async()=>{try{const file=input.files&&input.files[0];if(file)await readProjectFile(file)}catch(err){alert('Не удалось загрузить проект: '+err.message)}finally{input.remove()}},{once:true});input.click();
+ }catch(err){if(err&&err.name==='AbortError')return;alert('Не удалось загрузить проект: '+err.message);}
+}
+function loadRooms(){return [];}
+function persist(){savePlans();}
+function snapshot(){return clone(rooms)}
+function commit(before){history.push(before);if(history.length>50)history.shift();future=[];persist();render()}
+function undo(){if(!history.length)return;future.push(snapshot());rooms=history.pop();clearSelection();mode='select';persist();render()}
+function redo(){if(!future.length)return;history.push(snapshot());rooms=future.pop();clearSelection();mode='select';persist();render()}
+function getRoom(id){return rooms.find(r=>r.id===id)}
+function hslToHex(h,s,l){
+ s/=100;l/=100;
+ const c=(1-Math.abs(2*l-1))*s;
+ const x=c*(1-Math.abs((h/60)%2-1));
+ const m=l-c/2;
+ let r=0,g=0,b=0;
+ if(h<60){r=c;g=x}else if(h<120){r=x;g=c}else if(h<180){g=c;b=x}
+ else if(h<240){g=x;b=c}else if(h<300){r=x;b=c}else{r=c;b=x}
+ const hex=v=>Math.round((v+m)*255).toString(16).padStart(2,'0');
+ return '#'+hex(r)+hex(g)+hex(b);
+}
+function nextUniqueEmployeeColor(colorMap=employeeColors){
+ const used=new Set(Object.values(colorMap||{}).map(x=>String(x||'').toUpperCase()));
+ for(const color of COLORS){
+   if(!used.has(color.toUpperCase()))return color;
+ }
+ for(let i=0;i<720;i++){
+   const color=hslToHex((i*137.508)%360,68,52);
+   if(!used.has(color.toUpperCase()))return color;
+ }
+ throw new Error('Не удалось подобрать уникальный цвет сотруднику.');
+}
+function employeeColor(name){
+ if(!name)return FREE_ZONE_COLOR;
+ if(!employeeColors[name])employeeColors[name]=nextUniqueEmployeeColor(employeeColors);
+ return employeeColors[name];
+}
+
+function roomEmployees(room){
+ if(!room)return [];
+ if(Array.isArray(room.employees)){
+   return [...new Set(room.employees.map(v=>String(v||'').trim()).filter(Boolean))];
+ }
+ const legacy=String(room.employee||'').trim();
+ if(!legacy)return [];
+ return legacy.split(',').map(v=>v.trim()).filter(Boolean);
+}
+function syncRoomEmployees(room){
+ if(!room)return room;
+ const arr=roomEmployees(room);
+ room.employees=arr;
+ room.employee=arr.join(', ');
+ room.color=arr.length?employeeColor(arr[0]):FREE_ZONE_COLOR;
+ return room;
+}
+function roomHasEmployee(room,employee){
+ const e=String(employee||'').trim();
+ return !!e && roomEmployees(room).includes(e);
+}
+function addRoomEmployee(room,employee){
+ const e=String(employee||'').trim();
+ if(!room||!e)return false;
+ const arr=roomEmployees(room);
+ if(arr.includes(e))return false;
+ arr.push(e);
+ room.employees=arr;
+ room.employee=arr.join(', ');
+ room.color=employeeColor(arr[0]);
+ return true;
+}
+function removeRoomEmployee(room,employee){
+ const e=String(employee||'').trim();
+ if(!room||!e)return false;
+ const arr=roomEmployees(room);
+ const next=arr.filter(x=>x!==e);
+ if(next.length===arr.length)return false;
+ room.employees=next;
+ room.employee=next.join(', ');
+ room.color=next.length?employeeColor(next[0]):FREE_ZONE_COLOR;
+ return true;
+}
+function clearRoomEmployees(room){
+ if(!room)return false;
+ if(!roomEmployees(room).length && !String(room.employee||'').trim())return false;
+ room.employees=[];
+ room.employee='';
+ room.color=FREE_ZONE_COLOR;
+ return true;
+}
+
+function zoneColor(r){
+ if(areaCalcMode){
+   const plan=plans.find(p=>p.id===currentPlanId);
+   return plan&&areaIsHighlighted(plan.id,r)?'#2E8B57':FREE_ZONE_COLOR;
+ }
+ const arr=roomEmployees(r);
+ return arr.length?employeeColor(arr[0]):FREE_ZONE_COLOR;
+}
+function isFocusedEmployeeZone(room){
+ return !!(workloadMode&&selectedEmployee&&room&&roomHasEmployee(room,selectedEmployee));
+}
+function zoneFillOpacity(room){
+ return isFocusedEmployeeZone(room) ? .50 : .20;
+}
+function setZoneEmployee(room,employee){
+ if(!room)return false;
+ const next=String(employee||'').trim();
+ if(!next)return clearRoomEmployees(room);
+ room.employees=[next];
+ room.employee=next;
+ room.color=employeeColor(next);
+ return true;
+}
+function refreshAssignmentUI(){
+ persist();
+ render();
+ if(workloadMode){
+   renderEmployeeList();
+   renderWorkloadTable();
+ }
+}
+
+function enforceEmployeeColors(){rooms.forEach(r=>{r.color=zoneColor(r)});}
+function toggleWorkloadWindow(){const w=document.getElementById('workloadWindow');if(w.classList.contains('open'))closeWorkloadWindow();else openWorkloadWindow();}
+function openWorkloadWindow(){
+ selectedEmployee=selectedEmployee||employees[0]||'';
+ workloadMode=true;
+
+ // В режиме нагрузки клик по зоне имеет только одно значение:
+ // назначить/снять сотрудника.
+ mode='select';
+ draft=[];
+ primitiveStart=null;
+ primitiveCurrent=null;
+ clearSelection();
+
+ document.getElementById('workloadWindow').classList.add('open');
+
+ render();
+ renderEmployeeList();
+ renderWorkloadTable();
+
+ const tip=document.getElementById('tip');
+ if(tip){
+   tip.textContent='Режим нагрузки: зоны выбранного сотрудника имеют непрозрачность 50% и эффект подъёма. Остальные зоны — 20%. ПКМ по зоне — назначить/снять.';
+ }
+}
+function closeWorkloadWindow(){
+ workloadMode=false;
+ document.getElementById('workloadWindow').classList.remove('open');
+
+ // После закрытия режима нагрузки все зоны снова отображаются с непрозрачностью 20%.
+ render();
+
+ const tip=document.getElementById('tip');
+ if(tip)tip.textContent='Выберите помещение. Для точной коррекции нажмите «Редактировать вершины».';
+}
+function renderEmployeeList(){
+ const box=document.getElementById('empList');
+ box.innerHTML='';
+
+ employees.forEach(name=>{
+   const d=document.createElement('div');
+   d.className='emp-item'+(name===selectedEmployee?' active':'');
+
+   const total=Number(EMPLOYEE_TOTALS[name]||0);
+   d.innerHTML=
+     '<span class="emp-name">'+escapeHtml(name)+'</span>'+
+     '<span class="emp-total-badge" style="background:'+employeeColor(name)+';color:'+contrastTextColor(employeeColor(name))+';border:1px solid '+contrastBorderColor(employeeColor(name))+'" title="ВСЕГО участок работы">'+total.toFixed(1)+'</span>';
+
+   d.onclick=()=>{
+     selectedEmployee=name;
+
+     render();
+     renderEmployeeList();
+     renderWorkloadTable();
+
+     const currentCount=rooms.filter(r=>
+       String(r.employee||'').trim()===String(selectedEmployee||'').trim()
+     ).length;
+
+     const tip=document.getElementById('tip');
+     if(tip){
+       tip.textContent=currentCount
+         ? 'Выбран '+name+'. Его зоны на текущем плане приподняты и отображаются с непрозрачностью 50%. ПКМ по зоне — изменить назначение.'
+         : 'Выбран '+name+'. На текущем плане его зон нет. ПКМ по зоне — назначить.';
+     }
+   };
+
+   box.appendChild(d);
+ });
+}
+function groupedAssignedForEmployee(name){
+ const groups=[];
+ plans.forEach(p=>{const src=(p.id===currentPlanId?rooms:(p.rooms||[]));const rr=src.filter(r=>roomHasEmployee(r,name)).map(r=>({id:r.id,name:r.name,area:Number(r.area)||0}));if(rr.length)groups.push({plan:p.name,rooms:rr,total:rr.reduce((a,x)=>a+x.area,0)});});
+ return groups;
+}
+function assignedRowsForEmployee(name){const rows=[];groupedAssignedForEmployee(name).forEach(g=>g.rooms.forEach(r=>rows.push({plan:g.plan,id:r.id,name:r.name,area:r.area})));return rows;}
+
+function clearAllZonesForSelectedEmployee(){
+ const employee=String(selectedEmployee||'').trim();
+ if(!employee)return;
+
+ const before=snapshot();
+ try{
+   let changed=0;
+
+   rooms.forEach(room=>{
+     if(roomHasEmployee(room,employee) && removeRoomEmployee(room,employee))changed++;
+   });
+   savePlans();
+
+   plans.forEach(plan=>{
+     if(plan.id===currentPlanId)return;
+     (plan.rooms||[]).forEach(room=>{
+       if(roomHasEmployee(room,employee) && removeRoomEmployee(room,employee))changed++;
+     });
+   });
+
+   if(!changed){
+     const tip=document.getElementById('tip');
+     if(tip)tip.textContent='У '+employee+' нет назначенных зон.';
+     return;
+   }
+
+   history.push(before);
+   if(history.length>50)history.shift();
+   future=[];
+
+   savePlans();
+   persist();
+   render();
+
+   if(workloadMode){
+     renderEmployeeList();
+     renderWorkloadTable();
+   }
+
+   const tip=document.getElementById('tip');
+   if(tip)tip.textContent='Для '+employee+' снято назначение с зон: '+changed+'.';
+ }catch(err){
+   console.error(err);
+
+   // Возвращаем проект к состоянию до операции.
+   try{
+     applySnapshot(before);
+   }catch(restoreErr){
+     console.error(restoreErr);
+   }
+
+   alert('Ошибка очистки нагрузки сотрудника: '+(err&&err.message?err.message:String(err)));
+ }
+}
+
+function ensureWorkloadClearButton(){
+ if(!workloadMode || !selectedEmployee)return;
+ const modal=document.querySelector('.workload-window,.load-modal,.load-window,.workload-modal,#loadModal,#workloadModal');
+ if(!modal)return;
+
+ // Корректная кнопка уже создаётся внутри renderWorkloadTable()
+ // рядом с ФИО. Если она есть — никогда не создаём дубликат.
+ if(modal.querySelector('[data-clear-selected-employee]'))return;
+
+ const heading=modal.querySelector('.employee-heading');
+ if(!heading)return;
+
+ const metrics=heading.querySelector('.employee-metrics')||heading;
+ const btn=document.createElement('button');
+ btn.type='button';
+ btn.textContent='Очистить';
+ btn.setAttribute('data-clear-selected-employee','1');
+ btn.title='Очистить сотрудника во всех назначенных ему зонах';
+ btn.onclick=clearAllZonesForSelectedEmployee;
+ metrics.appendChild(btn);
+}
+
+function renderWorkloadTable(){
+ const box=document.getElementById('loadContent');
+ const groups=groupedAssignedForEmployee(selectedEmployee);
+ const total=groups.reduce((a,g)=>a+g.total,0);
+ const src=SHEET1_WORKLOAD[selectedEmployee]||[];
+ let srcRows='';
+
+ src.forEach(r=>{
+   const n=String(r.name||'');
+   const isTotal=n.toUpperCase().startsWith('ВСЕГО');
+   const isSection=!isTotal && Number(r.value)===1;
+   srcRows+='<tr class="source-row '+(isTotal?'total':isSection?'section':'')+'"><td>'+
+     escapeHtml(n)+'</td><td>'+formatWorkValue(r.value)+'</td></tr>';
+ });
+
+ let interactiveRows='';
+ groups.forEach(g=>{
+   interactiveRows+='<tr class="floor-section"><td>'+escapeHtml(g.plan.replace(/:\s*$/,'')+':')+'</td><td></td></tr>';
+   g.rooms.forEach(r=>{
+     interactiveRows+='<tr><td>'+escapeHtml(r.name)+'</td><td>'+r.area.toFixed(1)+'</td></tr>';
+   });
+ });
+ if(!interactiveRows)interactiveRows='<tr><td colspan="2">Нет интерактивно назначенных помещений.</td></tr>';
+
+ const loaded=loadedTotalDisplay(selectedEmployee);
+ const loadedNoData=loaded==='Нет данных';
+
+ box.innerHTML=
+   '<h3 class="employee-heading">'+
+     '<span class="emp-heading-name">'+escapeHtml(selectedEmployee||'Сотрудник не выбран')+'</span>'+
+     '<span class="employee-metrics">'+
+       '<span class="employee-metric-label">Факт</span>'+
+       '<span class="employee-metric-badge fact" title="Текущая нагрузка сотрудника в проекте">'+
+         escapeHtml(formatFactValue(total))+
+       '</span>'+
+       '<span class="employee-metric-label">Загружено</span>'+
+       '<span class="employee-metric-badge loaded '+(loadedNoData?'no-data':'')+'" title="Нагрузка сотрудника из загруженного файла">'+
+         escapeHtml(loaded)+
+       '</span>'+
+       '<button type="button" data-clear-selected-employee="1" onclick="clearAllZonesForSelectedEmployee()" title="Очистить сотрудника во всех назначенных ему зонах">Очистить</button>'+
+     '</span>'+
+   '</h3>'+
+   '<div class="assign-mode">Выберите сотрудника слева. Его зоны на плане: прозрачность 50% + эффект подъёма. Остальные зоны: 70%. В режиме нагрузки ПКМ по зоне — назначить или снять нагрузку. В свойствах зоны поле «Сотрудник» доступно только для просмотра.</div>'+
+   '<table><thead><tr><th>Участок работы / помещение</th><th>Площадь, м²</th></tr></thead><tbody>'+
+     interactiveRows+
+   '</tbody><tfoot><tr class="grand-total"><td>ВСЕГО участок работы</td><td>'+formatFactValue(total)+'</td></tr></tfoot></table>'+
+   '<div class="source-title">Образец / исходная персональная таблица из Лист1</div>'+
+   '<table><thead><tr><th>Участок работы</th><th>Площадь</th></tr></thead><tbody>'+srcRows+'</tbody></table>';
+
+ ensureWorkloadClearButton();
+}
+function formatWorkValue(v){if(v===null||v===undefined)return '';if(typeof v==='number')return Number(v).toFixed(v%1?1:0);return escapeHtml(String(v));}
+function assignZoneByClick(r){
+ if(!selectedEmployee||!r)return;
+
+ const before=snapshot();
+ const belongsToSelected=roomHasEmployee(r,selectedEmployee);
+
+ const changed=setZoneEmployee(r,belongsToSelected?'':selectedEmployee);
+ if(!changed)return;
+
+ history.push(before);
+ if(history.length>50)history.shift();
+ future=[];
+
+ const message=belongsToSelected
+   ? 'Зона «'+(r.name||r.id)+'» освобождена.'
+   : 'Зона «'+(r.name||r.id)+'» закреплена за '+selectedEmployee+'.';
+
+ refreshAssignmentUI();
+
+ const tip=document.getElementById('tip');
+ if(tip)tip.textContent=message+' ПКМ по зоне — изменить назначение.';
+}
+function employeeOptions(selected){
+ const current=String(selected||'').trim();
+ const values=employees.slice();
+ if(current && !values.includes(current))values.unshift(current);
+ return '<option value="">Не назначен</option>'+
+   values.map(n=>
+     '<option value="'+escapeAttr(n)+'" '+(n===current?'selected':'')+'>'+
+     escapeHtml(n)+(current===n&&!employees.includes(n)?' (из проекта)':'')+
+     '</option>'
+   ).join('');
+}
+
+function normalizedSheetName(name){
+ return String(name||'').toLowerCase().replace(/\s+/g,'');
+}
+function findRequiredSheetName(book,wanted){
+ const target=normalizedSheetName(wanted);
+ return (book.SheetNames||[]).find(n=>normalizedSheetName(n)===target)||'';
+}
+function normalizeEmployeeName(v){
+ return String(v==null?'':v).replace(/\s+/g,' ').trim();
+}
+function clonePlain(value){
+ return JSON.parse(JSON.stringify(value));
+}
+function parseSheet2Employees(sheet){
+ const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:'',raw:true});
+ if(!rows.length)throw new Error('Лист2 пуст.');
+ const headers=rows[0].map(v=>normalizeEmployeeName(v).toLowerCase());
+ let fioIndex=headers.findIndex(v=>v==='фио');
+ if(fioIndex<0)fioIndex=1;
+ const names=[];
+ const seen=new Set();
+ for(let i=1;i<rows.length;i++){
+   const name=normalizeEmployeeName(rows[i][fioIndex]);
+   if(!name||seen.has(name))continue;
+   seen.add(name);names.push(name);
+ }
+ if(!names.length)throw new Error('На Лист2 не найдены сотрудники в колонке «ФИО».');
+ return names;
+}
+function parseSheet1Workload(sheet,employeeNames){
+ const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:'',raw:true});
+ const names=[...new Set((employeeNames||[]).map(normalizeEmployeeName).filter(Boolean))];
+ const namesSet=new Set(names);
+ const result={};
+ names.forEach(name=>result[name]=[]);
+
+ let current='';
+
+ for(const row of rows){
+   const colA=normalizeEmployeeName(row[0]);
+   const rawB=row[1];
+   const bEmpty=rawB===''||rawB===null||rawB===undefined;
+
+   // Строка с ФИО начинает персональный блок.
+   if(namesSet.has(colA)){
+     current=colA;
+     continue;
+   }
+
+   if(!current)continue;
+
+   // Пустые разделительные строки в модальную таблицу не добавляем.
+   if(!colA && bEmpty)continue;
+
+   // Все остальные строки A/B из блока переносятся в персональную таблицу.
+   result[current].push({
+     name:colA,
+     value:bEmpty?null:rawB
+   });
+ }
+
+ return result;
+}
+
+function parseSheet1LoadedTotalDisplay(sheet,employeeNames){
+ const names=[...new Set((employeeNames||[]).map(normalizeEmployeeName).filter(Boolean))];
+ const namesSet=new Set(names);
+ const result={};
+ names.forEach(name=>result[name]=null);
+
+ const range=XLSX.utils.decode_range(sheet['!ref']||'A1:B1');
+ let current='';
+
+ for(let r=range.s.r;r<=range.e.r;r++){
+   const aCell=sheet[XLSX.utils.encode_cell({r,c:0})];
+   const bCell=sheet[XLSX.utils.encode_cell({r,c:1})];
+   const a=normalizeEmployeeName(aCell ? aCell.v : '');
+
+   if(namesSet.has(a)){
+     current=a;
+     continue;
+   }
+   if(!current)continue;
+
+   if(a.toUpperCase().startsWith('ВСЕГО УЧАСТОК РАБОТЫ')){
+     if(!bCell){
+       result[current]=null;
+     }else if(bCell.w!==undefined && bCell.w!==null && String(bCell.w)!==''){
+       // .w — отображаемое Excel значение, сохраняем его без переформатирования.
+       result[current]=String(bCell.w);
+     }else if(bCell.v!==undefined && bCell.v!==null && String(bCell.v)!==''){
+       result[current]=String(bCell.v);
+     }else{
+       result[current]=null;
+     }
+   }
+ }
+ return result;
+}
+function formatFactValue(value){
+ const n=Number(value);
+ if(!Number.isFinite(n))return '0';
+ const rounded=Math.round(n*10)/10;
+ return Number.isInteger(rounded)?String(rounded):rounded.toFixed(1);
+}
+function loadedTotalDisplay(employee){
+ const value=SHEET1_LOADED_TOTAL_DISPLAY[employee];
+ return value===null||value===undefined||String(value)===''?'Нет данных':String(value);
+}
+
+function workloadTotalsFromMap(map,names){
+ const totals={};
+ names.forEach(name=>{
+   const rows=map[name]||[];
+   const totalRow=rows.find(r=>String(r.name||'').trim().toUpperCase().startsWith('ВСЕГО'));
+   if(totalRow && Number.isFinite(Number(totalRow.value)))totals[name]=Number(totalRow.value);
+   else totals[name]=rows.reduce((sum,r)=>{
+     const n=Number(r.value);
+     return sum+(Number.isFinite(n)&&n!==1?n:0);
+   },0);
+ });
+ return totals;
+}
+function emptyWorkloadTable(){
+ return [{name:'ВСЕГО участок работы',value:0}];
+}
+function stageRemoveEmployeeFromPlans(stagedPlans,employee){
+ let count=0;
+ stagedPlans.forEach(plan=>{
+   (plan.rooms||[]).forEach(room=>{
+     const arr=Array.isArray(room.employees)
+       ? room.employees.map(v=>normalizeEmployeeName(v)).filter(Boolean)
+       : normalizeEmployeeName(room.employee).split(',').map(v=>normalizeEmployeeName(v)).filter(Boolean);
+     const next=arr.filter(x=>x!==employee);
+     if(next.length===arr.length)return;
+     room.employees=next;
+     room.employee=next.join(', ');
+     room.color=next.length?(employeeColors[next[0]]||FREE_ZONE_COLOR):FREE_ZONE_COLOR;
+     count++;
+   });
+ });
+ return count;
+}
+function validatePayrollFileName(fileName){
+ const base=String(fileName||'').replace(/\.[^.]+$/,'');
+ if(!/^расчет\s+зарплаты/i.test(base)){
+   throw new Error('Имя файла должно начинаться с «расчет зарплаты».');
+ }
+ const hasDate=/\d{8}/.test(base)||/\d{2}[._-]\d{2}[._-]\d{4}/.test(base);
+ if(!hasDate)throw new Error('В имени файла должна присутствовать дата.');
+}
+function arrayBufferToBase64(bytes){
+ if(!bytes)return '';
+ const arr=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);
+ let binary='';
+ const chunk=0x8000;
+ for(let i=0;i<arr.length;i+=chunk){
+   binary+=String.fromCharCode.apply(null,arr.subarray(i,i+chunk));
+ }
+ return btoa(binary);
+}
+function base64ToUint8Array(text){
+ if(!text)return null;
+ const binary=atob(text);
+ const arr=new Uint8Array(binary.length);
+ for(let i=0;i<binary.length;i++)arr[i]=binary.charCodeAt(i);
+ return arr;
+}
+function sourceWorkbookFromBytes(){
+ if(!excelSourceBytes)throw new Error('Сначала загрузите исходный Excel-файл.');
+ return XLSX.read(excelSourceBytes,{
+   type:'array',
+   cellStyles:true,
+   cellFormula:true,
+   cellDates:true,
+   bookVBA:true
+ });
+}
+async function loadExcel(event){
+ const file=event.target.files&&event.target.files[0];
+ if(!file)return;
+ try{
+   if(typeof XLSX==='undefined')throw new Error('Библиотека SheetJS недоступна.');
+   validatePayrollFileName(file.name);
+
+   const buffer=await file.arrayBuffer();
+   const book=XLSX.read(buffer,{
+     type:'array',
+     cellStyles:true,
+     cellFormula:true,
+     cellDates:true,
+     bookVBA:true
+   });
+   if(!book.SheetNames||book.SheetNames.length<2)throw new Error('Excel-файл должен содержать минимум два листа.');
+
+   const sheet1Name=findRequiredSheetName(book,'Лист1');
+   const sheet2Name=findRequiredSheetName(book,'Лист2');
+   if(!sheet1Name)throw new Error('Не найден обязательный лист «Лист1».');
+   if(!sheet2Name)throw new Error('Не найден обязательный лист «Лист2».');
+
+   const sheet2Employees=parseSheet2Employees(book.Sheets[sheet2Name]);
+
+   // Лист1 полностью обновляет персональные таблицы нагрузки.
+   // Разбираем блоки не только сотрудников Лист2, но и текущей базы:
+   // это позволяет корректно обновить таблицу сотрудника, которого
+   // пользователь решил временно не удалять.
+   const sheet1EmployeeCandidates=[...new Set([...sheet2Employees,...employees])];
+   const parsedWorkload=parseSheet1Workload(book.Sheets[sheet1Name],sheet1EmployeeCandidates);
+   const parsedTotals=workloadTotalsFromMap(parsedWorkload,sheet1EmployeeCandidates);
+   const parsedLoadedTotalDisplay=parseSheet1LoadedTotalDisplay(
+     book.Sheets[sheet1Name],
+     sheet1EmployeeCandidates
+   );
+
+   // Формируем полностью staged-состояние. До успешного завершения текущий проект не меняется.
+   const stagedEmployees=[];
+   const stagedColors=Object.assign({},employeeColors);
+   const stagedWorkload={};
+   const stagedTotals={};
+   const stagedLoadedTotalDisplay={};
+
+   const stagedPlans=clonePlain(plans);
+   const currentStage=stagedPlans.find(p=>p.id===currentPlanId);
+   if(currentStage)currentStage.rooms=clonePlain(rooms);
+
+   const oldSet=new Set(employees);
+   const sourceSet=new Set(sheet2Employees);
+   const added=sheet2Employees.filter(n=>!oldSet.has(n));
+   const missing=employees.filter(n=>!sourceSet.has(n));
+   const confirmedAdded=[];
+   const declinedAdded=[];
+   const confirmedRemoved=[];
+   const declinedRemoved=[];
+   let cleanedZones=0;
+
+   // Сотрудники Лист2 идут в его порядке.
+   for(const name of sheet2Employees){
+     if(oldSet.has(name)){
+       stagedEmployees.push(name);
+       stagedWorkload[name]=clonePlain(parsedWorkload[name]||emptyWorkloadTable());
+       stagedTotals[name]=Number(parsedTotals[name]||0);
+       stagedLoadedTotalDisplay[name]=parsedLoadedTotalDisplay[name]??null;
+       continue;
+     }
+     const ok=confirm(
+       'На Лист2 найден новый сотрудник:\n\n'+name+
+       '\n\nДобавить сотрудника в программу?'
+     );
+     if(ok){
+       stagedEmployees.push(name);
+       if(!stagedColors[name])stagedColors[name]=nextUniqueEmployeeColor(stagedColors);
+
+       // Новый сотрудник получает именно свой блок из Лист1.
+       // Если блока в Лист1 нет — создаём только пустую итоговую таблицу.
+       stagedWorkload[name]=clonePlain(
+         parsedWorkload[name]&&parsedWorkload[name].length
+           ? parsedWorkload[name]
+           : emptyWorkloadTable()
+       );
+       stagedTotals[name]=Number(parsedTotals[name]||0);
+       stagedLoadedTotalDisplay[name]=parsedLoadedTotalDisplay[name]??null;
+       confirmedAdded.push(name);
+     }else{
+       declinedAdded.push(name);
+     }
+   }
+
+   // Сотрудники, которых больше нет на Лист2.
+   for(const name of missing){
+     const ok=confirm(
+       'Сотрудник отсутствует на Лист2:\n\n'+name+
+       '\n\nУдалить сотрудника из программы и снять его со всех зон?'
+     );
+     if(ok){
+       cleanedZones+=stageRemoveEmployeeFromPlans(stagedPlans,name);
+       delete stagedColors[name];
+       confirmedRemoved.push(name);
+     }else{
+       stagedEmployees.push(name);
+
+       // Даже если сотрудника оставили в базе, его персональная таблица
+       // полностью переходит на данные текущего загруженного Лист1.
+       stagedWorkload[name]=clonePlain(
+         parsedWorkload[name]&&parsedWorkload[name].length
+           ? parsedWorkload[name]
+           : emptyWorkloadTable()
+       );
+       stagedTotals[name]=Number(parsedTotals[name]||0);
+       stagedLoadedTotalDisplay[name]=parsedLoadedTotalDisplay[name]??null;
+       declinedRemoved.push(name);
+     }
+   }
+
+   // Финальная проверка уникальности цветов до commit.
+   const usedColors=new Set();
+   for(const name of stagedEmployees){
+     if(!stagedColors[name])stagedColors[name]=nextUniqueEmployeeColor(stagedColors);
+     let color=String(stagedColors[name]).toUpperCase();
+     if(usedColors.has(color)){
+       stagedColors[name]=nextUniqueEmployeeColor(
+         Object.fromEntries([...usedColors].map((c,i)=>['used'+i,c]))
+       );
+       color=String(stagedColors[name]).toUpperCase();
+     }
+     usedColors.add(color);
+   }
+
+   // COMMIT: только после того, как весь файл распознан и staged-состояние готово.
+   employees=stagedEmployees;
+   employeeColors=stagedColors;
+   SHEET1_WORKLOAD=stagedWorkload;
+   EMPLOYEE_TOTALS=stagedTotals;
+   SHEET1_LOADED_TOTAL_DISPLAY=stagedLoadedTotalDisplay;
+   plans=stagedPlans;
+
+   const current=plans.find(p=>p.id===currentPlanId);
+   rooms=current?normalizeRooms(current.rooms||[]):[];
+
+   if(!employees.includes(selectedEmployee))selectedEmployee=employees[0]||'';
+
+   excelSourceBytes=new Uint8Array(buffer.slice(0));
+   excelSourceFileName=file.name;
+   excelSheet1Name=sheet1Name;
+   excelSheet2Name=sheet2Name;
+
+   persist();
+   renderPlanTabs();
+   render();
+   if(workloadMode){
+     renderEmployeeList();
+     renderWorkloadTable();
+   }
+
+   const missingSheet1Tables=employees.filter(name=>
+     !(parsedWorkload[name]&&parsedWorkload[name].length)
+   );
+   const damagedSheet1Totals=employees.filter(name=>
+     parsedWorkload[name]&&parsedWorkload[name].length &&
+     (parsedLoadedTotalDisplay[name]===null||parsedLoadedTotalDisplay[name]===undefined)
+   );
+   const lines=[
+     'Excel синхронизирован с Лист2.',
+     'Персональные таблицы нагрузки полностью обновлены из Лист1.',
+     'Обновлено персональных таблиц: '+employees.length+'.',
+     'Сотрудников в базе: '+employees.length+'.'
+   ];
+   if(missingSheet1Tables.length){
+     lines.push(
+       'В Лист1 не найден блок нагрузки для: '+
+       missingSheet1Tables.join(', ')+
+       '. Для них создана пустая таблица; «Загружено» = «Нет данных».'
+     );
+   }
+   if(damagedSheet1Totals.length){
+     lines.push(
+       'Не удалось прочитать строку «ВСЕГО участок работы» для: '+
+       damagedSheet1Totals.join(', ')+
+       '. Плашка «Загружено» показывает «Нет данных».'
+     );
+   }
+   if(confirmedAdded.length)lines.push('Добавлены: '+confirmedAdded.join(', ')+'.');
+   if(declinedAdded.length)lines.push('Не добавлены по подтверждению: '+declinedAdded.join(', ')+'.');
+   if(confirmedRemoved.length)lines.push('Удалены: '+confirmedRemoved.join(', ')+'.');
+   if(declinedRemoved.length)lines.push('Оставлены по подтверждению: '+declinedRemoved.join(', ')+'.');
+   if(cleanedZones)lines.push('Обновлено зон при удалении сотрудников: '+cleanedZones+'.');
+   alert(lines.join('\n'));
+ }catch(err){
+   console.error(err);
+   alert('Ошибка загрузки Excel: '+(err&&err.message?err.message:String(err)));
+ }finally{
+   event.target.value='';
+ }
+}
+function sourceSheetStyleSamples(sheet,employeeNames){
+ const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:'',raw:true});
+ const nameSet=new Set(employeeNames);
+ const sampleRows={employee:-1,section:-1,room:-1,total:-1,blank:-1};
+ for(let i=0;i<rows.length;i++){
+   const a=normalizeEmployeeName(rows[i][0]);
+   const b=rows[i][1];
+   if(sampleRows.employee<0 && nameSet.has(a))sampleRows.employee=i;
+   else if(sampleRows.total<0 && a.toUpperCase().startsWith('ВСЕГО'))sampleRows.total=i;
+   else if(sampleRows.blank<0 && !a && (b===''||b==null))sampleRows.blank=i;
+   else if(sampleRows.section<0 && a && Number(b)===1)sampleRows.section=i;
+   else if(sampleRows.room<0 && a && b!=='' && b!=null && Number(b)!==1)sampleRows.room=i;
+ }
+ return sampleRows;
+}
+function copyCellPresentation(srcCell,dstCell){
+ if(!srcCell||!dstCell)return;
+ if(srcCell.s!==undefined)dstCell.s=clonePlain(srcCell.s);
+ if(srcCell.z!==undefined)dstCell.z=srcCell.z;
+}
+function copyWorksheetLayout(sourceSheet,targetSheet){
+ const props=[
+   '!cols','!margins','!protect','!autofilter','!outline',
+   '!printHeader','!printFooter','!pageSetup'
+ ];
+ props.forEach(key=>{
+   if(sourceSheet[key]!==undefined)targetSheet[key]=clonePlain(sourceSheet[key]);
+ });
+}
+function ensureSheetCell(sheet,address){
+ if(!sheet[address])sheet[address]={t:'s',v:''};
+ return sheet[address];
+}
+function buildWorkloadExportSheet(sourceSheet){
+ const sourceRange=XLSX.utils.decode_range(sourceSheet['!ref']||'A1:B1');
+ const maxCols=Math.max(2,sourceRange.e.c+1);
+
+ const data=[];
+ const types=[];
+
+ employees.forEach(emp=>{
+   // По требованию: напротив ФИО НЕ должно быть единицы.
+   const employeeRow=Array(maxCols).fill('');
+   employeeRow[0]=emp;
+   data.push(employeeRow);
+   types.push('employee');
+
+   const groups=groupedAssignedForEmployee(emp);
+   let total=0;
+
+   groups.forEach(g=>{
+     // По требованию: напротив названия плана НЕ должно быть единицы.
+     const sectionRow=Array(maxCols).fill('');
+     sectionRow[0]=g.plan.replace(/:\s*$/,'')+':';
+     data.push(sectionRow);
+     types.push('section');
+
+     g.rooms.forEach(r=>{
+       const roomRow=Array(maxCols).fill('');
+       roomRow[0]=r.name;
+       roomRow[1]=Number(r.area)||0;
+       data.push(roomRow);
+       types.push('room');
+       total+=Number(r.area)||0;
+     });
+   });
+
+   const totalRow=Array(maxCols).fill('');
+   totalRow[0]='ВСЕГО участок работы';
+   totalRow[1]=Number(total.toFixed(2));
+   data.push(totalRow);
+   types.push('total');
+
+   data.push(Array(maxCols).fill(''));
+   types.push('blank');
+ });
+
+ if(!data.length){
+   data.push(Array(maxCols).fill(''));
+   types.push('blank');
+ }
+
+ const sheet=XLSX.utils.aoa_to_sheet(data);
+ copyWorksheetLayout(sourceSheet,sheet);
+
+ const samples=sourceSheetStyleSamples(sourceSheet,employees);
+
+ // Для каждой выходной строки используем соответствующую строку-шаблон
+ // исходного Лист1 и копируем оформление по всей ширине листа.
+ for(let r=0;r<data.length;r++){
+   const type=types[r];
+   const srcRow=samples[type];
+   if(srcRow<0)continue;
+
+   for(let c=0;c<maxCols;c++){
+     const srcAddr=XLSX.utils.encode_cell({r:srcRow,c});
+     const dstAddr=XLSX.utils.encode_cell({r,c});
+     const dstCell=ensureSheetCell(sheet,dstAddr);
+     copyCellPresentation(sourceSheet[srcAddr],dstCell);
+   }
+
+   if(sourceSheet['!rows']&&sourceSheet['!rows'][srcRow]){
+     if(!sheet['!rows'])sheet['!rows']=[];
+     sheet['!rows'][r]=clonePlain(sourceSheet['!rows'][srcRow]);
+   }
+ }
+
+ // В исходной книге диапазон мог содержать больше колонок, чем реально
+ // заполнено значениями. Явно сохраняем полный используемый диапазон.
+ sheet['!ref']=XLSX.utils.encode_range({
+   s:{r:0,c:0},
+   e:{r:Math.max(0,data.length-1),c:Math.max(0,maxCols-1)}
+ });
+
+ return sheet;
+}
+function payrollExportFileName(){
+ const d=new Date();
+ const pad=n=>String(n).padStart(2,'0');
+ return 'расчет зарплаты '+pad(d.getDate())+pad(d.getMonth()+1)+d.getFullYear()+'.xlsx';
+}
+async function writeExcelToUserDirectory(arrayBuffer,fileName){
+ const blob=new Blob([arrayBuffer],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+ if('showDirectoryPicker' in window){
+   const dir=await window.showDirectoryPicker({mode:'readwrite'});
+   const fh=await dir.getFileHandle(fileName,{create:true});
+   const writable=await fh.createWritable();
+   await writable.write(blob);
+   await writable.close();
+   return 'Файл сохранён в выбранную папку:\n'+fileName;
+ }
+ if('showSaveFilePicker' in window){
+   const fh=await window.showSaveFilePicker({
+     suggestedName:fileName,
+     types:[{
+       description:'Excel workbook',
+       accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}
+     }]
+   });
+   const writable=await fh.createWritable();
+   await writable.write(blob);
+   await writable.close();
+   return 'Excel-файл сохранён.';
+ }
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download=fileName;
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+ return 'Браузер не поддерживает выбор папки. Файл сохранён в стандартную папку загрузок.';
+}
+async function downloadExcel(){
+ try{
+   if(typeof XLSX==='undefined')throw new Error('Библиотека SheetJS недоступна.');
+   if(!excelSourceBytes)throw new Error('Сначала загрузите Excel-файл «расчет зарплаты + дата».');
+
+   savePlans();
+   const book=sourceWorkbookFromBytes();
+   const sheet1Name=findRequiredSheetName(book,excelSheet1Name||'Лист1')||findRequiredSheetName(book,'Лист1');
+   const sheet2Name=findRequiredSheetName(book,excelSheet2Name||'Лист2')||findRequiredSheetName(book,'Лист2');
+   if(!sheet1Name||!sheet2Name)throw new Error('В исходной книге не найдены Лист1 и Лист2.');
+
+   const untouchedSheet2=book.Sheets[sheet2Name];
+   const sourceSheet1=book.Sheets[sheet1Name];
+
+   // Изменяем только Лист1. Лист2 остаётся исходным объектом книги без каких-либо записей.
+   book.Sheets[sheet1Name]=buildWorkloadExportSheet(sourceSheet1);
+   book.Sheets[sheet2Name]=untouchedSheet2;
+
+   const outArray=XLSX.write(book,{
+     bookType:'xlsx',
+     type:'array',
+     cellStyles:true,
+     bookVBA:true,
+     compression:true
+   });
+   const fileName=payrollExportFileName();
+   const message=await writeExcelToUserDirectory(outArray,fileName);
+   alert(message);
+ }catch(err){
+   if(err&&err.name==='AbortError')return;
+   console.error(err);
+   alert('Ошибка выгрузки Excel: '+(err&&err.message?err.message:String(err)));
+ }
+}
+
+function xmlEscape(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function toggleRoomsDrawer(force){const d=document.getElementById('roomsDrawer');const open=typeof force==='boolean'?force:!d.classList.contains('open');d.classList.toggle('open',open);}
+let modalDragState=null;
+function startWorkloadDrag(e){
+ if(e.button!==0)return;
+ if(e.target.closest('button,input,select,textarea,a'))return;
+ const win=document.getElementById('workloadWindow');if(!win)return;
+ const r=win.getBoundingClientRect();
+ modalDragState={dx:e.clientX-r.left,dy:e.clientY-r.top};
+ win.style.setProperty('position','fixed','important');
+ win.style.setProperty('left',r.left+'px','important');
+ win.style.setProperty('top',r.top+'px','important');
+ win.style.setProperty('right','auto','important');
+ win.style.setProperty('bottom','auto','important');
+ win.style.setProperty('transform','none','important');
+ document.body.style.userSelect='none';document.documentElement.style.cursor='grabbing';
+ e.preventDefault();e.stopPropagation();
+}
+document.addEventListener('mousemove',e=>{if(!modalDragState)return;const win=document.getElementById('workloadWindow');if(!win)return;win.style.setProperty('left',(e.clientX-modalDragState.dx)+'px','important');win.style.setProperty('top',(e.clientY-modalDragState.dy)+'px','important');e.preventDefault();},true);
+document.addEventListener('mouseup',()=>{if(!modalDragState)return;modalDragState=null;document.body.style.userSelect='';document.documentElement.style.cursor='';},true);
+function parsePoints(s){return String(s).trim().split(/\s+/).filter(Boolean).map(p=>p.split(',').map(Number))}
+function pointsString(p){return p.map(x=>Math.round(x[0]*10)/10+','+Math.round(x[1]*10)/10).join(' ')}
+
+function roomPartStrings(room){
+ if(!room)return[];
+ if(Array.isArray(room.parts)&&room.parts.length)return room.parts.filter(Boolean);
+ return room.points?[room.points]:[];
+}
+function roomPartPoints(room,partIndex=0){
+ const parts=roomPartStrings(room);
+ return parsePoints(parts[partIndex]||'');
+}
+function setRoomPartPoints(room,partIndex,pts){
+ const parts=roomPartStrings(room).slice();
+ parts[partIndex]=pointsString(pts);
+ room.points=parts[0]||'';
+ room.parts=parts.length>1?parts:undefined;
+}
+function polygonAbsoluteArea(pts){
+ if(!Array.isArray(pts)||pts.length<3)return 0;
+ let a=0;
+ for(let i=0,j=pts.length-1;i<pts.length;j=i++){
+   a+=(pts[j][0]*pts[i][1])-(pts[i][0]*pts[j][1]);
+ }
+ return Math.abs(a/2);
+}
+function polygonCentroid(pts){
+ if(!Array.isArray(pts)||!pts.length)return[0,0];
+ let twiceArea=0,cx=0,cy=0;
+ for(let i=0,j=pts.length-1;i<pts.length;j=i++){
+   const cross=pts[j][0]*pts[i][1]-pts[i][0]*pts[j][1];
+   twiceArea+=cross;
+   cx+=(pts[j][0]+pts[i][0])*cross;
+   cy+=(pts[j][1]+pts[i][1])*cross;
+ }
+ if(Math.abs(twiceArea)<1e-6){
+   const sx=pts.reduce((a,p)=>a+p[0],0);
+   const sy=pts.reduce((a,p)=>a+p[1],0);
+   return[sx/pts.length,sy/pts.length];
+ }
+ return[cx/(3*twiceArea),cy/(3*twiceArea)];
+}
+function roomLabelPoint(room){
+ const contours=roomPartStrings(room)
+   .map(p=>parsePoints(p))
+   .filter(p=>p.length>=3);
+ if(!contours.length)return[0,0];
+ contours.sort((a,b)=>polygonAbsoluteArea(b)-polygonAbsoluteArea(a));
+ return polygonCentroid(contours[0]);
+}
+function zoneAreaLabelText(room){
+ const area=Number(room&&room.area)||0;
+ return area.toLocaleString('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:1})+' м²';
+}
+function appendZoneAreaLabel(room,color){
+ const pt=roomLabelPoint(room);
+ const textColor=contrastTextColor(color);
+ const outline=textColor==='#ffffff'?'rgba(0,0,0,.88)':'rgba(255,255,255,.92)';
+ const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+ t.setAttribute('x',pt[0]);
+ t.setAttribute('y',pt[1]);
+ t.setAttribute('class','zone-area-label');
+ t.setAttribute('fill',textColor);
+ t.setAttribute('stroke',outline);
+ t.setAttribute('stroke-width','7');
+ t.setAttribute('stroke-linejoin','round');
+ t.textContent=zoneAreaLabelText(room);
+ svg.appendChild(t);
+}
+function roomVertexCount(room){
+ return roomPartStrings(room).reduce((n,p)=>n+parsePoints(p).length,0);
+}
+function isRoomSelected(id){return selectedIds.has(id);}
+function clearSelection(){
+ selectedIds.clear();
+ selectedId=null;
+}
+
+
+
+function updateFinishPolygonButton(){
+ const btn=document.getElementById('finishPolygonBtn');
+ if(!btn)return;
+ const active=mode==='add';
+ btn.style.display=active?'':'none';
+ btn.disabled=!active||draft.length<3;
+}
+
+function render(){
+ rooms.forEach(syncRoomEmployees);renderPlanTabs();renderList();renderSvg();renderInspector();updateButtons()
+ updateFinishPolygonButton();
+}
+function renderList(){
+ const q=search.value.trim().toLowerCase(); list.innerHTML='';
+ const a=rooms.filter(r=>(r.name+' '+r.id).toLowerCase().includes(q));
+ if(!a.length){list.innerHTML='<div class="empty">Нет помещений.</div>';return}
+ a.forEach(r=>{
+   const d=document.createElement('div');
+   d.className='item'+(r.id===selectedId&&selectedIds.size<=1?' active':'')+(isRoomSelected(r.id)&&selectedIds.size>1?' multi-selected':'');
+   d.innerHTML='<strong>'+escapeHtml(r.name||'Без названия')+'</strong><small>'+escapeHtml(r.id)+' · '+(Number(r.area)||0).toFixed(1)+' м²'+(r.employee?' · '+escapeHtml(r.employee):'')+'</small>';
+   d.onclick=e=>{const multi=e.ctrlKey||e.metaKey;selectRoom(r.id,multi);if(!multi)toggleRoomsDrawer(false)};
+   list.appendChild(d);
+ })
+}
+
+function roomFillId(room){
+ return 'roomFill_'+String(room.id||'zone').replace(/[^A-Za-z0-9_-]/g,'_');
+}
+
+function ensureRoomGradient(room){
+ if(!svg||!room)return null;
+
+ // В режиме подсчёта площади используется единая зелёная/серая заливка.
+ if(areaCalcMode)return null;
+
+ const employees=roomEmployees(room);
+ if(employees.length<=1)return null;
+
+ let defs=svg.querySelector('defs[data-room-gradients="1"]');
+ if(!defs){
+   defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+   defs.setAttribute('data-room-gradients','1');
+   svg.insertBefore(defs,svg.firstChild);
+ }
+
+ const id=roomFillId(room);
+ let gradient=null;
+ try{
+   gradient=defs.querySelector('#'+(window.CSS&&CSS.escape?CSS.escape(id):id));
+ }catch(e){
+   gradient=document.getElementById(id);
+ }
+ if(!gradient){
+   gradient=document.createElementNS('http://www.w3.org/2000/svg','linearGradient');
+   gradient.id=id;
+   gradient.setAttribute('x1','0%');
+   gradient.setAttribute('y1','0%');
+   gradient.setAttribute('x2','100%');
+   gradient.setAttribute('y2','0%');
+   defs.appendChild(gradient);
+ }
+
+ gradient.innerHTML='';
+
+ const n=employees.length;
+ employees.forEach((employee,i)=>{
+   const color=employeeColor(employee);
+   const start=(i/n)*100;
+   const end=((i+1)/n)*100;
+
+   const stop1=document.createElementNS('http://www.w3.org/2000/svg','stop');
+   stop1.setAttribute('offset',start+'%');
+   stop1.setAttribute('stop-color',color);
+   stop1.setAttribute('stop-opacity',String(zoneFillOpacity(room)));
+   gradient.appendChild(stop1);
+
+   const stop2=document.createElementNS('http://www.w3.org/2000/svg','stop');
+   stop2.setAttribute('offset',end+'%');
+   stop2.setAttribute('stop-color',color);
+   stop2.setAttribute('stop-opacity',String(zoneFillOpacity(room)));
+   gradient.appendChild(stop2);
+ });
+
+ return 'url(#'+id+')';
+}
+
+function zoneFillValue(room){
+ if(areaCalcMode){
+   return hexToRgba(zoneColor(room),zoneFillOpacity(room));
+ }
+ const employees=roomEmployees(room);
+ if(employees.length>1){
+   return ensureRoomGradient(room) || hexToRgba(zoneColor(room),zoneFillOpacity(room));
+ }
+ return hexToRgba(zoneColor(room),zoneFillOpacity(room));
+}
+
+function renderSvg(){
+ svg.innerHTML='';
+ enforceEmployeeColors();
+
+ // Сначала обычные зоны, затем зоны выбранного сотрудника:
+ // так "приподнятые" зоны всегда визуально сверху.
+ const orderedRooms=rooms.slice().sort((a,b)=>
+   Number(isFocusedEmployeeZone(a))-Number(isFocusedEmployeeZone(b))
+ );
+
+ orderedRooms.forEach(r=>{
+  const selected=isRoomSelected(r.id);
+  const focused=isFocusedEmployeeZone(r);
+
+  roomPartStrings(r).forEach((part,partIndex)=>{
+   const pts=parsePoints(part);
+   if(pts.length<3)return;
+
+   const p=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+   p.setAttribute('points',pointsString(pts));
+   p.setAttribute(
+     'class',
+     'room'+
+     (selected&&selectedIds.size===1?' selected':'')+
+     (selected&&selectedIds.size>1?' multi-selected':'')+
+     (focused?' employee-focus':'')
+   );
+
+   const zc=zoneColor(r);
+   p.style.setProperty('fill',zoneFillValue(r),'important');
+   p.style.setProperty('stroke',zc);
+   p.style.setProperty('stroke-opacity',selected||focused?'1':'.86');
+
+   p.addEventListener('click',e=>{
+     e.stopPropagation();
+
+     if(mode==='add'||mode==='rect'||mode==='circle')return;
+
+     // Ctrl + ЛКМ (или Cmd + ЛКМ) — множественный выбор.
+     if(e.ctrlKey||e.metaKey){
+       selectRoom(r.id,true);
+       return;
+     }
+
+     // Обычный ЛКМ только выбирает зону.
+     // Назначение/снятие сотрудника выполняется через ПКМ или окно нагрузки.
+     selectRoom(r.id,false);
+   });
+
+   p.addEventListener('contextmenu',e=>showZoneContextMenu(e,r));
+
+   svg.appendChild(p);
+
+   if(selectedIds.size===1&&r.id===selectedId&&mode==='edit'){
+     drawHandles(r,pts,partIndex);
+   }
+  });
+  appendZoneAreaLabel(r,zoneColor(r));
+ });
+
+ if(mode==='add'&&draft.length){
+  const p=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  p.setAttribute('points',draft.map(x=>x.join(',')).join(' '));
+  p.setAttribute('class','room add-preview');
+  svg.appendChild(p);
+
+  draft.forEach(pt=>{
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',pt[0]);
+    c.setAttribute('cy',pt[1]);
+    c.setAttribute('r',5);
+    c.setAttribute('class','vertex');
+    svg.appendChild(c);
+  });
+ }
+
+ if((mode==='rect'||mode==='circle')&&primitiveStart&&primitiveCurrent){
+   const pts=primitivePoints(mode,primitiveStart,primitiveCurrent);
+   if(pts.length){
+     const p=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+     p.setAttribute('points',pointsString(pts));
+     p.setAttribute('class','room add-preview');
+     svg.appendChild(p);
+   }
+ }
+}
+function drawHandles(room,pts,partIndex=0){
+ for(let i=0;i<pts.length;i++){
+  const a=pts[i],b=pts[(i+1)%pts.length],mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',mx);c.setAttribute('cy',my);c.setAttribute('r',4);c.setAttribute('class','midpoint');
+  c.addEventListener('dblclick',e=>{
+    e.stopPropagation();
+    const before=snapshot(),r=getRoom(room.id),p=roomPartPoints(r,partIndex);
+    p.splice(i+1,0,[mx,my]);setRoomPartPoints(r,partIndex,p);
+    commit(before);mode='edit';render();
+  });svg.appendChild(c)
+ }
+ pts.forEach((pt,i)=>{
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',pt[0]);c.setAttribute('cy',pt[1]);c.setAttribute('r',6);c.setAttribute('class','vertex');
+  c.addEventListener('pointerdown',e=>startDragVertex(e,room.id,i,partIndex));
+  c.addEventListener('dblclick',e=>{
+    e.stopPropagation();
+    const r=getRoom(room.id),p=roomPartPoints(r,partIndex);
+    if(p.length<=3)return;
+    const before=snapshot();
+    p.splice(i,1);setRoomPartPoints(r,partIndex,p);
+    commit(before);mode='edit';render();
+  });
+  svg.appendChild(c)
+ })
+}
+function svgPoint(e){const r=svg.getBoundingClientRect();return[(e.clientX-r.left)*planWidth()/Math.max(1,r.width),(e.clientY-r.top)*planHeight()/Math.max(1,r.height)]}
+function startDragVertex(e,id,index,partIndex=0){e.preventDefault();e.stopPropagation();if(mode!=='edit')return;drag={id,index,partIndex,before:snapshot()};window.addEventListener('pointermove',dragMove);window.addEventListener('pointerup',dragEnd,{once:true})}
+function dragMove(e){
+ if(!drag)return;
+ const p=svgPoint(e),r=getRoom(drag.id),pts=roomPartPoints(r,drag.partIndex);
+ pts[drag.index]=[Math.max(0,Math.min(planWidth(),p[0])),Math.max(0,Math.min(planHeight(),p[1]))];
+ setRoomPartPoints(r,drag.partIndex,pts);
+ renderSvg();
+}
+function dragEnd(){if(!drag)return;history.push(drag.before);if(history.length>50)history.shift();future=[];persist();drag=null;render();window.removeEventListener('pointermove',dragMove)}
+
+
+function primitivePoints(type,a,b){
+ if(!a||!b)return[];
+ if(type==='rect'){
+   return [[a[0],a[1]],[b[0],a[1]],[b[0],b[1]],[a[0],b[1]]];
+ }
+ if(type==='circle'){
+   const rx=b[0]-a[0],ry=b[1]-a[1],r=Math.sqrt(rx*rx+ry*ry);
+   if(r<1)return[];
+   const pts=[];
+   const steps=40;
+   for(let i=0;i<steps;i++){
+     const t=Math.PI*2*i/steps;
+     pts.push([a[0]+Math.cos(t)*r,a[1]+Math.sin(t)*r]);
+   }
+   return pts;
+ }
+ return[];
+}
+function nextNewZoneId(){
+ let n=1;
+ while(getRoom('NEW-'+String(n).padStart(3,'0')))n++;
+ return 'NEW-'+String(n).padStart(3,'0');
+}
+function togglePrimitive(type){
+ if(!currentPlan()){alert('Сначала добавьте план.');return;}
+ if(mode===type){cancelCreate();return;}
+ clearSelection();draft=[];primitiveStart=null;primitiveCurrent=null;mode=type;
+ document.getElementById('tip').textContent=type==='rect'
+   ?'Прямоугольник: зажмите левую кнопку в одном углу и протяните к противоположному.'
+   :'Круг: зажмите левую кнопку в центре и протяните до нужного радиуса.';
+ render();
+}
+function cancelCreate(){
+ draft=[];primitiveStart=null;primitiveCurrent=null;mode='select';
+ document.getElementById('tip').textContent='Выберите помещение. Для точной коррекции нажмите «Редактировать вершины».';
+ render();
+}
+function finishPrimitive(){
+ if(!primitiveStart||!primitiveCurrent)return cancelCreate();
+ const pts=primitivePoints(mode,primitiveStart,primitiveCurrent);
+ if(pts.length<3)return cancelCreate();
+ const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
+ if(Math.max(...xs)-Math.min(...xs)<5||Math.max(...ys)-Math.min(...ys)<5)return cancelCreate();
+ const before=snapshot();
+ const r={id:nextNewZoneId(),name:mode==='circle'?'Новая круглая зона':'Новая прямоугольная зона',area:0,employee:'',color:FREE_ZONE_COLOR,points:pointsString(pts)};
+ rooms.push(r);selectedIds.clear();selectedIds.add(r.id);selectedId=r.id;
+ primitiveStart=null;primitiveCurrent=null;mode='select';
+ commit(before);
+}
+function selectRoom(id,additive=false){
+ mode='select';
+ if(additive){
+   if(selectedIds.has(id))selectedIds.delete(id);else selectedIds.add(id);
+   if(selectedIds.size===0)selectedId=null;
+   else if(selectedIds.has(id))selectedId=id;
+   else selectedId=[...selectedIds][selectedIds.size-1]||null;
+ }else{
+   selectedIds.clear();
+   selectedIds.add(id);
+   selectedId=id;
+ }
+ render();
+ if(!additive){
+   const x=[...document.querySelectorAll('.item')].find(v=>v.classList.contains('active'));
+   if(x)x.scrollIntoView({block:'nearest'});
+ }
+}
+
+function mergeSelectedZones(){
+ const ids=[...selectedIds];
+ if(ids.length<2){alert('Выберите минимум две зоны, удерживая Ctrl.');return;}
+ const selected=ids.map(getRoom).filter(Boolean);
+ if(selected.length<2)return;
+
+ const before=snapshot();
+ const parts=[];
+ selected.forEach(r=>roomPartStrings(r).forEach(p=>{if(parsePoints(p).length>=3)parts.push(p)}));
+ if(parts.length<2){alert('Не удалось получить геометрию выбранных зон.');return;}
+
+ const employees=[...new Set(selected.map(r=>String(r.employee||'').trim()))];
+ const commonEmployee=employees.length===1?employees[0]:'';
+ const totalArea=selected.reduce((sum,r)=>sum+(Number(r.area)||0),0);
+ const newId=nextNewZoneId();
+
+ const merged={
+   id:newId,
+   name:'Объединённая зона',
+   area:Math.round(totalArea*100)/100,
+   employee:commonEmployee,
+   color:commonEmployee?employeeColor(commonEmployee):FREE_ZONE_COLOR,
+   points:parts[0],
+   parts:parts
+ };
+
+ rooms=rooms.filter(r=>!selectedIds.has(r.id));
+ rooms.push(merged);
+ selectedIds.clear();
+ selectedIds.add(newId);
+ selectedId=newId;
+ mode='select';
+ commit(before);
+ document.getElementById('tip').textContent='Зоны объединены в один объект. Свойства объединённой зоны можно изменить справа.';
+}
+function startAdd(){clearSelection();mode='add';draft=[];primitiveStart=null;primitiveCurrent=null;document.getElementById('tip').textContent='Режим добавления: кликайте по углам комнаты. Минимум 3 точки.';render()}
+function finishAdd(){if(draft.length<3){alert('Нужно поставить минимум 3 точки.');return}const before=snapshot();const r={id:nextNewZoneId(),name:'Новое помещение',area:0,employee:'',color:FREE_ZONE_COLOR,points:pointsString(draft)};rooms.push(r);selectedIds.clear();selectedIds.add(r.id);selectedId=r.id;draft=[];mode='select';commit(before)}
+function cancelAdd(){draft=[];primitiveStart=null;primitiveCurrent=null;mode='select';document.getElementById('tip').textContent='Выберите помещение. Для точной коррекции нажмите «Редактировать вершины».';render()}
+function startEdit(){
+ if(!selectedId||selectedIds.size!==1)return;
+
+ if(workloadMode){
+   closeWorkloadWindow();
+ }
+
+ mode='edit';
+ const tip=document.getElementById('tip');
+ if(tip){
+   tip.textContent='Редактирование границы: тяните синие вершины. Двойной клик по серой точке — добавить вершину; по синей — удалить. Esc — завершить.';
+ }
+ render();
+}
+function clearSelectedEmployee(){
+ if(selectedIds.size!==1)return;
+
+ const r=getRoom(selectedId);
+ if(!r)return;
+
+ if(!r.employee){
+   alert('У выбранной зоны сотрудник не назначен.');
+   return;
+ }
+
+ const before=snapshot();
+ if(!setZoneEmployee(r,''))return;
+
+ history.push(before);
+ if(history.length>50)history.shift();
+ future=[];
+
+ refreshAssignmentUI();
+
+ const tip=document.getElementById('tip');
+ if(tip)tip.textContent='Зона «'+(r.name||r.id)+'» освобождена и снова стала серой.';
+}
+function deleteSelected(){if(!selectedId||selectedIds.size!==1)return;const r=getRoom(selectedId);if(!r)return;if(!confirm('Удалить «'+r.name+'»?'))return;const before=snapshot();rooms=rooms.filter(x=>x.id!==selectedId);clearSelection();mode='select';commit(before)}
+function updateButtons(){
+ const drawing=mode==='add'||mode==='rect'||mode==='circle';
+ const single=selectedIds.size===1&&!!selectedId;
+ const multi=selectedIds.size>=2;
+ const add=document.getElementById('addBtn');
+ add.onclick = mode==='add' ? cancelCreate : startAdd;
+ add.textContent = mode==='add' ? '✕ Отменить полигон' : '＋ Полигон';
+ add.classList.toggle('active',mode==='add');
+ const rect=document.getElementById('rectBtn');
+ const circle=document.getElementById('circleBtn');
+ if(rect){rect.classList.toggle('active',mode==='rect');rect.textContent=mode==='rect'?'✕ Отменить прямоугольник':'▭ Прямоугольник';}
+ if(circle){circle.classList.toggle('active',mode==='circle');circle.textContent=mode==='circle'?'✕ Отменить круг':'○ Круг';}
+ document.getElementById('editBtn').disabled=!single||drawing;
+ const clearBtn=document.getElementById('clearEmployeeBtn');
+ const selectedRoom=single?getRoom(selectedId):null;
+ if(clearBtn)clearBtn.disabled=!single||drawing||!selectedRoom||!selectedRoom.employee;
+ const mergeBtn=document.getElementById('mergeBtn');
+ if(mergeBtn){
+   mergeBtn.disabled=!multi||drawing;
+   mergeBtn.textContent=multi?'⧉ Объединить ('+selectedIds.size+')':'⧉ Объединить';
+ }
+ document.getElementById('deleteBtn').disabled=!single||drawing;
+}
+function renderInspector(){
+ const b=document.getElementById('inspectorBody');
+
+ if(mode==='rect'||mode==='circle'){
+   b.innerHTML='<div class="section"><h2>'+(mode==='rect'?'Прямоугольная зона':'Круглая зона')+'</h2><div class="status">'+
+     (mode==='rect'
+       ?'Зажмите левую кнопку мыши в одном углу и протяните к противоположному.'
+       :'Зажмите левую кнопку мыши в центре круга и протяните до нужного радиуса.')+
+     '</div><div class="actions" style="margin-top:12px"><button onclick="cancelCreate()">Отмена</button></div></div>';
+   return;
+ }
+
+ if(mode==='add'){
+   b.innerHTML='<div class="section"><h2>Новая зона</h2><div class="status">Поставлено точек: <b>'+draft.length+
+     '</b><br>Кликайте по углам комнаты на плане.</div><div class="actions" style="margin-top:12px">'+
+     ''+
+     '<button onclick="cancelAdd()">Отмена</button></div></div>';
+   return;
+ }
+
+ if(selectedIds.size>1){
+   const chosen=[...selectedIds].map(getRoom).filter(Boolean);
+   const area=chosen.reduce((a,r)=>a+(Number(r.area)||0),0);
+   b.innerHTML='<div class="section"><h2>Выбрано зон: '+chosen.length+'</h2>'+
+     '<div class="status">Суммарная площадь: <b>'+area.toFixed(1)+' м²</b><br><br>'+
+     'Удерживайте <b>Ctrl</b> и кликайте по зонам, чтобы изменить выбор.</div>'+
+     '<div class="actions" style="margin-top:12px"><button class="primary" onclick="mergeSelectedZones()">⧉ Объединить в один объект</button></div></div>';
+   return;
+ }
+
+ const r=getRoom(selectedId);
+ if(!r){
+   b.innerHTML='<div class="empty"><b>Зона не выбрана</b><br><br>Добавьте план, затем создайте или выберите зону.</div>';
+   return;
+ }
+
+ const currentColor=zoneColor(r);
+ const swatchText=contrastTextColor(currentColor);
+
+ b.innerHTML=
+   '<div class="section">'+
+     '<h2>'+escapeHtml(r.name||'Помещение')+'</h2>'+
+     '<div class="status" style="margin-bottom:12px">ID: <b>'+escapeHtml(r.id)+'</b></div>'+
+
+     '<div class="field">'+
+       '<label for="propName">Название зоны</label>'+
+       '<input id="propName" value="'+escapeAttr(r.name||'')+'" '+
+       'oninput="markPropertiesDirty()" onkeydown="propertyEditorKeydown(event)">'+
+     '</div>'+
+
+     '<div class="field">'+
+       '<label for="propArea">Площадь, м²</label>'+
+       '<input id="propArea" type="text" inputmode="decimal" value="'+escapeAttr(String(Number(r.area)||0))+'" '+
+       'placeholder="Например: 12,5" oninput="markPropertiesDirty()" onkeydown="propertyEditorKeydown(event)">'+
+     '</div>'+
+
+     '<div class="field">'+
+       '<label>Сотрудник</label>'+
+       '<div id="propEmployeeView" class="employee-readonly" title="Изменение сотрудника доступно только через ПКМ по зоне или окно нагрузки">'+
+         escapeHtml(roomEmployees(r).join(', ')||'Не назначен')+
+       '</div>'+ 
+       '<div class="locked-color">Только просмотр. Изменение — через ПКМ по зоне или окно «Нагрузка на сотрудника».</div>'+ 
+     '</div>'+
+
+     '<div class="field">'+
+       '<label>Цвет зоны</label>'+
+       '<div class="free-zone-note">'+
+         '<span id="propColorSwatch" class="free-zone-swatch" style="background:'+currentColor+';border-color:'+contrastBorderColor(currentColor)+'"></span>'+
+         '<span id="propColorText">'+
+           (roomEmployees(r).length
+             ?'Назначены: '+escapeHtml(roomEmployees(r).join(', '))
+             :'Свободная зона — серый цвет')+
+         '</span>'+
+       '</div>'+
+     '</div>'+
+
+     '<div class="actions">'+
+       '<button class="primary" id="propSaveBtn" onclick="saveProperties()">Сохранить свойства</button>'+
+       '<button onclick="startEdit()">Редактировать вершины</button>'+
+     '</div>'+
+     '<div id="propSaveStatus" class="property-save-status">Измените поля и нажмите «Сохранить свойства».</div>'+
+   '</div>'+
+
+   '<div class="section">'+
+     '<h2>Геометрия</h2>'+
+     '<div class="status">Контуров: <b>'+roomPartStrings(r).length+'</b><br>'+
+     'Вершин: <b>'+roomVertexCount(r)+'</b></div>'+
+   '</div>'+
+
+   '<div class="section help"><b>Вершины</b><br>'+
+     'Перетаскивание — изменить границу.<br>'+
+     'Двойной клик по серой точке — добавить вершину.<br>'+
+     'Двойной клик по синей вершине — удалить её.'+
+   '</div>'+
+   '<button class="danger" onclick="deleteSelected()">Удалить эту зону</button>';
+}
+function setRoomColor(color){const r=getRoom(selectedId);if(!r)return;r.color=zoneColor(r);render();}
+function hexToRgba(hex,a){
+  const h=String(hex).replace('#','');
+  const n=parseInt(h,16);
+  return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';
+}
+function parseHexColor(color){
+ let h=String(color||'').trim().replace('#','');
+ if(h.length===3)h=h.split('').map(x=>x+x).join('');
+ if(!/^[0-9a-fA-F]{6}$/.test(h))return null;
+ return {
+   r:parseInt(h.slice(0,2),16),
+   g:parseInt(h.slice(2,4),16),
+   b:parseInt(h.slice(4,6),16)
+ };
+}
+function relativeLuminance(color){
+ const rgb=parseHexColor(color);
+ if(!rgb)return .5;
+ const channel=v=>{
+   const x=v/255;
+   return x<=.03928 ? x/12.92 : Math.pow((x+.055)/1.055,2.4);
+ };
+ return .2126*channel(rgb.r)+.7152*channel(rgb.g)+.0722*channel(rgb.b);
+}
+function contrastTextColor(background){
+ const l=relativeLuminance(background);
+ const whiteContrast=1.05/(l+.05);
+ const blackContrast=(l+.05)/.05;
+ return blackContrast>=whiteContrast ? '#111827' : '#ffffff';
+}
+function contrastBorderColor(background){
+ return contrastTextColor(background)==='#ffffff'
+   ? 'rgba(255,255,255,.72)'
+   : 'rgba(17,24,39,.55)';
+}
+
+function setPropertyStatus(message,type=''){
+ const el=document.getElementById('propSaveStatus');
+ if(!el)return;
+ el.textContent=message;
+ el.className='property-save-status'+(type?' '+type:'');
+}
+function markPropertiesDirty(){
+ setPropertyStatus('Есть несохранённые изменения.','dirty');
+ const name=document.getElementById('propName');
+ const area=document.getElementById('propArea');
+ if(name)name.classList.remove('invalid');
+ if(area)area.classList.remove('invalid');
+}
+function propertyEditorKeydown(event){
+ if(event.key==='Enter' && !event.shiftKey){
+   event.preventDefault();
+   saveProperties();
+ }
+}
+function previewSelectedEmployee(){
+ const select=document.getElementById('propEmployee');
+ const swatch=document.getElementById('propColorSwatch');
+ const text=document.getElementById('propColorText');
+ if(!select||!swatch||!text)return;
+
+ const employee=String(select.value||'').trim();
+ const color=employee?employeeColor(employee):FREE_ZONE_COLOR;
+
+ swatch.style.background=color;
+ swatch.style.borderColor=contrastBorderColor(color);
+ text.textContent=employee
+   ?'Постоянный цвет сотрудника: '+employee
+   :'Свободная зона — серый цвет';
+}
+function parseAreaValue(raw){
+ const normalized=String(raw??'').trim().replace(/\s+/g,'').replace(',','.');
+ if(normalized==='')return 0;
+ const value=Number(normalized);
+ return Number.isFinite(value) && value>=0 ? value : null;
+}
+function saveProperties(){
+ if(selectedIds.size!==1||!selectedId)return;
+ const r=getRoom(selectedId);
+ if(!r)return;
+
+ const nameEl=document.getElementById('propName');
+ const areaEl=document.getElementById('propArea');
+ if(!nameEl||!areaEl){
+   setPropertyStatus('Не удалось получить поля свойств. Выберите зону повторно.','error');
+   return;
+ }
+
+ const name=String(nameEl.value||'').trim();
+ const area=parseAreaValue(areaEl.value);
+
+ nameEl.classList.remove('invalid');
+ areaEl.classList.remove('invalid');
+
+ if(!name){
+   nameEl.classList.add('invalid');
+   nameEl.focus();
+   setPropertyStatus('Введите название зоны.','error');
+   return;
+ }
+ if(area===null){
+   areaEl.classList.add('invalid');
+   areaEl.focus();
+   setPropertyStatus('Площадь должна быть числом не меньше 0. Можно вводить 12,5 или 12.5.','error');
+   return;
+ }
+
+ const oldName=String(r.name||'');
+ const oldArea=Number(r.area)||0;
+ const changed=name!==oldName || Math.abs(area-oldArea)>0.000001;
+
+ if(!changed){
+   setPropertyStatus('Изменений нет.','ok');
+   return;
+ }
+
+ const before=snapshot();
+ r.name=name;
+ r.area=Math.round(area*1000)/1000;
+
+ history.push(before);
+ if(history.length>50)history.shift();
+ future=[];
+ persist();
+
+ selectedIds.clear();
+ selectedIds.add(r.id);
+ selectedId=r.id;
+ mode='select';
+ render();
+
+ if(workloadMode){
+   renderEmployeeList();
+   renderWorkloadTable();
+ }
+
+ const status=document.getElementById('propSaveStatus');
+ if(status){
+   status.textContent='Свойства сохранены.';
+   status.className='property-save-status ok';
+ }
+ const tip=document.getElementById('tip');
+ if(tip)tip.textContent='Свойства зоны «'+r.name+'» сохранены.';
+}
+function exportJSON(){const blob=new Blob([JSON.stringify(rooms,null,2)],{type:'application/json;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(currentPlan()?.name||'zones')+'-rooms.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const d=JSON.parse(rd.result);if(!Array.isArray(d))throw Error('Ожидался массив помещений');if(!d.every(r=>r.id&&(r.points||(Array.isArray(r.parts)&&r.parts.length))))throw Error('Некорректный формат зоны');history.push(snapshot());future=[];rooms=normalizeRooms(d);clearSelection();mode='select';persist();render()}catch(x){alert('Ошибка импорта: '+x.message)}e.target.value=''};rd.readAsText(f)}
+function zoom(d){scale=Math.max(.4,Math.min(2.5,scale+d));applyScale()}
+function resetView(){scale=1;applyScale()}
+function fit(){
+ const p=currentPlan();
+ if(!p){scale=1;applyScale();return;}
+ const w=Math.max(1,stage.clientWidth-40),h=Math.max(1,stage.clientHeight-40);
+ scale=Math.max(.05,Math.min(2.5,Math.min(w/planWidth(),h/planHeight())));
+ applyScale();
+}
+function applyScale(){
+ canvas.style.transform='none';canvas.style.marginRight='0';canvas.style.marginBottom='0';
+ const p=currentPlan();
+ if(!p){
+  canvas.classList.add('no-plan');canvas.classList.remove('has-plan');
+  canvas.style.width='100%';canvas.style.height='100%';
+ }else{
+  canvas.classList.remove('no-plan');canvas.classList.add('has-plan');
+  canvas.style.width=(planWidth()*scale)+'px';canvas.style.height=(planHeight()*scale)+'px';
+ }
+ const zl=document.getElementById('zoomLabel');if(zl)zl.textContent=Math.round(scale*100)+'%';
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function escapeAttr(s){return escapeHtml(s).replace(/`/g,'&#96;')}
+
+
+svg.addEventListener('mousedown',e=>{
+ if(mode!=='rect'&&mode!=='circle')return;
+ if(e.button!==0)return;
+ e.preventDefault();
+ primitiveStart=svgPoint(e);
+ primitiveCurrent=primitiveStart.slice();
+ renderSvg();
+});
+window.addEventListener('mousemove',e=>{
+ if((mode!=='rect'&&mode!=='circle')||!primitiveStart)return;
+ primitiveCurrent=svgPoint(e);
+ renderSvg();
+});
+window.addEventListener('mouseup',e=>{
+ if((mode!=='rect'&&mode!=='circle')||!primitiveStart)return;
+ primitiveCurrent=svgPoint(e);
+ finishPrimitive();
+});
+search.addEventListener('input',renderList);
+svg.addEventListener('click',e=>{
+ if(mode!=='add')return;
+ const p=svgPoint(e);
+ draft.push([Math.round(p[0]*10)/10,Math.round(p[1]*10)/10]);
+ render();
+});
+svg.addEventListener('dblclick',e=>{
+ if(mode!=='add'||draft.length<3)return;
+ e.preventDefault();
+ finishAdd();
+});
+document.addEventListener('keydown',e=>{
+ const editingField=['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName);
+
+ if((e.ctrlKey||e.metaKey)&&!editingField&&e.key.toLowerCase()==='z'){
+   e.preventDefault();
+   if(e.shiftKey)redo();else undo();
+   return;
+ }
+ if((e.ctrlKey||e.metaKey)&&!editingField&&e.key.toLowerCase()==='y'){
+   e.preventDefault();
+   redo();
+   return;
+ }
+
+ if(e.key==='Escape'&&(mode==='add'||mode==='rect'||mode==='circle'))cancelCreate();
+ else if(e.key==='Escape'&&mode==='edit'){mode='select';render()}
+ else if(e.key==='Escape'&&selectedIds.size){clearSelection();render()}
+
+ if((e.key==='Delete'||e.key==='Backspace')&&selectedId&&selectedIds.size===1&&!['add','rect','circle'].includes(mode)&&!editingField){
+   deleteSelected();
+ }
+});
+plans=[];currentPlanId=null;rooms=[];clearPlanVisual();renderPlanTabs();render();
+
+function setEditorPanelState(which,collapsed,save=true){
+ const panel=which==='zones'?document.getElementById('zonesPanel'):document.getElementById('propertiesPanel');
+ if(!panel)return;
+ panel.classList.toggle('collapsed',!!collapsed);
+ panel.classList.toggle('expanded',!collapsed);
+ const btn=panel.querySelector('.panel-toggle');
+ if(btn)btn.setAttribute('aria-expanded',String(!collapsed));
+ if(which==='properties'){
+  const app=document.getElementById('editor');
+  if(app)app.classList.toggle('properties-collapsed',!!collapsed);
+ }
+ if(save){try{localStorage.setItem('editor-panel-'+which,collapsed?'collapsed':'expanded')}catch(e){}}
+}
+function toggleEditorPanel(which){
+ const panel=which==='zones'?document.getElementById('zonesPanel'):document.getElementById('propertiesPanel');
+ if(!panel)return;
+ setEditorPanelState(which,!panel.classList.contains('collapsed'));
+}
+function restoreEditorPanelStates(){
+ ['zones','properties'].forEach(which=>{
+  let state='expanded';
+  try{state=localStorage.getItem('editor-panel-'+which)||'expanded'}catch(e){}
+  setEditorPanelState(which,state==='collapsed',false);
+ });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restoreEditorPanelStates,{once:true});else restoreEditorPanelStates();
+
+
+let contextZoneId='';
+function hideZoneContextMenu(){
+ const menu=document.getElementById('zoneContextMenu');
+ if(!menu)return;
+ menu.classList.remove('open');menu.setAttribute('aria-hidden','true');contextZoneId='';
+}
+function showZoneContextMenu(event,room){
+ if(!event||!room)return;
+ event.preventDefault();event.stopPropagation();
+ contextZoneId=room.id;
+ selectedIds.clear();selectedIds.add(room.id);selectedId=room.id;render();
+
+ const menu=document.getElementById('zoneContextMenu');
+ const unloadBtn=document.getElementById('ctxUnloadBtn');
+ const assignBtn=document.getElementById('ctxAssignBtn');
+ const addBtn=document.getElementById('ctxAreaAddBtn');
+ const removeBtn=document.getElementById('ctxAreaRemoveBtn');
+ if(!menu)return;
+
+ if(areaCalcMode){
+   if(unloadBtn)unloadBtn.style.display='none';
+   if(assignBtn)assignBtn.style.display='none';
+   if(addBtn)addBtn.style.display='';
+   if(removeBtn)removeBtn.style.display='';
+ }else{
+   if(unloadBtn)unloadBtn.style.display='';
+   if(assignBtn){
+     assignBtn.style.display='';
+     const employee=String(selectedEmployee||'').trim();
+     const canAssign=!!employee&&!roomHasEmployee(room,employee);
+     assignBtn.disabled=!canAssign;
+     assignBtn.title=canAssign?'Добавить сотрудника: '+employee:(employee?'Этот сотрудник уже назначен':'Сначала выберите сотрудника в окне нагрузки');
+   }
+   if(addBtn)addBtn.style.display='none';
+   if(removeBtn)removeBtn.style.display='none';
+ }
+
+ menu.style.left=Math.min(event.clientX,window.innerWidth-210)+'px';
+ menu.style.top=Math.min(event.clientY,window.innerHeight-120)+'px';
+ menu.classList.add('open');menu.setAttribute('aria-hidden','false');
+}
+function contextUnloadZone(){
+ const room=getRoom(contextZoneId);if(!room){hideZoneContextMenu();return;}
+ const before=snapshot();let changed=false;
+ if(selectedEmployee&&roomHasEmployee(room,selectedEmployee))changed=removeRoomEmployee(room,selectedEmployee);
+ else changed=clearRoomEmployees(room);
+ if(changed){history.push(before);if(history.length>50)history.shift();future=[];refreshAssignmentUI();}
+ hideZoneContextMenu();
+}
+function contextAssignZone(){
+ const room=getRoom(contextZoneId);if(!room){hideZoneContextMenu();return;}
+ const employee=String(selectedEmployee||'').trim();
+ if(!employee||roomHasEmployee(room,employee)){hideZoneContextMenu();return;}
+ const before=snapshot();const changed=addRoomEmployee(room,employee);
+ if(changed){history.push(before);if(history.length>50)history.shift();future=[];refreshAssignmentUI();}
+ hideZoneContextMenu();
+}
+document.addEventListener('click',e=>{const menu=document.getElementById('zoneContextMenu');if(menu&&!menu.contains(e.target))hideZoneContextMenu();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideZoneContextMenu();});
+window.addEventListener('blur',hideZoneContextMenu);
+
+
+let areaCalcMode=false;
+let areaManualKeys=new Set();
+let areaRemovedKeys=new Set();
+let areaSearchText='';
+let areaCategory='';
+
+function areaKey(planId,roomId){return String(planId)+'::'+String(roomId)}
+function stripBracketText(text){return String(text||'').replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim()}
+function areaRoomValue(room){return Number(room&&room.area)||0}
+function allAreaEntries(){
+ const out=[];
+ plans.forEach(plan=>{
+   const rr=plan.id===currentPlanId?rooms:(plan.rooms||[]);
+   rr.forEach(room=>out.push({plan,room,key:areaKey(plan.id,room.id)}));
+ });
+ return out;
+}
+function areaCategoryOf(name){
+ const n=stripBracketText(name).toLowerCase();
+ if(/туалет|санузел|wc/.test(n))return 'Туалеты';
+ if(/класс|кабинет|аудитор/.test(n))return 'Классы';
+ if(/рекреац|холл|коридор/.test(n))return 'Рекреации';
+ return '';
+}
+function areaMatchesSearch(room){
+ const q=stripBracketText(areaSearchText).toLowerCase();
+ return !!q && stripBracketText(room.name).toLowerCase().includes(q);
+}
+function areaMatchesCategory(room){
+ return !!areaCategory && areaCategoryOf(room.name)===areaCategory;
+}
+function areaIsHighlighted(planId,room){
+ const key=areaKey(planId,room.id);
+ if(areaRemovedKeys.has(key))return false;
+ return areaManualKeys.has(key)||areaMatchesSearch(room)||areaMatchesCategory(room);
+}
+function areaActiveEntries(){return allAreaEntries().filter(x=>areaIsHighlighted(x.plan.id,x.room))}
+function areaManualTotal(){
+ return allAreaEntries().filter(x=>areaManualKeys.has(x.key)).reduce((a,x)=>a+areaRoomValue(x.room),0);
+}
+function areaPlanHasHighlight(plan){
+ const rr=plan.id===currentPlanId?rooms:(plan.rooms||[]);
+ return rr.some(r=>areaIsHighlighted(plan.id,r));
+}
+function openAreaCalculator(){
+ areaCalcMode=true;
+ workloadMode=false;
+ const ww=document.getElementById('workloadWindow');if(ww)ww.classList.remove('open');
+ const modal=document.getElementById('areaModal');
+ if(modal){modal.classList.add('open');modal.setAttribute('aria-hidden','false')}
+ makeAreaModalDraggable();
+ renderAreaCalculator();render();
+}
+function closeAreaCalculator(){
+ areaCalcMode=false;
+ const modal=document.getElementById('areaModal');
+ if(modal){modal.classList.remove('open');modal.setAttribute('aria-hidden','true')}
+ render();
+}
+function makeAreaModalDraggable(){
+ const modal=document.getElementById('areaModal'),head=document.getElementById('areaModalHeader');
+ if(!modal||!head||head.dataset.dragReady)return;
+ head.dataset.dragReady='1';
+ let drag=false,dx=0,dy=0;
+ head.addEventListener('mousedown',e=>{
+   if(e.target.closest('button'))return;
+   drag=true;dx=e.clientX-modal.offsetLeft;dy=e.clientY-modal.offsetTop;e.preventDefault();
+ });
+ document.addEventListener('mousemove',e=>{
+   if(!drag)return;modal.style.left=(e.clientX-dx)+'px';modal.style.top=(e.clientY-dy)+'px';
+ });
+ document.addEventListener('mouseup',()=>drag=false);
+}
+function renderAreaCalculator(){
+ const total=document.getElementById('areaTotalCard');
+ const planBox=document.getElementById('areaPlanList');
+ const catBox=document.getElementById('areaCategoryList');
+ const roomBox=document.getElementById('areaRoomList');
+ const roomCount=document.getElementById('areaRoomsCount');
+ if(!total||!planBox||!catBox||!roomBox)return;
+
+ total.textContent='Итого добавлено через ПКМ: '+areaManualTotal().toLocaleString('ru-RU',{minimumFractionDigits:1,maximumFractionDigits:2})+' м²';
+
+ planBox.innerHTML='';
+ plans.forEach(plan=>{
+   const rr=plan.id===currentPlanId?rooms:(plan.rooms||[]);
+   const sum=rr.filter(r=>areaIsHighlighted(plan.id,r)).reduce((a,r)=>a+areaRoomValue(r),0);
+   const d=document.createElement('div');d.className='area-item'+(areaPlanHasHighlight(plan)?' active':'');
+   d.innerHTML='<span>'+escapeHtml(plan.name||plan.id)+'</span><strong>'+sum.toLocaleString('ru-RU',{maximumFractionDigits:2})+' м²</strong>';
+   planBox.appendChild(d);
+ });
+
+ catBox.innerHTML='';
+ ['Туалеты','Классы','Рекреации'].forEach(cat=>{
+   const matches=allAreaEntries().filter(x=>areaCategoryOf(x.room.name)===cat&&!areaRemovedKeys.has(x.key));
+   const sum=matches.reduce((a,x)=>a+areaRoomValue(x.room),0);
+   const d=document.createElement('div');d.className='area-item'+(areaCategory===cat?' active':'');
+   const b=document.createElement('button');b.type='button';b.textContent=cat;
+   b.onclick=()=>{areaCategory=areaCategory===cat?'':cat;areaRemovedKeys.clear();renderAreaCalculator();render();};
+   const val=document.createElement('strong');val.textContent=sum.toLocaleString('ru-RU',{maximumFractionDigits:2})+' м²';
+   d.append(b,val);catBox.appendChild(d);
+ });
+
+ roomBox.innerHTML='';
+ const activeRoomEntries=areaActiveEntries();
+ if(roomCount)roomCount.textContent=String(activeRoomEntries.length);
+ activeRoomEntries.forEach(x=>{
+   const d=document.createElement('div');d.className='area-item';
+   const label=document.createElement('span');
+   label.textContent=(x.room.name||x.room.id)+' — '+areaRoomValue(x.room).toLocaleString('ru-RU',{maximumFractionDigits:2})+' м²';
+   const b=document.createElement('button');b.type='button';b.textContent='Убрать';
+   b.onclick=()=>{areaManualKeys.delete(x.key);areaRemovedKeys.add(x.key);renderAreaCalculator();render();};
+   d.append(label,b);roomBox.appendChild(d);
+ });
+}
+function areaSearchChanged(){
+ const inp=document.getElementById('areaSearchInput');areaSearchText=inp?inp.value:'';
+ areaRemovedKeys.clear();renderAreaCalculator();render();
+}
+function clearAreaSearch(){
+ const inp=document.getElementById('areaSearchInput');if(inp)inp.value='';
+ areaSearchText='';areaCategory='';areaRemovedKeys.clear();renderAreaCalculator();render();
+}
+function areaAddRoom(room){
+ const plan=plans.find(p=>p.id===currentPlanId);if(!plan||!room)return;
+ const key=areaKey(plan.id,room.id);areaManualKeys.add(key);areaRemovedKeys.delete(key);
+ renderAreaCalculator();render();
+}
+function areaRemoveRoom(room){
+ const plan=plans.find(p=>p.id===currentPlanId);if(!plan||!room)return;
+ const key=areaKey(plan.id,room.id);areaManualKeys.delete(key);areaRemovedKeys.add(key);
+ renderAreaCalculator();render();
+}
+
+
+function contextAreaAdd(){const room=getRoom(contextZoneId);if(room)areaAddRoom(room);hideZoneContextMenu();}
+function contextAreaRemove(){const room=getRoom(contextZoneId);if(room)areaRemoveRoom(room);hideZoneContextMenu();}
+
+</script>
+
+<div class="workload-window" id="workloadWindow" data-draggable="true">
+  <div class="workload-head modal-handle" title="Перетащите окно левой кнопкой мыши" onmousedown="startWorkloadDrag(event)"><h2>Нагрузка на сотрудника</h2><button type="button" onclick="closeWorkloadWindow()">×</button></div>
+  <div class="workload-body"><div class="emp-list" id="empList"></div><div class="load-content" id="loadContent"></div></div>
+</div>
+
+<div id="zoneContextMenu" class="zone-context-menu" role="menu" aria-hidden="true">
+  <button type="button" id="ctxUnloadBtn" onclick="contextUnloadZone()">Снять нагрузку</button>
+  <button type="button" id="ctxAssignBtn" onclick="contextAssignZone()">Назначить</button>
+  <button type="button" id="ctxAreaAddBtn" onclick="contextAreaAdd()" style="display:none">Добавить</button>
+  <button type="button" id="ctxAreaRemoveBtn" onclick="contextAreaRemove()" style="display:none">Убрать</button>
+</div>
+
+
+<div id="areaModal" class="area-modal" aria-hidden="true">
+  <div id="areaModalHeader" class="area-modal-header">
+    <span>Посчитать площадь</span>
+    <button type="button" onclick="closeAreaCalculator()">✕</button>
+  </div>
+  <div id="areaTotalCard" class="area-total-card">Итого добавлено через ПКМ: 0.0 м²</div>
+  <div class="area-modal-body">
+    <div class="area-left">
+      <div style="font-weight:800;margin-bottom:8px">Планы</div>
+      <div id="areaPlanList" class="area-plan-list"></div>
+    </div>
+    <div class="area-right">
+      <div class="area-search-row">
+        <input id="areaSearchInput" type="text" placeholder="Поиск по названию зоны" oninput="areaSearchChanged()">
+        <button type="button" onclick="clearAreaSearch()">Очистить поиск</button>
+      </div>
+      <div style="font-weight:800;margin:6px 0 8px">Категории</div>
+      <div id="areaCategoryList" class="area-category-list"></div>
+      <details id="areaRoomsDropdown" class="area-rooms-dropdown" open>
+        <summary>
+          <span>Помещения</span>
+          <span id="areaRoomsCount" class="area-rooms-count">0</span>
+        </summary>
+        <div id="areaRoomList" class="area-room-list" tabindex="0"></div>
+      </details>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
