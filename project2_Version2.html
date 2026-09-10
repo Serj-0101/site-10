@@ -5,28 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧹</text></svg>">
 <title>Расчёт нагрузки — МБОУ Лицей №35</title>
-<
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
 :root{--bg:#0f1117;--bg2:#161822;--card:#1c1f2e;--card-hover:#232740;--border:#2a2e42;--fg:#e8eaf0;--fg-muted:#8b8fa7;--accent:#00c9a7;--accent-dim:rgba(0,201,167,0.12);--danger:#ff6b6b;--danger-dim:rgba(255,107,107,0.12);--warn:#ffc857;--warn-dim:rgba(255,200,87,0.12);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--blue:#60a5fa;--blue-dim:rgba(96,165,250,0.12);--orange:#f97316;--orange-dim:rgba(249,115,22,0.12);--success:#5a9e5a;--success-dim:rgba(90,158,90,0.12);--radius:10px;--shadow:0 4px 24px rgba(0,0,0,0.3);--glow1:rgba(0,201,167,0.06);--glow2:rgba(167,139,250,0.05);--muted-text:#555a72;--hover-border:#3a3f58;--color-scheme:dark;}
 [data-theme="light"]{--bg:#f0f2f7;--bg2:#e4e7f0;--card:#ffffff;--card-hover:#f5f6fa;--border:#cdd1de;--fg:#1a1c2e;--fg-muted:#5d6178;--accent:#00a88a;--accent-dim:rgba(0,168,138,0.10);--danger:#e04545;--danger-dim:rgba(224,69,69,0.09);--warn:#d4a017;--warn-dim:rgba(212,160,23,0.10);--purple:#7c5fd3;--purple-dim:rgba(124,95,211,0.09);--blue:#3b82f6;--blue-dim:rgba(59,130,246,0.09);--orange:#e06010;--orange-dim:rgba(224,96,16,0.09);--success:#3d8c3d;--success-dim:rgba(61,140,61,0.09);--shadow:0 4px 24px rgba(0,0,0,0.07);--glow1:rgba(0,168,138,0.05);--glow2:rgba(124,95,211,0.04);--muted-text:#9ca0b5;--hover-border:#b5b9cc;--color-scheme:light;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;transition:background .35s,color .35s;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;min-height:100dvh;overflow:hidden;transition:background .35s,color .35s;}
 body::before{content:'';position:fixed;top:-40%;left:-20%;width:600px;height:600px;background:radial-gradient(circle,var(--glow1) 0%,transparent 70%);pointer-events:none;z-index:0;}
 body::after{content:'';position:fixed;bottom:-30%;right:-10%;width:500px;height:500px;background:radial-gradient(circle,var(--glow2) 0%,transparent 70%);pointer-events:none;z-index:0;}
-.app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1;}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh;min-width:0;position:relative;z-index:1;}
 
-.header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0;transition:background .35s,border-color .35s;gap:12px;}
+.header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px clamp(10px,2vw,20px);border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0;transition:background .35s,border-color .35s;gap:10px 12px;}
 .header-left{display:flex;align-items:center;gap:10px;min-width:0;}
 .header-logo{width:36px;height:36px;border-radius:8px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:16px;flex-shrink:0;}
 .header-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;white-space:nowrap;background:linear-gradient(135deg,var(--accent),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .header-sub{font-size:12px;color:var(--fg-muted);white-space:nowrap;}
-.tabs{display:flex;align-items:center;gap:2px;background:var(--bg2);border-radius:8px;padding:3px;border:1px solid var(--border);}
+.tabs{display:flex;align-items:center;gap:2px;max-width:100%;overflow-x:auto;background:var(--bg2);border-radius:8px;padding:3px;border:1px solid var(--border);}
 .tab-btn{padding:7px 18px;border:none;background:transparent;color:var(--fg-muted);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border-radius:6px;transition:all .2s;white-space:nowrap;}
 .tab-btn:hover{color:var(--fg);background:var(--card-hover);}
 .tab-btn.active{background:var(--accent-dim);color:var(--accent);}
-.header-right{display:flex;align-items:center;gap:8px;}
+.header-badges{display:flex;align-items:center;gap:8px;min-width:0;}
+.header-right{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;min-width:0;}
 .btn-icon{width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--fg-muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
 .btn-icon:hover{background:var(--card-hover);color:var(--accent);border-color:var(--accent);}
 
@@ -42,9 +42,9 @@ body::after{content:'';position:fixed;bottom:-30%;right:-10%;width:500px;height:
 
 @media(max-width:900px){.hdr-btn-label{display:none;}.hdr-btn{padding:0;width:36px;justify-content:center;}}
 
-.main-layout{display:flex;flex:1;overflow:hidden;}
+.main-layout{display:flex;flex:1;min-height:0;min-width:0;overflow:hidden;}
 
-.sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;transition:background .35s,border-color .35s;}
+.sidebar{width:clamp(220px,22vw,300px);flex-shrink:0;border-right:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;transition:background .35s,border-color .35s;}
 .sidebar-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .sidebar-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--fg-muted);}
 .btn-add-sm{width:28px;height:28px;border-radius:6px;border:none;background:var(--accent-dim);color:var(--accent);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
@@ -67,7 +67,7 @@ body::after{content:'';position:fixed;bottom:-30%;right:-10%;width:500px;height:
 .sb-item-del:hover{background:var(--danger-dim);color:var(--danger);}
 
 .content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
-.content-scroll{flex:1;overflow-y:auto;padding:20px;}
+.content-scroll{flex:1;min-height:0;min-width:0;overflow:auto;padding:clamp(8px,2vw,20px);}
 .content-scroll::-webkit-scrollbar{width:6px;}
 .content-scroll::-webkit-scrollbar-track{background:transparent;}
 .content-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
@@ -78,9 +78,10 @@ body::after{content:'';position:fixed;bottom:-30%;right:-10%;width:500px;height:
 .card-head i{color:var(--accent);font-size:14px;}
 .card-head span{font-weight:700;font-size:14px;}
 .card-head .card-head-right{margin-left:auto;display:flex;gap:6px;align-items:center;}
+.card-head .card-head-right{flex-wrap:wrap;justify-content:flex-end;}
 .card-body{padding:18px;}
 
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:10px;margin-bottom:16px;}
 .stat-tile{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;transition:transform .2s,border-color .3s,background .35s;}
 .stat-tile:hover{transform:translateY(-1px);border-color:var(--hover-border);}
 .stat-tile .st-num{font-size:26px;font-weight:900;line-height:1;margin-bottom:4px;transition:color .3s;}
@@ -92,6 +93,7 @@ body::after{content:'';position:fixed;bottom:-30%;right:-10%;width:500px;height:
 
 .form-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
 .form-row label{min-width:120px;text-align:right;font-size:13px;font-weight:600;color:var(--fg-muted);flex-shrink:0;}
+.form-row>div{min-width:0;max-width:100%;flex-wrap:wrap;}
 .input-cell{padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--fg);font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s,background .35s;width:100%;}
 .input-cell:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim);}
 .input-cell::placeholder{color:var(--muted-text);}
@@ -103,9 +105,47 @@ body::after{content:'';position:fixed;bottom:-30%;right:-10%;width:500px;height:
 .btn-accent:hover{background:rgba(0,201,167,.2);}
 .btn-danger{background:var(--danger-dim);color:var(--danger);border-color:rgba(255,107,107,.3);}
 .btn-danger:hover{background:rgba(255,107,107,.2);}
+.btn:disabled{opacity:.42;cursor:not-allowed;filter:grayscale(.35);}
 
 .table-wrap{overflow-x:auto;}
-table.wl{width:100%;border-collapse:collapse;}
+.table-compare{display:flex;align-items:flex-start;gap:14px;max-width:100%;overflow-x:auto;padding:14px;background:var(--bg2);}
+.table-panel{position:relative;flex:0 0 calc(50% - 7px);width:calc(50% - 7px);height:420px;min-width:300px;min-height:220px;overflow-x:auto;overflow-y:auto;resize:both;border:1px solid var(--border);border-radius:9px;background:var(--card);box-shadow:inset 0 0 0 1px rgba(255,255,255,.015);}
+.table-panel:focus{outline:2px solid var(--accent);outline-offset:2px;}
+.table-panel table.wl{min-width:620px;}
+.table-panel-title{position:sticky;left:0;top:0;z-index:4;display:flex;align-items:center;gap:7px;width:max-content;min-width:100%;height:38px;padding:0 12px;border-bottom:1px solid var(--border);background:var(--card);font-size:12px;font-weight:800;white-space:nowrap;}
+.table-panel-title i{color:var(--accent);}
+.table-panel table.wl th{top:38px;z-index:3;}
+.table-panel-readonly{border-style:dashed;background:color-mix(in srgb,var(--card) 92%,var(--blue) 8%);}
+.table-panel-readonly .table-panel-title{background:color-mix(in srgb,var(--card) 88%,var(--blue) 12%);color:var(--blue);}
+.readonly-badge{padding:3px 7px;border:1px solid color-mix(in srgb,var(--blue) 40%,transparent);border-radius:999px;background:var(--blue-dim);color:var(--blue);font-size:9px;font-weight:900;letter-spacing:.55px;text-transform:uppercase;}
+.etalon-empty td{height:120px;text-align:center!important;color:var(--fg-muted);font-style:italic;}
+.table-resize-hint{margin-left:auto;color:var(--fg-muted);font-size:10px;font-weight:600;}
+.etalon-created{color:var(--fg-muted);font-size:10px;font-weight:700;}
+.sync-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:999px;background:var(--purple-dim);color:var(--purple);font-size:9px;font-weight:900;letter-spacing:.35px;text-transform:uppercase;}
+.comparison-info{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:8px 14px;border-top:1px solid var(--border);background:var(--card);color:var(--fg-muted);font-size:11px;}
+.diff-legend{display:inline-flex;align-items:center;gap:5px;}
+.diff-dot{width:9px;height:9px;border-radius:50%;}
+.diff-dot.changed{background:var(--warn);}
+.diff-dot.added{background:var(--success);}
+.diff-dot.removed{background:var(--danger);}
+table.wl tr.diff-row-changed td{background:var(--warn-dim)!important;}
+table.wl tr.diff-row-added td{background:var(--success-dim)!important;}
+table.wl tr.diff-row-removed td{background:var(--danger-dim)!important;}
+table.wl td.diff-cell{box-shadow:inset 0 -3px 0 var(--warn);}
+table.wl tr.diff-row-added td:first-child{box-shadow:inset 4px 0 0 var(--success);}
+table.wl tr.diff-row-removed td:first-child{box-shadow:inset 4px 0 0 var(--danger);}
+.modal-box.modal-wide{max-width:1000px;}
+.diff-report-wrap{max-height:60vh;overflow:auto;border:1px solid var(--border);border-radius:8px;}
+.diff-report{width:100%;min-width:760px;border-collapse:collapse;}
+.diff-report th,.diff-report td{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;text-align:left;vertical-align:top;}
+.diff-report th{position:sticky;top:0;z-index:1;background:var(--bg2);color:var(--fg-muted);font-size:10px;text-transform:uppercase;letter-spacing:.4px;}
+.diff-status{display:inline-block;padding:3px 7px;border-radius:999px;font-size:9px;font-weight:900;text-transform:uppercase;}
+.diff-status.changed{background:var(--warn-dim);color:var(--warn);}
+.diff-status.added{background:var(--success-dim);color:var(--success);}
+.diff-status.removed{background:var(--danger-dim);color:var(--danger);}
+.diff-report-summary{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px;}
+.diff-count{padding:6px 10px;border:1px solid var(--border);border-radius:7px;background:var(--bg2);font-size:11px;font-weight:700;}
+table.wl{width:100%;min-width:520px;border-collapse:collapse;}
 table.wl th,table.wl td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);font-size:13px;}
 table.wl th{background:var(--bg2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--fg-muted);position:sticky;top:0;white-space:nowrap;transition:background .35s;}
 table.wl tr{transition:background .12s;}
@@ -128,7 +168,7 @@ table.wl .row-actions{width:36px;text-align:center;}
 .total-bar-num.pulse{animation:tpulse .4s ease;}
 @keyframes tpulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
 
-.paper{background:#fefcf8;color:#000;font-family:'Times New Roman',serif;padding:40px 50px;box-shadow:0 8px 40px rgba(0,0,0,.5);border-radius:4px;line-height:1.35;font-size:14pt;max-width:800px;margin:0 auto;}
+.paper{background:#fefcf8;color:#000;font-family:'Times New Roman',serif;padding:clamp(18px,5vw,50px);box-shadow:0 8px 40px rgba(0,0,0,.5);border-radius:4px;line-height:1.35;font-size:clamp(11pt,1.5vw,14pt);width:100%;max-width:800px;margin:0 auto;overflow-wrap:anywhere;}
 .paper h2{font-family:'Times New Roman',serif;font-size:14pt;text-align:center;margin:18px 0 8px;font-weight:700;}
 .paper .center{text-align:center;}
 .paper .right{text-align:right;}
@@ -143,12 +183,19 @@ table.wl .row-actions{width:36px;text-align:center;}
 .paper table.wt .hr td{background:#f0ede8;font-weight:600;}
 .paper table.wt .tr td{background:#e8f5e9;font-weight:700;}
 
-.paper-ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:16px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);}
+.paper-ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:16px;padding:clamp(10px,2vw,16px);background:var(--card);border:1px solid var(--border);border-radius:var(--radius);}
 .paper-ctrl label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--fg-muted);margin-bottom:4px;}
+.orders-toolbar{display:grid;grid-template-columns:minmax(180px,1fr) auto;gap:12px;align-items:end;width:100%;}
+.orders-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;}
+.btn-batch-orders{padding:9px 16px;background:linear-gradient(135deg,var(--accent),#0ea5e9);border-color:transparent;color:#fff;box-shadow:0 5px 18px rgba(0,201,167,.18);}
+.btn-batch-orders:hover{background:linear-gradient(135deg,#00b99b,#0284c7);color:#fff;transform:translateY(-1px);}
+.batch-order-status{grid-column:1/-1;min-height:18px;color:var(--fg-muted);font-size:11px;font-weight:700;}
+.settings-card{width:100%;max-width:760px;margin-top:14px;}
+.manage-content{width:100%;max-width:900px;margin:0 auto;}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:9998;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
 .modal-overlay.active{opacity:1;pointer-events:all;}
-.modal-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 28px;max-width:520px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:scale(.9);transition:transform .25s,background .35s,border-color .35s;}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(16px,3vw,28px);max-width:520px;width:min(90%,1000px);max-height:90dvh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:scale(.9);transition:transform .25s,background .35s,border-color .35s;}
 .modal-overlay.active .modal-box{transform:scale(1);}
 .modal-box h3{font-size:17px;font-weight:800;margin-bottom:12px;}
 .modal-box .form-row{margin-bottom:12px;}
@@ -161,7 +208,7 @@ table.wl .row-actions{width:36px;text-align:center;}
 .modal-confirm-accent{background:var(--accent);color:#fff;}
 .modal-confirm-accent:hover{opacity:.9;}
 
-.toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+.toast-container{position:fixed;top:clamp(8px,2vw,20px);right:clamp(8px,2vw,20px);left:auto;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:calc(100vw - 16px);}
 .toast{padding:12px 18px;border-radius:10px;font-size:13px;font-weight:600;font-family:'Nunito',sans-serif;color:#fff;box-shadow:0 8px 30px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px;animation:toastIn .3s ease;max-width:440px;}
 .toast.success{background:linear-gradient(135deg,#00a88a,#00c9a7);}
 .toast.error{background:linear-gradient(135deg,#d63031,#ff6b6b);}
@@ -176,25 +223,69 @@ table.wl .row-actions{width:36px;text-align:center;}
   #tabCalc,#tabManage{display:none!important}
   #tabTpl{display:flex!important}
   .paper{box-shadow:none!important;margin:0!important;padding:15mm 20mm!important;max-width:100%!important}
-  body{background:#fff!important}
+  body{background:#fff!important;overflow:visible!important}
   body::before,body::after{display:none}
   .total-bar,.header,.sidebar{display:none!important}
   .content{display:block!important;overflow:visible!important}
   .content-scroll{overflow:visible!important;padding:0!important}
 }
+@media(max-width:1200px){
+  .header-left{order:1;}
+  .tabs{order:2;}
+  .header-badges{order:3;margin-left:auto;}
+  .header-right{order:4;width:100%;}
+}
+@media(max-width:900px){
+  .header{align-items:flex-start;}
+  .header-left{flex:1 1 auto;}
+  .tabs{order:4;width:100%;justify-content:center;}
+  .header-badges{order:2;}
+  .header-right{order:3;width:auto;}
+  .hdr-btn-label{display:none;}
+  .hdr-btn{padding:0;width:36px;justify-content:center;}
+  .table-panel{min-width:min(340px,85vw);}
+}
 @media(max-width:768px){
-  .sidebar{width:240px;}
-  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .sidebar{width:min(280px,86vw);}
   .header-sub{display:none;}
-  .paper{padding:20px;font-size:11px;}
   .form-row{flex-direction:column;align-items:stretch;}
   .form-row label{text-align:left;min-width:auto;}
-  .paper-ctrl{flex-direction:column;}
+  .orders-toolbar{grid-template-columns:1fr;}
+  .orders-actions{justify-content:stretch;}
+  .orders-actions .btn{flex:1 1 210px;justify-content:center;}
+  .table-compare{gap:10px;}
+  .table-panel{flex-basis:340px;width:340px;}
+  .total-bar{flex-wrap:wrap;gap:8px;}
+  .total-bar-num{font-size:clamp(20px,7vw,28px);}
+}
+@media(max-width:700px){
+  .table-compare{display:grid;grid-template-columns:minmax(0,1fr);overflow:visible;}
+  .table-panel{width:100%!important;max-width:100%;min-width:0;flex-basis:auto!important;resize:vertical;}
+  .table-panel table.wl{min-width:560px;}
 }
 @media(max-width:600px){
   .sidebar{position:fixed;left:-280px;top:0;bottom:0;z-index:100;transition:left .3s;box-shadow:4px 0 20px rgba(0,0,0,.4);}
   .sidebar.open{left:0;}
   .mobile-menu-btn{display:flex!important;}
+  .header-title{font-size:17px;}
+  .header-logo{width:32px;height:32px;}
+  .header-badges{width:100%;order:3;}
+  .hdr-badge{flex:1;justify-content:center;padding:5px 7px;}
+  .header-right{width:100%;order:2;justify-content:flex-end;}
+  .tabs{order:4;}
+  .card-head{align-items:flex-start;flex-wrap:wrap;padding:11px 12px;}
+  .card-head .card-head-right{width:100%;margin-left:0;justify-content:stretch;}
+  .card-head .card-head-right .btn{flex:1 1 140px;justify-content:center;}
+  .card-body{padding:12px;}
+  .modal-actions{flex-wrap:wrap;}
+  .modal-actions button{flex:1 1 130px;}
+  .toast-container{left:8px;right:8px;}
+  .toast{max-width:none;width:100%;}
+}
+@media(min-width:1700px){
+  .content-scroll{padding:24px clamp(24px,4vw,72px);}
+  .manage-content{max-width:1100px;}
+  .paper{max-width:900px;}
 }
 .mobile-menu-btn{display:none;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--fg-muted);font-size:14px;cursor:pointer;align-items:center;justify-content:center;}
 @keyframes rowIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
@@ -216,7 +307,7 @@ tr.removing{animation:rowOut .3s ease forwards;pointer-events:none;}
     </div>
     <div class="tabs" id="tabs">
       <button class="tab-btn active" data-tab="calc"><i class="fa-solid fa-calculator" style="margin-right:5px;font-size:11px"></i>Расчёт</button>
-      <button class="tab-btn" data-tab="tpl"><i class="fa-solid fa-file-lines" style="margin-right:5px;font-size:11px"></i>Приказ</button>
+      <button class="tab-btn" data-tab="tpl"><i class="fa-solid fa-file-lines" style="margin-right:5px;font-size:11px"></i>Приказы</button>
       <button class="tab-btn" data-tab="manage"><i class="fa-solid fa-sliders" style="margin-right:5px;font-size:11px"></i>Управление</button>
     </div>
     <div class="header-badges">
@@ -253,16 +344,20 @@ tr.removing{animation:rowOut .3s ease forwards;pointer-events:none;}
   </div>
 
   <!-- Tab: Template -->
-  <div class="content" id="tabTpl" style="display:none;overflow-y:auto;">
+  <div class="content" id="tabTpl" style="display:none;">
     <div class="content-scroll">
       <div class="paper-ctrl no-print">
-        <div style="flex:1;min-width:160px"><label>Сотрудник</label><select id="tplEmp" class="input-cell"></select></div>
-        <div style="display:flex;gap:6px;align-items:flex-end;padding-bottom:1px">
-          <button class="btn btn-accent" onclick="fillDocx()" title="Сформировать приказ из шаблона (без помощника)"><i class="fa-solid fa-file-word"></i>Сформировать приказ</button>
+        <div class="orders-toolbar">
+          <div><label for="tplEmp">Сотрудник</label><select id="tplEmp" class="input-cell"></select></div>
+          <div class="orders-actions">
+            <button type="button" class="btn btn-accent" onclick="fillDocx()" title="Сформировать приказ для выбранного сотрудника"><i class="fa-solid fa-file-word"></i>Сформировать приказ</button>
+            <button type="button" class="btn btn-batch-orders" id="btnFillAllDocx" onclick="fillAllDocx()" aria-label="Сформировать приказы для всех сотрудников" title="Сформировать приказы для всех сотрудников"><i class="fa-solid fa-layer-group"></i><span>Сформировать все приказы</span></button>
+          </div>
+          <div class="batch-order-status" id="batchOrderStatus" role="status" aria-live="polite"></div>
         </div>
       </div>
-      <div class="card no-print" style="margin-top:14px;max-width:760px">
-        <div class="card-head"><i class="fa-solid fa-gear"></i><span>Приказ</span></div>
+      <div class="card no-print settings-card">
+        <div class="card-head"><i class="fa-solid fa-gear"></i><span>Приказы</span></div>
         <div class="card-body">
           <div class="form-row">
             <label>Укажи Шаблон</label>
@@ -284,8 +379,8 @@ tr.removing{animation:rowOut .3s ease forwards;pointer-events:none;}
     </div>
   </div>
   <!-- Tab: Manage -->
-  <div class="content" id="tabManage" style="display:none;overflow-y:auto;">
-    <div class="content-scroll" style="max-width:700px;margin:0 auto;">
+  <div class="content" id="tabManage" style="display:none;">
+    <div class="content-scroll manage-content">
       <div class="card"><div class="card-head"><i class="fa-solid fa-file-import"></i><span>Импорт / Экспорт</span></div>
         <div class="card-body manage-section">
           <p style="font-size:13px;color:var(--fg-muted);line-height:1.6;margin-bottom:14px">Загрузите Excel-файл с двумя листами: Лист1 — площади помещений, Лист2 — справочник сотрудников (ФИО, ФИО(Д1), ФИО (Д), ставка, допставка).</p>
@@ -301,7 +396,7 @@ tr.removing{animation:rowOut .3s ease forwards;pointer-events:none;}
       <div class="card"><div class="card-head"><i class="fa-solid fa-triangle-exclamation" style="color:var(--danger)"></i><span style="color:var(--danger)">Опасная зона</span></div>
         <div class="card-body manage-section">
           <p style="font-size:13px;color:var(--fg-muted);margin-bottom:14px">Удалить всех сотрудников и все сохранённые данные. Это действие нельзя отменить.</p>
-          <button class="btn" onclick="saveData();toast(''Данные сохранены'',''success'')" style="padding:10px 20px;font-size:14px"><i class="fa-solid fa-floppy-disk"></i>Сохранить</button> <button class="btn btn-danger" onclick="confirmClearAll()" style="padding:10px 20px;font-size:14px"><i class="fa-solid fa-trash-can"></i>Очистить все данные</button>
+          <button class="btn" onclick="saveData();toast('Данные сохранены','success')" style="padding:10px 20px;font-size:14px"><i class="fa-solid fa-floppy-disk"></i>Сохранить</button> <button class="btn btn-danger" onclick="confirmClearAll()" style="padding:10px 20px;font-size:14px"><i class="fa-solid fa-trash-can"></i>Очистить все данные</button>
         </div>
       </div>
     </div>
@@ -321,7 +416,7 @@ tr.removing{animation:rowOut .3s ease forwards;pointer-events:none;}
 /* ===== STORAGE ===== */
 var DATA_KEY='pfhg-data-v1',THEME_KEY='pfhg-theme';
 function saveData(){try{localStorage.setItem(DATA_KEY,JSON.stringify(S));}catch(e){}}
-function loadData(){try{var d=localStorage.getItem(DATA_KEY);if(d){var p=JSON.parse(d);S.emps=(p.emps||[]).filter(function(e){return e&&e.fio&&String(e.fio).trim();});S.nextId=p.nextId||14;S.selId=p.selId&&S.emps.find(function(e){return e.id===p.selId})?p.selId:(S.emps[0]?S.emps[0].id:null);S.cfg=p.cfg||S.cfg;S.tplDate1=p.tplDate1||'';S.tplDate2=p.tplDate2||'';S.tplNum=p.tplNum||'';S.tplEmpId=p.tplEmpId&&S.emps.find(function(e){return e.id===p.tplEmpId})?p.tplEmpId:(S.emps[0]?S.emps[0].id:null);return true;}}catch(e){}return false;}
+function loadData(){try{var d=localStorage.getItem(DATA_KEY);if(d){var p=JSON.parse(d);S.emps=(p.emps||[]).filter(function(e){return e&&e.fio&&String(e.fio).trim();});S.etalonData=p.etalonData&&typeof p.etalonData==='object'?p.etalonData:{};S.etalonMeta=p.etalonMeta&&typeof p.etalonMeta==='object'?p.etalonMeta:{};S.nextId=p.nextId||14;S.selId=p.selId&&S.emps.find(function(e){return e.id===p.selId})?p.selId:(S.emps[0]?S.emps[0].id:null);S.cfg=p.cfg||S.cfg;S.tplDate1=p.tplDate1||'';S.tplDate2=p.tplDate2||'';S.tplNum=p.tplNum||'';S.tplEmpId=p.tplEmpId&&S.emps.find(function(e){return e.id===p.tplEmpId})?p.tplEmpId:(S.emps[0]?S.emps[0].id:null);return true;}}catch(e){}return false;}
 
 /* ===== DEMO DATA ===== */
 var DEMO_S1=[
@@ -427,16 +522,81 @@ var DEMO_S2=[
 ];
 
 /* ===== STATE ===== */
-var S={emps:[],selId:null,tab:'calc',nextId:1,
+var S={emps:[],etalonData:{},etalonMeta:{},selId:null,tab:'calc',nextId:1,
   cfg:{baseArea:500,salaryRate:18810,yearS:'01.09.2026',yearE:'31.08.2027',year:'2026-2027',reqArea:0},
   tplEmpId:null,tplDate1:'',tplDate2:'',tplNum:''};
 var _prevTotal=0;
+var TABLE_VIEW_SIZES={main:null,etalon:null},TABLE_RESIZE_OBSERVER=null;
 
 /* ===== UTILS ===== */
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmt(n){var s=parseFloat(n)||0;return s%1===0?s.toString():s.toFixed(2).replace('.',',');}
 function fmt2(n){var s=fmt(n);if(s.indexOf(',')!==-1)s=s.replace(/0+$/,'').replace(/[.,]$/,'');return s;}
 function fmtFull(n){var s=(parseFloat(n)||0).toFixed(2);var p=s.split('.');p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');return p.join(',');}
+function cloneRows(rows){return JSON.parse(JSON.stringify(rows||[]));}
+function hasEtalon(empId){return Object.prototype.hasOwnProperty.call(S.etalonData,String(empId));}
+function rowType(r){return!r?'':(r.isTotal?'total':(r.isHeader?'header':'room'));}
+function rowKey(r){return rowType(r)+'|'+String(r&&r.text||'').trim().toLowerCase();}
+function sameArea(a,b){
+  if(a===null||a===undefined)return b===null||b===undefined;
+  if(b===null||b===undefined)return false;
+  return Math.abs((parseFloat(a)||0)-(parseFloat(b)||0))<0.001;
+}
+/* Выравниваем неизменённые строки по LCS, а промежутки классифицируем
+   как изменения, добавления или удаления без каскада ложных отличий. */
+function compareRows(current,etalon){
+  current=current||[];etalon=etalon||[];
+  var n=current.length,m=etalon.length,dp=[],i,j;
+  for(i=0;i<=n;i++){dp[i]=[];for(j=0;j<=m;j++)dp[i][j]=0;}
+  for(i=n-1;i>=0;i--)for(j=m-1;j>=0;j--)dp[i][j]=rowKey(current[i])===rowKey(etalon[j])?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+  var anchors=[],ci=0,ei=0;
+  while(ci<n&&ei<m){
+    if(rowKey(current[ci])===rowKey(etalon[ei])){anchors.push([ci,ei]);ci++;ei++;}
+    else if(dp[ci+1][ei]>=dp[ci][ei+1])ci++;else ei++;
+  }
+  anchors.push([n,m]);
+  var out=[],pc=0,pe=0;
+  anchors.forEach(function(a){
+    var cEnd=a[0],eEnd=a[1],cLen=cEnd-pc,eLen=eEnd-pe,pairs=Math.min(cLen,eLen),k;
+    for(k=0;k<pairs;k++)out.push(makeDiff(current[pc+k],etalon[pe+k],pc+k,pe+k));
+    for(k=pairs;k<cLen;k++)out.push({status:'added',current:current[pc+k],etalon:null,currentIndex:pc+k,etalonIndex:null,textChanged:true,areaChanged:true,typeChanged:false});
+    for(k=pairs;k<eLen;k++)out.push({status:'removed',current:null,etalon:etalon[pe+k],currentIndex:null,etalonIndex:pe+k,textChanged:true,areaChanged:true,typeChanged:false});
+    if(cEnd<n&&eEnd<m)out.push(makeDiff(current[cEnd],etalon[eEnd],cEnd,eEnd));
+    pc=cEnd+1;pe=eEnd+1;
+  });
+  return out.filter(function(d){return d.status!=='same';});
+}
+function makeDiff(c,e,ci,ei){
+  var typeChanged=rowType(c)!==rowType(e),textChanged=String(c&&c.text||'')!==String(e&&e.text||''),areaChanged=!sameArea(c&&c.area,e&&e.area);
+  return{status:(typeChanged||textChanged||areaChanged)?'changed':'same',current:c,etalon:e,currentIndex:ci,etalonIndex:ei,textChanged:textChanged,areaChanged:areaChanged,typeChanged:typeChanged};
+}
+function diffMaps(diffs){
+  var c={},e={};diffs.forEach(function(d){if(d.currentIndex!==null)c[d.currentIndex]=d;if(d.etalonIndex!==null)e[d.etalonIndex]=d;});return{current:c,etalon:e};
+}
+function diffRowClass(d,side){
+  if(!d)return'';
+  if(d.status==='changed')return' diff-row-changed';
+  if(d.status==='added'&&side==='current')return' diff-row-added';
+  if(d.status==='removed'&&side==='etalon')return' diff-row-removed';
+  return'';
+}
+function formatEtalonDate(iso){
+  if(!iso)return'дата создания неизвестна';
+  var d=new Date(iso);if(isNaN(d))return'дата создания неизвестна';
+  return new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(d);
+}
+function tablePanelStyle(key){var s=TABLE_VIEW_SIZES[key];return s?' style="width:'+s.width+'px;height:'+s.height+'px;flex-basis:'+s.width+'px"':'';}
+function observeTablePanelSizes(){
+  if(typeof ResizeObserver==='undefined')return;
+  if(TABLE_RESIZE_OBSERVER)TABLE_RESIZE_OBSERVER.disconnect();
+  TABLE_RESIZE_OBSERVER=new ResizeObserver(function(entries){
+    entries.forEach(function(entry){var key=entry.target.dataset.tablePanel,r=entry.target.getBoundingClientRect();if(key&&r)TABLE_VIEW_SIZES[key]={width:Math.round(r.width),height:Math.round(r.height)};});
+  });
+  ['main','etalon'].forEach(function(key){
+    var el=document.querySelector('[data-table-panel="'+key+'"]');if(!el)return;
+    TABLE_RESIZE_OBSERVER.observe(el);
+  });
+}
 function getEmp(id){return S.emps.find(function(e){return e.id===id});}
 function getTotal(emp){return emp.rows.filter(function(r){return!r.isHeader&&!r.isTotal}).reduce(function(s,r){return s+(r.area||0)},0);}
 function getDoppl(emp){var st=emp.stavka+(emp.dopStavka||0);var base=st*S.cfg.baseArea;return Math.max(0,getTotal(emp)-base);}
@@ -473,9 +633,71 @@ function toggleMobileSidebar(){document.getElementById('sidebar').classList.togg
 function toast(msg,type){type=type||'info';var icons={success:'fa-circle-check',error:'fa-circle-xmark',info:'fa-circle-info',warn:'fa-triangle-exclamation'};var d=document.createElement('div');d.className='toast '+type;d.innerHTML='<i class="fa-solid '+(icons[type]||icons.info)+'"></i><span>'+esc(msg).replace(/\n/g,'<br>')+'</span>';document.getElementById('toastContainer').appendChild(d);setTimeout(function(){d.classList.add('out');setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},300);},3500);}
 
 /* ===== MODAL ===== */
-function openModal(html){document.getElementById('modalBox').innerHTML=html;document.getElementById('modalOverlay').classList.add('active');}
+function openModal(html,wide){var box=document.getElementById('modalBox');box.classList.toggle('modal-wide',!!wide);box.innerHTML=html;document.getElementById('modalOverlay').classList.add('active');}
 function closeModal(){document.getElementById('modalOverlay').classList.remove('active');}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+
+function setupSynchronizedScroll(){
+  var main=document.querySelector('[data-table-panel="main"]'),etalon=document.querySelector('[data-table-panel="etalon"]');
+  if(!main||!etalon)return;
+  var locked=false;
+  function sync(source,target){
+    if(locked)return;locked=true;
+    var sx=Math.max(0,source.scrollWidth-source.clientWidth),sy=Math.max(0,source.scrollHeight-source.clientHeight);
+    var tx=Math.max(0,target.scrollWidth-target.clientWidth),ty=Math.max(0,target.scrollHeight-target.clientHeight);
+    target.scrollLeft=sx?source.scrollLeft/sx*tx:0;
+    target.scrollTop=sy?source.scrollTop/sy*ty:0;
+    requestAnimationFrame(function(){locked=false;});
+  }
+  main.addEventListener('scroll',function(){sync(main,etalon);},{passive:true});
+  etalon.addEventListener('scroll',function(){sync(etalon,main);},{passive:true});
+}
+
+function saveCurrentAsEtalon(emp){
+  S.etalonData[String(emp.id)]=cloneRows(emp.rows);
+  S.etalonMeta[String(emp.id)]={createdAt:new Date().toISOString()};
+  closeModal();saveData();renderMain();
+  toast('Текущая таблица скопирована в эталон','success');
+}
+function requestSaveToEtalon(){
+  var emp=getEmp(S.selId);if(!emp)return;
+  if(!hasEtalon(emp.id)){saveCurrentAsEtalon(emp);return;}
+  openModal('<h3>Перезаписать эталон?</h3>'+
+    '<p style="color:var(--fg-muted)">Существующий эталон от <strong style="color:var(--fg)">'+esc(formatEtalonDate((S.etalonMeta[String(emp.id)]||{}).createdAt))+'</strong> будет заменён текущим состоянием основной таблицы.</p>'+
+    '<div class="modal-actions"><button class="modal-cancel" onclick="closeModal()">Отмена</button><button class="modal-confirm-accent" id="confirmEtalonOverwrite">Перезаписать</button></div>');
+  setTimeout(function(){var b=document.getElementById('confirmEtalonOverwrite');if(b){b.focus();b.addEventListener('click',function(){saveCurrentAsEtalon(emp);});}},0);
+}
+function requestClearEtalon(){
+  var emp=getEmp(S.selId);if(!emp||!hasEtalon(emp.id))return;
+  openModal('<h3>Очистить эталон?</h3>'+
+    '<p style="color:var(--fg-muted)">Эталон сотрудника <strong style="color:var(--fg)">'+esc(emp.fio)+'</strong> будет удалён.</p>'+
+    '<div class="modal-actions"><button class="modal-cancel" onclick="closeModal()">Отмена</button><button class="modal-confirm" id="confirmEtalonClear">Очистить</button></div>');
+  setTimeout(function(){var b=document.getElementById('confirmEtalonClear');if(b){b.focus();b.addEventListener('click',function(){delete S.etalonData[String(emp.id)];delete S.etalonMeta[String(emp.id)];closeModal();saveData();renderMain();toast('Эталон очищен','info');});}},0);
+}
+function rowDisplay(r){
+  if(!r)return'<span style="color:var(--muted-text)">—</span>';
+  return'<strong>'+esc(r.text||'Без названия')+'</strong>'+(r.isHeader?' <span style="color:var(--fg-muted)">(раздел)</span>':'<br><span style="color:var(--fg-muted)">Площадь: '+fmt(r.area)+' м²</span>');
+}
+function openComparisonReport(){
+  var emp=getEmp(S.selId);if(!emp||!hasEtalon(emp.id)){toast('Сначала создайте эталон','warn');return;}
+  var etalon=S.etalonData[String(emp.id)]||[],diffs=compareRows(emp.rows,etalon);
+  var counts={changed:0,added:0,removed:0};diffs.forEach(function(d){counts[d.status]++;});
+  var h='<h3>Отчёт о различиях</h3><p style="color:var(--fg-muted);font-size:12px">Сотрудник: <strong style="color:var(--fg)">'+esc(emp.fio)+'</strong> · Эталон создан: '+esc(formatEtalonDate((S.etalonMeta[String(emp.id)]||{}).createdAt))+'</p>';
+  h+='<div class="diff-report-summary"><span class="diff-count">Изменено: '+counts.changed+'</span><span class="diff-count">Добавлено: '+counts.added+'</span><span class="diff-count">Удалено: '+counts.removed+'</span></div>';
+  if(diffs.length===0)h+='<div style="padding:26px;text-align:center;border:1px solid var(--border);border-radius:8px;color:var(--success)"><i class="fa-solid fa-circle-check" style="margin-right:7px"></i>Различий не найдено</div>';
+  else{
+    h+='<div class="diff-report-wrap"><table class="diff-report" aria-label="Отчёт о различиях основной и эталонной таблиц"><thead><tr><th>Статус</th><th>Строка эталона</th><th>Текущая строка</th><th>Различия</th></tr></thead><tbody>';
+    diffs.forEach(function(d){
+      var label=d.status==='changed'?'Изменено':(d.status==='added'?'Добавлено':'Удалено'),fields=[];
+      if(d.status==='changed'){if(d.typeChanged)fields.push('тип строки');if(d.textChanged)fields.push('название');if(d.areaChanged)fields.push('площадь');}
+      else fields.push(d.status==='added'?'добавлена новая строка':'строка отсутствует в основной таблице');
+      h+='<tr><td><span class="diff-status '+d.status+'">'+label+'</span></td><td>'+rowDisplay(d.etalon)+'</td><td>'+rowDisplay(d.current)+'</td><td>'+esc(fields.join(', ')||label.toLowerCase())+'</td></tr>';
+    });
+    h+='</tbody></table></div>';
+  }
+  h+='<div class="modal-actions"><button class="modal-cancel" onclick="closeModal()">Закрыть</button></div>';
+  openModal(h,true);
+}
 
 /* ===== RECALC ===== */
 function recalcEmp(emp){var total=getTotal(emp);var tr=emp.rows.find(function(r){return r.isTotal});if(tr)tr.area=parseFloat(total.toFixed(2));}
@@ -516,6 +738,11 @@ document.getElementById('sidebarList').addEventListener('click',function(e){
 function renderMain(){
   var emp=getEmp(S.selId);
   if(!emp){document.getElementById('mainContent').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--muted-text)"><i class="fa-solid fa-hand-pointer" style="font-size:36px;display:block;margin-bottom:12px;opacity:.3"></i>Выберите сотрудника в списке слева</div>';return;}
+  /* Состояние сравнения: текущие строки и независимый глубокий снимок. */
+  var currentTableData=emp.rows;
+  var etalonData=S.etalonData[String(emp.id)]||[];
+  var etalonMeta=S.etalonMeta[String(emp.id)]||{},etalonExists=hasEtalon(emp.id);
+  var differences=etalonExists?compareRows(currentTableData,etalonData):[],maps=diffMaps(differences);
   var total=getTotal(emp),doppl=getDoppl(emp),proc=getProc(emp),oklad=getOklad(emp),dopOk=getDopOklad(emp),baseArea=emp.stavka*S.cfg.baseArea;
   var h='';
   /* Сводные карточки по сотруднику */
@@ -526,16 +753,30 @@ function renderMain(){
     +'<div class="stat-tile st-orange"><div class="st-num" id="stOklad">0</div><div class="st-label">Оклад + доп.</div></div>'
     +'</div>';
   h+='<div class="card"><div class="card-head" style="cursor:pointer" onclick="var b=this.querySelector(\'.spoiler-arrow\');var c=this.nextElementSibling;if(c.style.display===\'none\'){c.style.display=\'\';b.style.transform=\'rotate(90deg)\'}else{c.style.display=\'none\';b.style.transform=\'\'}"><i class="fa-solid fa-user"></i><span>'+esc(emp.fio)+'</span><i class="fa-solid fa-chevron-right spoiler-arrow" style="margin-left:auto;font-size:11px;color:var(--fg-muted);transition:transform .2s;transform:rotate(90deg)"></i><div class="card-head-right"><button class="btn btn-danger" onclick="event.stopPropagation();removeEmp(S.selId)"><i class="fa-solid fa-trash-can"></i>Удалить</button></div></div><div class="card-body"><div class="form-row"><label>ФИО</label><input class="input-cell" value="'+esc(emp.fio)+'" data-field="fio"></div><div class="form-row"><label>ФИО (Д1)</label><input class="input-cell" value="'+esc(emp.fioD1)+'" data-field="fioD1"></div><div class="form-row"><label>ФИО (Д)</label><input class="input-cell" value="'+esc(emp.fioD)+'" data-field="fioD"></div><div class="form-row"><label>Ставка</label><input type="number" step="0.25" min="0.25" class="input-cell input-sm" value="'+emp.stavka+'" data-field="stavka"></div><div class="form-row"><label>Допставка</label><input type="number" step="0.25" min="0" class="input-cell input-sm" value="'+(emp.dopStavka||'')+'" data-field="dopStavka" placeholder="—"></div><div class="form-row"><label>Выслуга</label><div style="display:flex;gap:6px;align-items:center"><label style="font-size:12px;white-space:nowrap"><input type="radio" name="vysluga" value="0" data-field="vysluga"> нет выслуги</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="vysluga" value="5" data-field="vysluga" '+(emp.vysluga===5?'checked':'')+'> от 5 до 10 лет</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="vysluga" value="10" data-field="vysluga" '+(emp.vysluga===10?'checked':'')+'> от 10 до 20 лет</label><label style="font-size:12px;white-space:nowrap"><input type="radio" name="vysluga" value="15" data-field="vysluga" '+(emp.vysluga===15?'checked':'')+'> от 20 лет</label></div></div><div class="form-row"><label>Факт.выслуга, лет</label><input type="number" step="0.5" class="input-cell input-sm" value="'+(emp.faktVysluga||'')+'"  data-field="faktVysluga" placeholder="—"></div><div class="form-row"><label>Выс.проц</label><input class="input-cell input-sm" value="'+(emp.vyslugaProc!=null?emp.vyslugaProc:'')+'"  data-field="vyslugaProc" style="background:var(--bg-secondary);opacity:.7"></div></div></div>';
-  h+='<div class="card"><div class="card-head"><i class="fa-solid fa-list"></i><span>Участок работы</span><div class="card-head-right"><button class="btn btn-accent" id="btnAddRoom"><i class="fa-solid fa-plus"></i>Помещение</button><button class="btn" id="btnAddSection"><i class="fa-solid fa-plus"></i>Раздел</button></div></div>';
-  h+='<div class="table-wrap"><table class="wl"><thead><tr><th class="row-num">№</th><th>Помещение</th><th class="row-area">Площадь, м²</th><th class="row-actions"></th></tr></thead><tbody id="wlBody">';
+  h+='<div class="card"><div class="card-head"><i class="fa-solid fa-list"></i><span>Участок работы</span><div class="card-head-right"><button type="button" class="btn btn-accent" id="btnToEtalon" aria-label="Скопировать основную таблицу в эталон" title="Скопировать текущее состояние основной таблицы в эталон"><i class="fa-solid fa-copy"></i>В эталон</button><button type="button" class="btn" id="btnCompare" aria-label="Открыть отчёт о различиях"'+(!etalonExists?' disabled aria-disabled="true"':'')+'><i class="fa-solid fa-code-compare"></i>Сравнить</button><button type="button" class="btn btn-danger" id="btnClearEtalon" aria-label="Очистить эталонную таблицу"'+(!etalonExists?' disabled aria-disabled="true"':'')+'><i class="fa-solid fa-eraser"></i>Очистить эталон</button><button type="button" class="btn btn-accent" id="btnAddRoom"><i class="fa-solid fa-plus"></i>Помещение</button><button type="button" class="btn" id="btnAddSection"><i class="fa-solid fa-plus"></i>Раздел</button></div></div>';
+  h+='<div class="table-compare" aria-label="Сравнение основной и эталонной таблиц">';
+  h+='<section class="table-panel" data-table-panel="main" tabindex="0" role="region" aria-label="Основная редактируемая таблица участка работы"'+tablePanelStyle('main')+'><div class="table-panel-title"><i class="fa-solid fa-pen-to-square"></i>Основная <span class="table-resize-hint">↘ изменить размер</span></div><table class="wl" aria-label="Основная таблица участка работы"><thead><tr><th class="row-num">№</th><th>Помещение</th><th class="row-area">Площадь, м²</th><th class="row-actions"></th></tr></thead><tbody id="wlBody">';
   var num=0;
-  emp.rows.forEach(function(r,i){
-    if(r.isTotal){h+='<tr class="row-total"><td></td><td>'+esc(r.text)+'</td><td style="text-align:right">'+fmt(r.area)+'</td><td></td></tr>';}
-    else if(r.isHeader){h+='<tr class="row-header"><td></td><td><input class="cell-edit" data-idx="'+i+'" data-f="text" value="'+esc(r.text)+'"></td><td></td><td style="text-align:center"><button class="btn-row-del" data-delrow="'+i+'" title="Удалить"><i class="fa-solid fa-xmark"></i></button></td></tr>';}
-    else{num++;h+='<tr><td class="row-num">'+num+'</td><td><input class="cell-edit" data-idx="'+i+'" data-f="text" value="'+esc(r.text)+'"></td><td class="row-area"><input type="number" step="0.01" class="cell-num" data-idx="'+i+'" data-f="area" value="'+r.area+'"></td><td class="row-actions"><button class="btn-row-del" data-delrow="'+i+'" title="Удалить"><i class="fa-solid fa-xmark"></i></button></td></tr>';}
+  currentTableData.forEach(function(r,i){
+    var d=maps.current[i],rc=diffRowClass(d,'current'),tc=d&&d.status==='changed'&&(d.textChanged||d.typeChanged)?' diff-cell':'',ac=d&&d.status==='changed'&&d.areaChanged?' diff-cell':'';
+    if(r.isTotal){h+='<tr class="row-total'+rc+'"><td></td><td class="'+tc+'">'+esc(r.text)+'</td><td class="'+ac+'" style="text-align:right">'+fmt(r.area)+'</td><td></td></tr>';}
+    else if(r.isHeader){h+='<tr class="row-header'+rc+'"><td></td><td class="'+tc+'"><input class="cell-edit" data-idx="'+i+'" data-f="text" value="'+esc(r.text)+'"></td><td class="'+ac+'"></td><td style="text-align:center"><button class="btn-row-del" data-delrow="'+i+'" title="Удалить"><i class="fa-solid fa-xmark"></i></button></td></tr>';}
+    else{num++;h+='<tr class="'+rc+'"><td class="row-num">'+num+'</td><td class="'+tc+'"><input class="cell-edit" data-idx="'+i+'" data-f="text" value="'+esc(r.text)+'"></td><td class="row-area'+ac+'"><input type="number" step="0.01" class="cell-num" data-idx="'+i+'" data-f="area" value="'+r.area+'"></td><td class="row-actions"><button class="btn-row-del" data-delrow="'+i+'" title="Удалить"><i class="fa-solid fa-xmark"></i></button></td></tr>';}
   });
-  h+='</tbody></table></div></div>';
+  h+='</tbody></table></section>';
+  h+='<section class="table-panel table-panel-readonly" data-table-panel="etalon" tabindex="0" role="region" aria-label="Эталонная таблица участка работы, только для чтения"'+tablePanelStyle('etalon')+'><div class="table-panel-title"><i class="fa-solid fa-lock"></i>Эталон <span class="readonly-badge">только чтение</span>'+(etalonExists?'<span class="etalon-created">Создан: '+esc(formatEtalonDate(etalonMeta.createdAt))+'</span>':'')+'<span class="table-resize-hint">↘ изменить размер</span></div><table class="wl" aria-label="Эталонная таблица участка работы, только для чтения"><thead><tr><th class="row-num">№</th><th>Помещение</th><th class="row-area">Площадь, м²</th></tr></thead><tbody id="etalonBody">';
+  var etalonNum=0;
+  if(etalonData.length===0){h+='<tr class="etalon-empty"><td colspan="3">Эталон ещё не создан. Нажмите «В эталон».</td></tr>';}
+  etalonData.forEach(function(r,i){
+    var d=maps.etalon[i],rc=diffRowClass(d,'etalon'),tc=d&&d.status==='changed'&&(d.textChanged||d.typeChanged)?' diff-cell':'',ac=d&&d.status==='changed'&&d.areaChanged?' diff-cell':'';
+    if(r.isTotal){h+='<tr class="row-total'+rc+'"><td></td><td class="'+tc+'">'+esc(r.text)+'</td><td class="'+ac+'" style="text-align:right">'+fmt(r.area)+'</td></tr>';}
+    else if(r.isHeader){h+='<tr class="row-header'+rc+'"><td></td><td class="'+tc+'">'+esc(r.text)+'</td><td class="'+ac+'"></td></tr>';}
+    else{etalonNum++;h+='<tr class="'+rc+'"><td class="row-num">'+etalonNum+'</td><td class="'+tc+'">'+esc(r.text)+'</td><td class="row-area'+ac+'">'+fmt(r.area)+'</td></tr>';}
+  });
+  h+='</tbody></table></section></div><div class="comparison-info"><span class="sync-badge"><i class="fa-solid fa-link"></i>прокрутка синхронизирована</span><span class="diff-legend"><span class="diff-dot changed"></span>изменено</span><span class="diff-legend"><span class="diff-dot added"></span>добавлено</span><span class="diff-legend"><span class="diff-dot removed"></span>удалено</span></div></div>';
   document.getElementById('mainContent').innerHTML=h;
+  observeTablePanelSizes();
+  setupSynchronizedScroll();
   updateCalcCards(emp);
 }
 
@@ -556,7 +797,17 @@ document.getElementById('mainContent').addEventListener('input',function(e){
     else if(ff==='text'){emp.rows[idx].text=e.target.value;saveData();}
   }
 });
+/* После завершения редактирования обновляем подсветку сравнения,
+   не прерывая пользователя перерисовкой на каждом введённом символе. */
+document.getElementById('mainContent').addEventListener('change',function(e){
+  if(e.target.dataset.idx!==undefined)renderMain();
+});
 document.getElementById('mainContent').addEventListener('click',function(e){
+  if(e.target.closest('#btnToEtalon')){
+    requestSaveToEtalon();return;
+  }
+  if(e.target.closest('#btnClearEtalon')){requestClearEtalon();return;}
+  if(e.target.closest('#btnCompare')){openComparisonReport();return;}
   if(e.target.closest('#btnAddRoom')){
     var emp=getEmp(S.selId);if(!emp)return;
     var ti=emp.rows.findIndex(function(r){return r.isTotal});
@@ -639,6 +890,8 @@ function removeEmp(id){
   setTimeout(function(){
     document.getElementById('mDelOk').addEventListener('click',function(){
       S.emps=S.emps.filter(function(e){return e.id!==id});
+      delete S.etalonData[String(id)];
+      delete S.etalonMeta[String(id)];
       if(S.selId===id)S.selId=S.emps.length?S.emps[0].id:null;
       closeModal();renderSidebar();renderMain();renderTotalBar();saveData();
       toast('Сотрудник удалён','info');
@@ -1027,21 +1280,30 @@ function saveBlob(blob,name){
   a.click();
   setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}try{if(a.parentNode)a.parentNode.removeChild(a);}catch(e){}},2000);
 }
+function safeFilePart(value,fallback){return String(value||'').replace(/[\\\/:*?"<>|]/g,'_').trim()||fallback;}
+function orderFileName(emp,used){
+  var base='Приказ_'+safeFilePart(emp.fio,'сотрудник')+'_'+safeFilePart(S.cfg.year||'год','год'),name=base+'.docx',n=2,key=name.toLowerCase();
+  if(used){while(used[key]){name=base+'_'+n+'.docx';key=name.toLowerCase();n++;}used[key]=true;}
+  return name;
+}
+function generateOrderData(emp,tplB64,type){
+  var P=buildPrikazPayload(emp);
+  return JSZip.loadAsync(tplB64,{base64:true}).then(function(zip){
+    var doc=zip.file('word/document.xml');if(!doc)throw new Error('В шаблоне отсутствует word/document.xml');
+    return doc.async('string').then(function(xml){
+      zip.file('word/document.xml',DOCX_ENGINE.fillDocxXml(xml,P));
+      return zip.generateAsync({type:type||'blob'});
+    });
+  });
+}
 function fillDocx(){
   var emp=getEmp(S.tplEmpId);
   if(!emp){toast('Сначала выберите сотрудника','warn');return;}
   if(typeof JSZip==='undefined'){toast('Библиотека .docx недоступна — перезагрузите страницу','error');return;}
-  var P=buildPrikazPayload(emp);
-  var safe=String(emp.fio).replace(/[\\\/:*?"<>|]/g,'_').trim()||'приказ';
-  var year=String(S.cfg.year||'год').replace(/[\\\/:*?"<>|]/g,'_');
-  var fname='Приказ_'+safe+'_'+year+'.docx';
+  var tpl=getTplB64();if(!tpl){toast('Шаблон не загружен — выберите файл шаблона .docx','error');return;}
+  var fname=orderFileName(emp);
   toast('Формируем приказ…','info');
-  (function(){var t=getTplB64();if(!t){toast('\u0428\u0430\u0431\u043b\u043e\u043d \u043d\u0435 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d \u2014 \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0444\u0430\u0439\u043b \u0448\u0430\u0431\u043b\u043e\u043d\u0430 .docx','error');return Promise.reject(new Error('no template'));}return JSZip.loadAsync(t,{base64:true});})().then(function(zip){
-    return zip.file('word/document.xml').async('string').then(function(xml){
-      zip.file('word/document.xml',DOCX_ENGINE.fillDocxXml(xml,P));
-      return zip.generateAsync({type:'blob'});
-    });
-  }).then(function(blob){
+  generateOrderData(emp,tpl,'blob').then(function(blob){
     if(prikazDirHandle){
       savePrikazToFolder(blob,fname,function(){
         toast('Приказ сохранён в папку «'+prikazDirHandle.name+'»: '+fname,'success');
@@ -1054,6 +1316,51 @@ function fillDocx(){
       toast('Приказ готов — файл скачан: '+fname,'success');
     }
   }).catch(function(err){toast('Ошибка формирования приказа: '+err.message,'error');});
+}
+function savePrikazToFolderPromise(blob,fname){
+  return new Promise(function(resolve,reject){savePrikazToFolder(blob,fname,resolve,reject);});
+}
+function setBatchOrderState(busy,done,total,message){
+  var btn=document.getElementById('btnFillAllDocx'),status=document.getElementById('batchOrderStatus');
+  if(btn){btn.disabled=!!busy;btn.setAttribute('aria-busy',busy?'true':'false');var text=btn.querySelector('span');if(text)text.textContent=busy?'Формирование '+done+'/'+total:'Сформировать все приказы';}
+  if(status)status.textContent=message||'';
+}
+async function fillAllDocx(){
+  if(!S.emps.length){toast('Нет сотрудников для формирования приказов','warn');return;}
+  if(typeof JSZip==='undefined'){toast('Библиотека .docx недоступна — перезагрузите страницу','error');return;}
+  var tpl=getTplB64();if(!tpl){toast('Шаблон не загружен — выберите файл шаблона .docx','error');return;}
+  var total=S.emps.length,used={},errors=[],ready=0,archive=prikazDirHandle?null:new JSZip();
+  setBatchOrderState(true,0,total,'Подготовка документов…');
+  try{
+    for(var i=0;i<S.emps.length;i++){
+      var emp=S.emps[i],fname=orderFileName(emp,used);
+      setBatchOrderState(true,i,total,'Формируется приказ: '+emp.fio);
+      try{
+        if(prikazDirHandle){
+          var blob=await generateOrderData(emp,tpl,'blob');
+          await savePrikazToFolderPromise(blob,fname);
+        }else{
+          var bytes=await generateOrderData(emp,tpl,'uint8array');
+          archive.file(fname,bytes);
+        }
+        ready++;
+      }catch(err){errors.push(emp.fio+': '+(err&&err.message?err.message:String(err)));}
+      setBatchOrderState(true,i+1,total,'Готово '+(i+1)+' из '+total);
+    }
+    if(!prikazDirHandle&&ready){
+      setBatchOrderState(true,total,total,'Упаковка '+ready+' документов в ZIP…');
+      var zipBlob=await archive.generateAsync({type:'blob'});
+      saveBlob(zipBlob,'Приказы_все_'+safeFilePart(S.cfg.year||'год','год')+'.zip');
+    }
+    if(!ready)throw new Error(errors[0]||'Не удалось сформировать документы');
+    var where=prikazDirHandle?'в папку «'+prikazDirHandle.name+'»':'в ZIP-архив';
+    setBatchOrderState(false,ready,total,'Сформировано: '+ready+' из '+total+' '+where);
+    if(errors.length)toast('Сформировано '+ready+' из '+total+'. Ошибок: '+errors.length,'warn');
+    else toast('Все приказы сформированы: '+ready+' '+where,'success');
+  }catch(err){
+    setBatchOrderState(false,ready,total,'Формирование остановлено');
+    toast('Ошибка формирования приказов: '+err.message,'error');
+  }
 }
 function tplFileSelected(input){
   var f=input&&input.files&&input.files[0];if(!f)return;
@@ -1329,7 +1636,9 @@ function importFromSheets(rawS1,empList,r3){
       }
       var blocks=parseSheet1(s1arr);
       /* Собираем сотрудников */
-      S.emps=[];S.nextId=1;
+      /* Новые уникальные id не позволяют ранее созданным эталонам
+         ошибочно привязаться к сотрудникам из нового файла. */
+      S.emps=[];S.nextId=Math.max(S.nextId||1,1);
       if(emps2.length>0){
         emps2.forEach(function(d){
           S.emps.push({id:S.nextId++,fio:d.fio,fioD1:d.fioD1,fioD:d.fioD,
@@ -1455,7 +1764,7 @@ function confirmClearAll(){
     '<div class="modal-actions"><button class="modal-cancel" onclick="closeModal()">Отмена</button><button class="modal-confirm" id="mClrOk">Удалить всё</button></div>');
   setTimeout(function(){
     document.getElementById('mClrOk').addEventListener('click',function(){
-      S.emps=[];S.selId=null;S.nextId=1;S.tplEmpId=null;S3_TEXT='';S3_NUM=9405;
+      S.emps=[];S.etalonData={};S.etalonMeta={};S.selId=null;S.nextId=1;S.tplEmpId=null;S3_TEXT='';S3_NUM=9405;
       closeModal();renderSidebar();renderMain();renderTotalBar();saveData();
       toast('Все данные удалены','info');
     });
